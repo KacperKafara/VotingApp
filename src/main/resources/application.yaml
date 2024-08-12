@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: voting
+  datasource:
+    url: jdbc:postgresql://localhost:5432/voting_app
+    username: postgres
+    password: postgres
+
+server:
+  servlet:
+    context-path: /api/v1
