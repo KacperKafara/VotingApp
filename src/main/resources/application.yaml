@@ -5,6 +5,11 @@ spring:
     url: jdbc:postgresql://localhost:5432/voting_app
     username: postgres
     password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
 
 server:
   servlet:
