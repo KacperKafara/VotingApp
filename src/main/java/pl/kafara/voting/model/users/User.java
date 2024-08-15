@@ -8,6 +8,7 @@ import lombok.ToString;
 import pl.kafara.voting.model.AbstractEntity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -25,6 +26,9 @@ public class User extends AbstractEntity {
     private String username;
     @Column(name = "password", nullable = false)
     private String password;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    List<Role> roles;
 
     @Column(name = "first_name", table = "personal_data", nullable = false)
     private String firstName;
