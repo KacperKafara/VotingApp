@@ -30,7 +30,7 @@ public class JwtService {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(String username, List<Role> roles) {
+    public String createToken(String username, UUID id, List<Role> roles) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime expirationTime = now.plusSeconds(expireLength);
         List<String> rolesString = new ArrayList<>();
@@ -40,7 +40,8 @@ public class JwtService {
 
         return JWT.create()
                 .withIssuer("VotingApp")
-                .withSubject(username)
+                .withSubject(id.toString())
+                .withClaim("username", username)
                 .withClaim("roles", rolesString)
                 .withIssuedAt(Date.from(now.atZone(ZoneId.systemDefault()).toInstant()))
                 .withExpiresAt(Date.from(expirationTime.atZone(ZoneId.systemDefault()).toInstant()))

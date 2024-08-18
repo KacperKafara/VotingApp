@@ -48,6 +48,6 @@ public class AuthenticationService {
         user.setFailedLoginAttempts(0);
         userRepository.save(user);
 
-        return jwtService.createToken(user.getUsername(), user.getRoles());
+        return jwtService.createToken(user.getUsername(), user.getId(), user.getRoles());
     }
 }
