@@ -48,13 +48,6 @@ public class AuthenticationService {
         user.setFailedLoginAttempts(0);
         userRepository.save(user);
 
-        return jwtService.createToken(user.getUsername(), getRoles(user));
-    }
-
-    @PreAuthorize("permitAll()")
-    private List<String> getRoles(User user) {
-        List<String> roles = new ArrayList<>();
-        user.getRoles().forEach(role -> roles.add(String.valueOf(role.getName())));
-        return roles;
+        return jwtService.createToken(user.getUsername(), user.getRoles());
     }
 }
