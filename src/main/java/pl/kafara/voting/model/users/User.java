@@ -24,6 +24,7 @@ public class User extends AbstractEntity {
     private String email;
     @Column(name = "username", nullable = false, unique = true)
     private String username;
+    @ToString.Exclude
     @Column(name = "password", nullable = false)
     private String password;
 
@@ -38,4 +39,12 @@ public class User extends AbstractEntity {
     private String phoneNumber;
     @Column(name = "birth_date", table = "personal_data", nullable = false)
     private LocalDateTime birthDate;
+
+    @Column(name = "verified", nullable = false)
+    private boolean verified;
+    @Column(name = "blocked", nullable = false)
+    private boolean blocked;
+
+    @Column(name = "failed_login_attempts", nullable = false)
+    private int failedLoginAttempts;
 }

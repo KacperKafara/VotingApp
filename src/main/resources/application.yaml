@@ -10,7 +10,18 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: create-drop
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
 
 server:
   servlet:
     context-path: /api/v1
+
+security:
+  jwt:
+    token:
+      secret-key: secret-key
+      expiration-time: 86400000
+  max-failed-attempts: 3
