@@ -1,16 +1,16 @@
 package pl.kafara.voting.users.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import jakarta.validation.constraints.NotBlank;
+import org.hibernate.validator.constraints.Length;
 
 import java.util.StringJoiner;
 
-@AllArgsConstructor
-@Getter
-public class LoginRequest {
-    private final String username;
-    private final String password;
-
+public record LoginRequest(
+        @NotBlank
+        String username,
+        @NotBlank
+        @Length(min = 8)
+        String password) {
     @Override
     public String toString() {
         return new StringJoiner(", ", LoginRequest.class.getSimpleName() + "[", "]")

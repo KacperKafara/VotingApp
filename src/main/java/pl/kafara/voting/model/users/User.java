@@ -8,6 +8,7 @@ import lombok.ToString;
 import pl.kafara.voting.model.AbstractEntity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -29,7 +30,7 @@ public class User extends AbstractEntity {
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    List<Role> roles;
+    List<Role> roles = new ArrayList<>();
 
     @Column(name = "first_name", table = "personal_data", nullable = false)
     private String firstName;
@@ -41,10 +42,19 @@ public class User extends AbstractEntity {
     private LocalDateTime birthDate;
 
     @Column(name = "verified", nullable = false)
-    private boolean verified;
+    private boolean verified = false;
     @Column(name = "blocked", nullable = false)
-    private boolean blocked;
+    private boolean blocked = false;
 
     @Column(name = "failed_login_attempts", nullable = false)
-    private int failedLoginAttempts;
+    private int failedLoginAttempts = 0;
+
+    public User(String firstName, String lastName, String phoneNumber, LocalDateTime birthDate, String username, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.birthDate = birthDate;
+        this.username = username;
+        this.email = email;
+    }
 }

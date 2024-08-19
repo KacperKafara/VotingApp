@@ -8,16 +8,20 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
+import pl.kafara.voting.exceptions.CreationException;
+import pl.kafara.voting.exceptions.IdenticalFieldValueException;
 import pl.kafara.voting.exceptions.NotFoundException;
 import pl.kafara.voting.exceptions.user.AccountNotActiveException;
 import pl.kafara.voting.exceptions.user.InvalidLoginDataException;
 import pl.kafara.voting.users.dto.LoginRequest;
 import pl.kafara.voting.users.dto.LoginResponse;
+import pl.kafara.voting.users.dto.RegistrationRequest;
 import pl.kafara.voting.users.services.AuthenticationService;
 
 @RestController
@@ -28,7 +32,7 @@ public class AuthenticationController {
 
     @PreAuthorize("permitAll()")
     @PostMapping("/authenticate")
-    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<LoginResponse> authenticate(@Validated @RequestBody LoginRequest loginRequest) {
         try {
             return ResponseEntity.ok(new LoginResponse(authenticationService.authenticate(loginRequest)));
         } catch (NotFoundException e) {
@@ -37,6 +41,17 @@ public class AuthenticationController {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         } catch (InvalidLoginDataException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage(), e);
+        }
+    }
+
+    @PreAuthorize("permitAll()")
+    @PostMapping("/register")
+    public ResponseEntity<Void> register(@Validated @RequestBody RegistrationRequest registrationRequest) {
+        try {
+            authenticationService.register(registrationRequest);
+            return ResponseEntity.ok().build();
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
