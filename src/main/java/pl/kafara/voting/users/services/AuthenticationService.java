@@ -14,12 +14,11 @@ import pl.kafara.voting.exceptions.messages.GenericMessages;
 import pl.kafara.voting.exceptions.messages.UserMessages;
 import pl.kafara.voting.exceptions.user.AccountNotActiveException;
 import pl.kafara.voting.exceptions.user.InvalidLoginDataException;
-import pl.kafara.voting.model.users.Role;
-import pl.kafara.voting.model.users.User;
-import pl.kafara.voting.model.users.UserRoleEnum;
+import pl.kafara.voting.model.users.*;
 import pl.kafara.voting.users.dto.LoginRequest;
 import pl.kafara.voting.users.dto.RegistrationRequest;
 import pl.kafara.voting.users.mapper.RegistrationMapper;
+import pl.kafara.voting.users.repositories.GenderRepository;
 import pl.kafara.voting.users.repositories.RoleRepository;
 import pl.kafara.voting.users.repositories.UserRepository;
 import pl.kafara.voting.util.JwtService;
@@ -30,6 +29,7 @@ import pl.kafara.voting.util.JwtService;
 @Transactional(propagation = Propagation.REQUIRES_NEW)
 public class AuthenticationService {
 
+    private final GenderRepository genderRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
@@ -65,9 +65,12 @@ public class AuthenticationService {
     public User register(RegistrationRequest registrationRequest) throws NotFoundException {
         Role role = roleRepository.findByName(UserRoleEnum.USER)
                 .orElseThrow(() -> new NotFoundException(UserMessages.ROLE_NOT_FOUND, ExceptionCodes.ROLE_NOT_FOUND));
+        Gender gender = genderRepository.findByName(GenderEnum.fromInt(registrationRequest.gender()))
+                .orElseThrow(() -> new NotFoundException(GenericMessages.NOT_FOUND, ExceptionCodes.NOT_FOUND));
         User user = RegistrationMapper.mapToUser(registrationRequest);
         user.setPassword(passwordEncoder.encode(registrationRequest.password()));
         user.getRoles().add(role);
+        user.setGender(gender);
         return userRepository.save(user);
     }
 }

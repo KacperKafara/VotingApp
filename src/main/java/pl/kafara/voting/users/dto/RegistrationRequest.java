@@ -1,8 +1,6 @@
 package pl.kafara.voting.users.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDateTime;
@@ -25,7 +23,10 @@ public record RegistrationRequest(
         @Length(min = 9, max = 9)
         String phoneNumber,
         @NotNull
-        LocalDateTime birthDate
+        LocalDateTime birthDate,
+        @Min(0)
+        @Max(2)
+        int gender
 ) {
     @Override
     public String toString() {

@@ -9,14 +9,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import pl.kafara.voting.model.AbstractEntity;
 
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Entity
-public class Role extends AbstractEntity {
+public class Gender extends AbstractEntity {
 
-    @Column(nullable = false, unique = true, updatable = false, length = 20)
-    @Enumerated(EnumType.STRING)
-    private UserRoleEnum name;
+    @Column(nullable = false, unique = true, updatable = false)
+    @Enumerated(EnumType.ORDINAL)
+    private GenderEnum name;
 
 }

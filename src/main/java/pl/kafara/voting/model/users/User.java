@@ -40,6 +40,9 @@ public class User extends AbstractEntity {
     private LocalDateTime birthDate;
     @Column(name = "email", table = "personal_data", nullable = false, unique = true)
     private String email;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "gender_id", table = "personal_data", nullable = false)
+    private Gender gender;
 
     @Column(name = "verified", nullable = false)
     private boolean verified = false;
