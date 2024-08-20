@@ -1,5 +1,8 @@
 package pl.kafara.voting.exceptions;
 
+import lombok.Getter;
+
+@Getter
 public abstract class ApplicationBaseException extends Exception {
     protected String exceptionCode;
 

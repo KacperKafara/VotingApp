@@ -21,8 +21,6 @@ import java.util.List;
 @SecondaryTable(name = "personal_data", pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id"))
 public class User extends AbstractEntity {
 
-    @Column(name = "email", nullable = false, unique = true)
-    private String email;
     @Column(name = "username", nullable = false, unique = true)
     private String username;
     @ToString.Exclude
@@ -36,10 +34,12 @@ public class User extends AbstractEntity {
     private String firstName;
     @Column(name = "last_name", table = "personal_data", nullable = false)
     private String lastName;
-    @Column(name = "phone_number", table = "personal_data", nullable = false)
+    @Column(name = "phone_number", table = "personal_data", nullable = false, unique = true)
     private String phoneNumber;
     @Column(name = "birth_date", table = "personal_data", nullable = false)
     private LocalDateTime birthDate;
+    @Column(name = "email", table = "personal_data", nullable = false, unique = true)
+    private String email;
 
     @Column(name = "verified", nullable = false)
     private boolean verified = false;

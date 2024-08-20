@@ -1,19 +1,17 @@
 package pl.kafara.voting.users.services;
 
-import jakarta.persistence.PersistenceException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import pl.kafara.voting.exceptions.CreationException;
-import pl.kafara.voting.exceptions.IdenticalFieldValueException;
 import pl.kafara.voting.exceptions.NotFoundException;
+import pl.kafara.voting.exceptions.handlers.ExceptionCodes;
+import pl.kafara.voting.exceptions.messages.GenericMessages;
+import pl.kafara.voting.exceptions.messages.UserMessages;
 import pl.kafara.voting.exceptions.user.AccountNotActiveException;
 import pl.kafara.voting.exceptions.user.InvalidLoginDataException;
 import pl.kafara.voting.model.users.Role;
@@ -43,10 +41,10 @@ public class AuthenticationService {
     @PreAuthorize("permitAll()")
     public String authenticate(LoginRequest loginRequest) throws NotFoundException, AccountNotActiveException, InvalidLoginDataException {
         User user = userRepository.findByUsername(loginRequest.username())
-                .orElseThrow(() -> new NotFoundException("User not found"));
+                .orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.USER_NOT_FOUND));
 
-        if(!user.isVerified()) throw new AccountNotActiveException("User not verified");
-        if(user.isBlocked()) throw new AccountNotActiveException("User blocked");
+        if(!user.isVerified()) throw new AccountNotActiveException(UserMessages.USER_NOT_VERIFIED, ExceptionCodes.USER_NOT_FOUND);
+        if(user.isBlocked()) throw new AccountNotActiveException(UserMessages.USER_BLOCKED, ExceptionCodes.USER_BLOCKED);
 
         if(!passwordEncoder.matches(loginRequest.password(), user.getPassword())) {
             user.setFailedLoginAttempts(user.getFailedLoginAttempts() + 1);
@@ -54,7 +52,7 @@ public class AuthenticationService {
                 user.setBlocked(true);
             }
             userRepository.save(user);
-            throw new InvalidLoginDataException("Invalid password");
+            throw new InvalidLoginDataException(UserMessages.INVALID_CREDENTIALS, ExceptionCodes.INVALID_CREDENTIALS);
         }
 
         user.setFailedLoginAttempts(0);
@@ -66,7 +64,7 @@ public class AuthenticationService {
     @PreAuthorize("permitAll()")
     public User register(RegistrationRequest registrationRequest) throws NotFoundException {
         Role role = roleRepository.findByName(UserRoleEnum.USER)
-                .orElseThrow(() -> new NotFoundException("Role not found"));
+                .orElseThrow(() -> new NotFoundException(UserMessages.ROLE_NOT_FOUND, ExceptionCodes.ROLE_NOT_FOUND));
         User user = RegistrationMapper.mapToUser(registrationRequest);
         user.setPassword(passwordEncoder.encode(registrationRequest.password()));
         user.getRoles().add(role);
