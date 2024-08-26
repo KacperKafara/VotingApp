@@ -16,7 +16,7 @@ import pl.kafara.voting.model.AbstractEntity;
 public class Gender extends AbstractEntity {
 
     @Column(nullable = false, unique = true, updatable = false)
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private GenderEnum name;
 
 }
