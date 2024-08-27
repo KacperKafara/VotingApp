@@ -13,6 +13,9 @@ public class ExceptionCodes {
     public static final String USERNAME_OR_EMAIL_ALREADY_EXISTS = "USERNAME_OR_EMAIL_ALREADY_EXISTS";
     public static final String PHONE_NUMBER_ALREADY_EXISTS = "PHONE_NUMBER_ALREADY_EXISTS";
     public static final String CONSTRAINT_VIOLATION = "CONSTRAINT_VIOLATION";
+    public static final String ACCOUNT_VERIFICATION_TOKEN_USED = "ACCOUNT_VERIFICATION_TOKEN_USED";
+    public static final String ACCOUNT_VERIFICATION_TOKEN_EXPIRED = "ACCOUNT_VERIFICATION_TOKEN_EXPIRED";
+    public static final String USER_NOT_VERIFIED = "USER_NOT_VERIFIED";
 
     private ExceptionCodes() {
     }

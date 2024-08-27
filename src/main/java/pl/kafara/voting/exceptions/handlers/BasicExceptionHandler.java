@@ -17,6 +17,8 @@ import pl.kafara.voting.exceptions.NotFoundException;
 import pl.kafara.voting.exceptions.messages.GenericMessages;
 import pl.kafara.voting.exceptions.messages.UserMessages;
 
+import java.security.NoSuchAlgorithmException;
+
 @ControllerAdvice
 @Slf4j
 public class BasicExceptionHandler {
@@ -93,5 +95,11 @@ public class BasicExceptionHandler {
     ResponseEntity<ExceptionResponse> handleNotFoundException(NotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ExceptionResponse(e.getMessage(), e.getExceptionCode()));
+    }
+
+    @ExceptionHandler(NoSuchAlgorithmException.class)
+    ResponseEntity<ExceptionResponse> handleNoSuchAlgorithmException(NoSuchAlgorithmException e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ExceptionResponse(GenericMessages.SOMETHING_WENT_WRONG, ExceptionCodes.INTERNAL_SERVER_ERROR));
     }
 }

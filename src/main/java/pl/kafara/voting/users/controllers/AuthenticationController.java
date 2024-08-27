@@ -15,11 +15,12 @@ import pl.kafara.voting.exceptions.NotFoundException;
 import pl.kafara.voting.exceptions.messages.GenericMessages;
 import pl.kafara.voting.exceptions.user.AccountNotActiveException;
 import pl.kafara.voting.exceptions.user.InvalidLoginDataException;
-import pl.kafara.voting.model.users.User;
 import pl.kafara.voting.users.dto.LoginRequest;
 import pl.kafara.voting.users.dto.LoginResponse;
 import pl.kafara.voting.users.dto.RegistrationRequest;
 import pl.kafara.voting.users.services.AuthenticationService;
+
+import java.security.NoSuchAlgorithmException;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,9 +42,9 @@ public class AuthenticationController {
 
     @PreAuthorize("permitAll()")
     @PostMapping("/register")
-    public ResponseEntity<Void> register(@Validated @RequestBody RegistrationRequest registrationRequest) throws NotFoundException {
-        User user = authenticationService.register(registrationRequest);
-        if (user == null)
+    public ResponseEntity<Void> register(@Validated @RequestBody RegistrationRequest registrationRequest) throws NotFoundException, NoSuchAlgorithmException {
+        String token = authenticationService.register(registrationRequest);
+        if (token == null || token.isEmpty())
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, GenericMessages.SOMETHING_WENT_WRONG);
         return ResponseEntity.ok().build();
     }

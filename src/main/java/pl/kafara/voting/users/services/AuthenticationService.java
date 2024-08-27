@@ -23,6 +23,8 @@ import pl.kafara.voting.users.repositories.RoleRepository;
 import pl.kafara.voting.users.repositories.UserRepository;
 import pl.kafara.voting.util.JwtService;
 
+import java.security.NoSuchAlgorithmException;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -33,6 +35,7 @@ public class AuthenticationService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final TokenService tokenService;
     private final JwtService jwtService;
 
     @Value("${security.max-failed-attempts:3}")
@@ -43,7 +46,7 @@ public class AuthenticationService {
         User user = userRepository.findByUsername(loginRequest.username())
                 .orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.USER_NOT_FOUND));
 
-        if(!user.isVerified()) throw new AccountNotActiveException(UserMessages.USER_NOT_VERIFIED, ExceptionCodes.USER_NOT_FOUND);
+        if(!user.isVerified()) throw new AccountNotActiveException(UserMessages.USER_NOT_VERIFIED, ExceptionCodes.USER_NOT_VERIFIED);
         if(user.isBlocked()) throw new AccountNotActiveException(UserMessages.USER_BLOCKED, ExceptionCodes.USER_BLOCKED);
 
         if(!passwordEncoder.matches(loginRequest.password(), user.getPassword())) {
@@ -62,7 +65,7 @@ public class AuthenticationService {
     }
 
     @PreAuthorize("permitAll()")
-    public User register(RegistrationRequest registrationRequest) throws NotFoundException {
+    public String register(RegistrationRequest registrationRequest) throws NotFoundException, NoSuchAlgorithmException {
         Role role = roleRepository.findByName(UserRoleEnum.USER)
                 .orElseThrow(() -> new NotFoundException(UserMessages.ROLE_NOT_FOUND, ExceptionCodes.ROLE_NOT_FOUND));
         Gender gender = genderRepository.findByName(GenderEnum.fromInt(registrationRequest.gender()))
@@ -71,6 +74,7 @@ public class AuthenticationService {
         user.setPassword(passwordEncoder.encode(registrationRequest.password()));
         user.getRoles().add(role);
         user.setGender(gender);
-        return userRepository.save(user);
+        userRepository.save(user);
+        return tokenService.generateAccountVerificationToken(user);
     }
 }

@@ -8,6 +8,8 @@ public class UserMessages {
     public static final String INVALID_CREDENTIALS = "Invalid username or password";
     public static final String USERNAME_OR_EMAIL_ALREADY_EXISTS = "Username or email already exists";
     public static final String PHONE_NUMBER_ALREADY_EXISTS = "Phone number already exists";
+    public static final String ACCOUNT_VERIFICATION_TOKEN_USED = "Account verification token used";
+    public static final String ACCOUNT_VERIFICATION_TOKEN_EXPIRED = "Account verification token expired";
 
     private UserMessages() {
     }
