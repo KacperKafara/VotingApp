@@ -29,6 +29,9 @@ spring:
             protocol: smtp
         from: votingapp@kafara.pl
 
+app:
+  url: http://localhost:3000
+
 server:
   servlet:
     context-path: /api/v1

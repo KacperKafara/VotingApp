@@ -19,6 +19,7 @@ import pl.kafara.voting.users.dto.LoginRequest;
 import pl.kafara.voting.users.dto.LoginResponse;
 import pl.kafara.voting.users.dto.RegistrationRequest;
 import pl.kafara.voting.users.services.AuthenticationService;
+import pl.kafara.voting.users.services.EmailService;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -27,6 +28,7 @@ import java.security.NoSuchAlgorithmException;
 @Transactional(propagation = Propagation.NEVER)
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
+    private final EmailService emailService;
 
     @PreAuthorize("permitAll()")
     @PostMapping("/authenticate")
@@ -44,6 +46,7 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<Void> register(@Validated @RequestBody RegistrationRequest registrationRequest) throws NotFoundException, NoSuchAlgorithmException {
         String token = authenticationService.register(registrationRequest);
+        emailService.sendAccountVerificationEmail(registrationRequest.email(), token, registrationRequest.firstName(), "pl");
         if (token == null || token.isEmpty())
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, GenericMessages.SOMETHING_WENT_WRONG);
         return ResponseEntity.ok().build();
