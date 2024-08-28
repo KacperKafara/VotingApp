@@ -20,11 +20,11 @@ import java.time.temporal.ChronoUnit;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(propagation = Propagation.MANDATORY)
 public class TokenService {
 
     private final AccountVerificationTokenRepository accountVerificationTokenRepository;
 
-    @Transactional(propagation = Propagation.MANDATORY)
     public String generateAccountVerificationToken(User user) throws NoSuchAlgorithmException {
         String token = generateSafeToken();
         accountVerificationTokenRepository.deleteByUserId(user.getId());
@@ -32,7 +32,7 @@ public class TokenService {
         return accountVerificationTokenRepository.save(accountVerificationToken).getToken();
     }
 
-    public void validateAccountVerificationToken(String token) throws VerificationTokenUsedException, VerificationTokenExpiredException {
+    public SafeToken validateAccountVerificationToken(String token) throws VerificationTokenUsedException, VerificationTokenExpiredException {
         SafeToken accountVerificationToken = accountVerificationTokenRepository.findByToken(token)
                 .orElseThrow(() -> new VerificationTokenUsedException(UserMessages.ACCOUNT_VERIFICATION_TOKEN_USED, ExceptionCodes.ACCOUNT_VERIFICATION_TOKEN_USED));
 
@@ -40,6 +40,7 @@ public class TokenService {
             throw new VerificationTokenExpiredException(UserMessages.ACCOUNT_VERIFICATION_TOKEN_EXPIRED, ExceptionCodes.ACCOUNT_VERIFICATION_TOKEN_EXPIRED);
 
         accountVerificationTokenRepository.deleteById(accountVerificationToken.getId());
+        return accountVerificationToken;
     }
 
     private String generateSafeToken() throws NoSuchAlgorithmException {

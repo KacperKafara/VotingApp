@@ -46,9 +46,9 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<Void> register(@Validated @RequestBody RegistrationRequest registrationRequest) throws NotFoundException, NoSuchAlgorithmException {
         String token = authenticationService.register(registrationRequest);
-        emailService.sendAccountVerificationEmail(registrationRequest.email(), token, registrationRequest.firstName(), "pl");
         if (token == null || token.isEmpty())
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, GenericMessages.SOMETHING_WENT_WRONG);
+        emailService.sendAccountVerificationEmail(registrationRequest.email(), token, registrationRequest.firstName(), registrationRequest.language());
         return ResponseEntity.ok().build();
     }
 }

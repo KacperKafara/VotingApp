@@ -26,7 +26,10 @@ public record RegistrationRequest(
         LocalDateTime birthDate,
         @Min(0)
         @Max(2)
-        int gender
+        int gender,
+        @NotBlank(message = "Language name cannot be blank.")
+        @Pattern(regexp = "^(en|pl)$", message = "Language name must be 'en' or 'pl'.")
+        String language
 ) {
     @Override
     public String toString() {
@@ -38,6 +41,7 @@ public record RegistrationRequest(
                 .add("lastName='" + lastName + "'")
                 .add("phoneNumber='" + phoneNumber + "'")
                 .add("birthDate=" + birthDate)
+                .add("language='" + language + "'")
                 .toString();
     }
 }

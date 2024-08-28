@@ -6,4 +6,5 @@
 <body>
     <h1 th:text="#{hello} + ' ' + ${name} + '.'" />
     <p th:text="#{accountVerification.text}" />
+    <a th:href="@{${uri}}" th:text="#{accountVerification.link}" />
 </body>
