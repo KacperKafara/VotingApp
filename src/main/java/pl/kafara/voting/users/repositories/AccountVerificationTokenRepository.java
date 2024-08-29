@@ -16,7 +16,4 @@ import java.util.UUID;
 public interface AccountVerificationTokenRepository extends JpaRepository<AccountVerificationToken, UUID> {
     void deleteByUserId(UUID userId);
     Optional<AccountVerificationToken> findByToken(String token);
-
-    @Query("SELECT token.user FROM AccountVerificationToken token WHERE token.token = :token")
-    Optional<User> findUserByToken(String token);
 }

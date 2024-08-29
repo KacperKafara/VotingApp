@@ -10,6 +10,8 @@ public class UserMessages {
     public static final String PHONE_NUMBER_ALREADY_EXISTS = "Phone number already exists";
     public static final String ACCOUNT_VERIFICATION_TOKEN_USED = "Account verification token used";
     public static final String ACCOUNT_VERIFICATION_TOKEN_EXPIRED = "Account verification token expired";
+    public static final String RESET_PASSWORD_TOKEN_USED = "Reset password token used";
+    public static final String RESET_PASSWORD_TOKEN_EXPIRED = "Reset password token expired";
 
     private UserMessages() {
     }

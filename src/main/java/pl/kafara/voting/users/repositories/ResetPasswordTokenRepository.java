@@ -4,16 +4,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import pl.kafara.voting.model.users.User;
+import pl.kafara.voting.model.users.tokens.ResetPasswordToken;
 
 import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 @Transactional(propagation = Propagation.MANDATORY)
-public interface UserRepository extends JpaRepository<User, UUID> {
-    @Transactional(readOnly = true, propagation = Propagation.MANDATORY)
-    Optional<User> findByUsername(String username);
-    @Transactional(readOnly = true, propagation = Propagation.MANDATORY)
-    Optional<User> findByEmail(String email);
+public interface ResetPasswordTokenRepository extends JpaRepository<ResetPasswordToken, UUID> {
+    Optional<ResetPasswordToken> findByToken(String token);
+    void deleteByUserId(UUID userId);
 }

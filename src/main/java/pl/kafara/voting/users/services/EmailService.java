@@ -1,5 +1,8 @@
 package pl.kafara.voting.users.services;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.support.ResourceBundleMessageSource;
@@ -29,5 +32,14 @@ public class EmailService {
                 "uri", uri);
         String subject = mailMessageSource.getMessage("accountVerification.subject", null, Locale.of(lang));
         htmlEmailService.createHtmlEmail(to, subject, "accountVerification", templateModel, lang);
+    }
+
+    public void sendResetPasswordEmail(String email, String token, String lang) {
+        URI uri = URI.create(url + "/resetPassword/" + token);
+        Map<String, Object> templateModel = Map.of(
+                "uri", uri);
+        String subject = mailMessageSource.getMessage("resetPassword.subject", null, Locale.of(lang));
+        htmlEmailService.createHtmlEmail(email, subject, "resetPassword", templateModel, lang);
+
     }
 }

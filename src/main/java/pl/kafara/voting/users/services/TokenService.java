@@ -10,8 +10,10 @@ import pl.kafara.voting.exceptions.user.VerificationTokenExpiredException;
 import pl.kafara.voting.exceptions.user.VerificationTokenUsedException;
 import pl.kafara.voting.model.users.User;
 import pl.kafara.voting.model.users.tokens.AccountVerificationToken;
+import pl.kafara.voting.model.users.tokens.ResetPasswordToken;
 import pl.kafara.voting.model.users.tokens.SafeToken;
 import pl.kafara.voting.users.repositories.AccountVerificationTokenRepository;
+import pl.kafara.voting.users.repositories.ResetPasswordTokenRepository;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -24,6 +26,7 @@ import java.time.temporal.ChronoUnit;
 public class TokenService {
 
     private final AccountVerificationTokenRepository accountVerificationTokenRepository;
+    private final ResetPasswordTokenRepository resetPasswordTokenRepository;
 
     public String generateAccountVerificationToken(User user) throws NoSuchAlgorithmException {
         String token = generateSafeToken();
@@ -41,6 +44,24 @@ public class TokenService {
 
         accountVerificationTokenRepository.deleteById(accountVerificationToken.getId());
         return accountVerificationToken;
+    }
+
+    public String generateResetPasswordToken(User user) throws NoSuchAlgorithmException {
+        String token = generateSafeToken();
+        resetPasswordTokenRepository.deleteByUserId(user.getId());
+        ResetPasswordToken resetPasswordToken = new ResetPasswordToken(token, Instant.now().plus(ResetPasswordToken.EXPIRATION_TIME, ChronoUnit.MINUTES), user);
+        return resetPasswordTokenRepository.save(resetPasswordToken).getToken();
+    }
+
+    public SafeToken validateResetPasswordToken(String token) throws VerificationTokenUsedException, VerificationTokenExpiredException {
+        SafeToken resetPasswordToken = resetPasswordTokenRepository.findByToken(token)
+                .orElseThrow(() -> new VerificationTokenUsedException(UserMessages.RESET_PASSWORD_TOKEN_USED, ExceptionCodes.RESET_PASSWORD_TOKEN_USED));
+
+        if (resetPasswordToken.getExpirationDate().isBefore(Instant.now()))
+            throw new VerificationTokenExpiredException(UserMessages.RESET_PASSWORD_TOKEN_EXPIRED, ExceptionCodes.RESET_PASSWORD_TOKEN_EXPIRED);
+
+        resetPasswordTokenRepository.deleteById(resetPasswordToken.getId());
+        return resetPasswordToken;
     }
 
     private String generateSafeToken() throws NoSuchAlgorithmException {

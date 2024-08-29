@@ -16,6 +16,9 @@ public class ExceptionCodes {
     public static final String ACCOUNT_VERIFICATION_TOKEN_USED = "ACCOUNT_VERIFICATION_TOKEN_USED";
     public static final String ACCOUNT_VERIFICATION_TOKEN_EXPIRED = "ACCOUNT_VERIFICATION_TOKEN_EXPIRED";
     public static final String USER_NOT_VERIFIED = "USER_NOT_VERIFIED";
+    public static final String RESET_PASSWORD_TOKEN_USED = "RESET_PASSWORD_TOKEN_USED";
+    public static final String RESET_PASSWORD_TOKEN_EXPIRED = "RESET_PASSWORD_TOKEN_EXPIRED";
+    public static final String USER_WITH_EMAIL_NOT_FOUND = "USER_WITH_EMAIL_NOT_FOUND";
 
     private ExceptionCodes() {
     }
