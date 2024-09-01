@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-const App: FC = () => {
+const TestPage: FC = () => {
   return (
     <>
       <h1>React App</h1>
@@ -8,4 +8,4 @@ const App: FC = () => {
   )
 }
 
-export default App
+export default TestPage
