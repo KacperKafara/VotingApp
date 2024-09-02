@@ -4,8 +4,12 @@ import { AxiosError } from "axios";
 import { useToast } from "@/hooks/use-toast";
 
 interface LoginRequest {
-  login: string;
+  username: string;
   password: string;
+}
+
+interface LoginResponse {
+  token: string;
 }
 
 export const useAuthenticate = () => {
@@ -13,13 +17,14 @@ export const useAuthenticate = () => {
 
   const { mutateAsync, isSuccess, isPending } = useMutation({
     mutationFn: async (data: LoginRequest) => {
-      await api.post("/authenticate", data);
+      const response = await api.post<LoginResponse>("/authenticate", data);
+      return response.data;
     },
     onError: (error: AxiosError) => {
       toast({
         variant: "destructive",
         title: "Authentication failed",
-        description: error.response?.data.exceptionCode,
+        description: error.response?.data?.exceptionCode,
       });
     }
   });

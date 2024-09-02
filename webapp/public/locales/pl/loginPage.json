@@ -1,4 +1,11 @@
 {
-  "login": "Login",
-  "password": "Hasło"
+  "username": "Login",
+  "password": "Hasło",
+  "loginButton": "Zaloguj",
+  "registerButton": "Zarejestruj się",
+  "forgotPassword": "Zapomniałeś hasła?",
+  "loginToShort": "Login jest za krótki",
+  "passwordToShort": "Hasło jest za krótkie",
+  "loginToLong": "Login jest za długi",
+  "passwordToLong": "Hasło jest za długie"
 }

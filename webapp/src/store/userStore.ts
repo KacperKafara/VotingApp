@@ -14,15 +14,15 @@ interface UserStore {
 export type Role = "administrator" | "moderator" | "user";
 
 export const roleMapping: Record<string, string> = {
-  ADMINISTRATOR: "admin",
-  MODERATOR: "moderator",
-  USER: "user",
+  ROLE_ADMINISTRATOR: "admin",
+  ROLE_MODERATOR: "moderator",
+  ROLE_USER: "user",
 };
 
 export const rolePriority: Record<string, number> = {
-  ADMINISTRATOR: 0,
-  MODERATOR: 2,
-  USER: 3,
+  ROLE_ADMINISTRATOR: 0,
+  ROLE_MODERATOR: 2,
+  ROLE_USER: 3,
 };
 
 const getActiveRole = (roles: string[]): string =>

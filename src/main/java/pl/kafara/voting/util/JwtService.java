@@ -42,7 +42,7 @@ public class JwtService {
                 .withIssuer("VotingApp")
                 .withSubject(id.toString())
                 .withClaim("username", username)
-                .withClaim("roles", rolesString)
+                .withClaim("authorities", rolesString)
                 .withIssuedAt(Date.from(now.atZone(ZoneId.systemDefault()).toInstant()))
                 .withExpiresAt(Date.from(expirationTime.atZone(ZoneId.systemDefault()).toInstant()))
                 .sign(Algorithm.HMAC256(secretKey));

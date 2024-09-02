@@ -18,8 +18,6 @@ import java.security.NoSuchAlgorithmException;
 @Transactional(propagation = Propagation.REQUIRES_NEW)
 public class UserService {
     private final TokenService tokenService;
-    private final EmailService emailService;
-    private final UserService userService;
     private final UserRepository userRepository;
 
     public String resetPassword(String email) throws NotFoundException, AccountNotActiveException, NoSuchAlgorithmException {

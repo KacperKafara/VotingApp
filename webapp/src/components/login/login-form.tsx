@@ -8,17 +8,19 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuthenticate } from "@/data/useAuthenticate";
 import { useTranslation } from "react-i18next";
+import { TFunction } from "i18next";
+import { useUserStore } from "@/store/userStore";
 
-const getLoginSchema = () =>
+const getLoginSchema = (t: TFunction<'loginPage'>) =>
   z.object({
-    login: z
+    username: z
       .string()
-      .min(3, { message: "Login must be at least 3 characters long" })
-      .max(50, { message: "Login must be at most 50 characters long" }),
+      .min(3, { message: t('loginToShort') })
+      .max(50, { message: t('loginToLong') }),
     password: z
       .string()
-      .min(8, { message: "Password must be at least 8 characters long" })
-      .max(50, { message: "Password must be at most 50 characters long" }),
+      .min(8, { message: t('passwordToShort') })
+      .max(50, { message: t('passwordToLong') }),
   })
 
 type LoginSchema = z.infer<ReturnType<typeof getLoginSchema>>;
@@ -30,16 +32,18 @@ interface LoginFormProps {
 const LoginForm:FC<LoginFormProps> = ({ className }) => {
   const { authenticate, isPending } = useAuthenticate();
   const { t } = useTranslation('loginPage');
+  const { setToken } = useUserStore();
   const form = useForm<LoginSchema>({
-    resolver: zodResolver(getLoginSchema()),
+    resolver: zodResolver(getLoginSchema(t)),
     values: {
-      login: "",
+      username: "",
       password: "",
     },
   });
 
-  const onSubmit = form.handleSubmit(async ({ login, password }) => {
-    await authenticate({ login, password });
+  const onSubmit = form.handleSubmit(async ({ username, password }) => {
+    const result = await authenticate({ username, password });
+    setToken(result.token);
   });
 
   return (
@@ -48,11 +52,11 @@ const LoginForm:FC<LoginFormProps> = ({ className }) => {
         <form onSubmit={onSubmit} className="flex flex-col gap-2">
           <FormField
             control={form.control}
-            name="login"
+            name="username"
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input {...field} autoComplete="username" placeholder={t('login')}/>
+                  <Input {...field} autoComplete="username" placeholder={t('username')}/>
                 </FormControl>
                 <FormMessage className="text-center" />
               </FormItem>
@@ -72,7 +76,7 @@ const LoginForm:FC<LoginFormProps> = ({ className }) => {
           />
           <LoadingButton 
             type="submit"
-            text="Login"
+            text={t('loginButton')}
             className="h-fit mt-1"
             isLoading={isPending}
           />
