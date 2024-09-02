@@ -44,7 +44,7 @@ public class AuthenticationService {
     @PreAuthorize("permitAll()")
     public String authenticate(LoginRequest loginRequest) throws NotFoundException, AccountNotActiveException, InvalidLoginDataException {
         User user = userRepository.findByUsername(loginRequest.username())
-                .orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.USER_NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.INVALID_CREDENTIALS));
 
         if(!user.isVerified()) throw new AccountNotActiveException(UserMessages.USER_NOT_VERIFIED, ExceptionCodes.USER_NOT_VERIFIED);
         if(user.isBlocked()) throw new AccountNotActiveException(UserMessages.USER_BLOCKED, ExceptionCodes.USER_BLOCKED);

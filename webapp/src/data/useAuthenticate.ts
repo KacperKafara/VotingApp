@@ -2,6 +2,8 @@ import { useMutation } from "@tanstack/react-query";
 import { api } from "./api";
 import { AxiosError } from "axios";
 import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from "react-i18next";
+import { ApplicationError } from "@/types/applicationError";
 
 interface LoginRequest {
   username: string;
@@ -14,6 +16,7 @@ interface LoginResponse {
 
 export const useAuthenticate = () => {
   const { toast } = useToast();
+  const { t } = useTranslation("errors");
 
   const { mutateAsync, isSuccess, isPending } = useMutation({
     mutationFn: async (data: LoginRequest) => {
@@ -24,7 +27,7 @@ export const useAuthenticate = () => {
       toast({
         variant: "destructive",
         title: "Authentication failed",
-        description: error.response?.data?.exceptionCode,
+        description: t((error.response?.data as ApplicationError).code)
       });
     }
   });

@@ -1,3 +1,20 @@
 {
-  
+  "USER_BLOCKED": "User is blocked",
+  "USER_NOT_FOUND": "User not found",
+  "INTERNAL_SERVER_ERROR": "Something went wrong",
+  "NOT_FOUND": "Not found",
+  "VALIDATION_ERROR": "Invalid data",
+  "SOMETHING_WENT_WRONG": "Something went wrong",
+  "MEDIA_TYPE_NOT_SUPPORTED": "Media type not supported",
+  "INVALID_CREDENTIALS": "Invalid credentials",
+  "ROLE_NOT_FOUND": "Role not found",
+  "USERNAME_OR_EMAIL_ALREADY_EXISTS": "User with this username or email already exists",
+  "PHONE_NUMBER_ALREADY_EXISTS": "User with this phone number already exists",
+  "CONSTRAINT_VIOLATION": "Constraint violation",
+  "ACCOUNT_VERIFICATION_TOKEN_USED": "Account verification token used",
+  "ACCOUNT_VERIFICATION_TOKEN_EXPIRED": "Account verification token expired",
+  "USER_NOT_VERIFIED": "User not verified",
+  "RESET_PASSWORD_TOKEN_USED": "Reset password token used",
+  "RESET_PASSWORD_TOKEN_EXPIRED": "Reset password token expired",
+  "USER_WITH_EMAIL_NOT_FOUND": "User with this email not found"
 }
