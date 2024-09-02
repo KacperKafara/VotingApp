@@ -51,6 +51,7 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        "main-background": "hsl(var(--main-background))",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -70,6 +71,9 @@ module.exports = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      fontFamily: {
+        ec: ["Sacramento", "cursive"],
       },
     },
   },

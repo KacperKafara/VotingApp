@@ -9,6 +9,7 @@ import { ThemeProvider } from './components/theme-provider.tsx'
 import { ProtectedRoutes, UnprotectedRoutes } from './routes.ts'
 import NotFoundPage from './pages/NotFoundPage/index.tsx'
 import AuthGuard from './AuthGuard.tsx'
+import '@/i18n'
 
 const router = createBrowserRouter([
   ...UnprotectedRoutes,

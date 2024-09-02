@@ -7,6 +7,7 @@ import java.util.StringJoiner;
 
 public record LoginRequest(
         @NotBlank
+        @Length(min = 3)
         String username,
         @NotBlank
         @Length(min = 8)

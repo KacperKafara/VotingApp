@@ -1,9 +1,6 @@
 import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
-import pl from "./pl/common"
-import en from "./en/common"
-
-export const defaultNS = "common";
+import Backend from "i18next-http-backend";
 
 let userLang = "en";
 const storedLanguage = localStorage.getItem("language");
@@ -19,16 +16,15 @@ if (storedLanguage && (storedLanguage === "pl" || storedLanguage === "en")) {
   localStorage.setItem("language", userLang);
 }
 
-i18next.use(initReactI18next).init({
-  debug: true,
-  fallbackLng: "en",
-  defaultNS,
-  resources: {
-    pl: {
-      common: pl,
-    },
-    en: {
-      common: en,
-    },
-  },
+i18next
+  .use(Backend)
+  .use(initReactI18next)
+  .init({
+    debug: true,
+    fallbackLng: userLang,
+    interpolation: {
+      escapeValue: false,
+    }
 });
+
+export default i18next;
