@@ -7,5 +7,6 @@
   "loginToShort": "Login jest za krótki",
   "passwordToShort": "Hasło jest za krótkie",
   "loginToLong": "Login jest za długi",
-  "passwordToLong": "Hasło jest za długie"
+  "passwordToLong": "Hasło jest za długie",
+  "register": "Rejestracja"
 }

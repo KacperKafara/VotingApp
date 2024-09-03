@@ -9,6 +9,7 @@ interface UserStore {
   setActiveRole: (role: string) => void;
   setToken: (token: string) => void;
   clearToken: () => void;
+  clearActiveRole: () => void;
 }
 
 export type Role = "administrator" | "moderator" | "user";
@@ -65,6 +66,13 @@ export const useUserStore = create<UserStore>((set) => ({
       localStorage.setItem("activeRole", role);
       return {
         activeRole: role,
+      };
+    }),
+  clearActiveRole: () =>
+    set(() => {
+      localStorage.removeItem("activeRole");
+      return {
+        activeRole: undefined,
       };
     }),
 }));
