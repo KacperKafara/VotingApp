@@ -12,6 +12,7 @@ import { TFunction } from "i18next";
 import { useUserStore } from "@/store/userStore";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
+import ResetPassword from "./forgot-password";
 
 const getLoginSchema = (t: TFunction<'loginPage'>) =>
   z.object({
@@ -31,12 +32,12 @@ interface LoginFormProps {
   className?: string;
 }
 
-const LoginForm:FC<LoginFormProps> = ({ className }) => {
+const LoginForm: FC<LoginFormProps> = ({ className }) => {
   const { authenticate, isPending } = useAuthenticate();
   const { t } = useTranslation('loginPage');
   const { setToken } = useUserStore();
   const navigate = useNavigate();
-  const [ forgotPasswordOpen, setForgotPasswordOpen ] = useState(false);
+  const [resetPasswordOpen, setResetPasswordOpen] = useState(false);
 
   const form = useForm<LoginSchema>({
     resolver: zodResolver(getLoginSchema(t)),
@@ -54,53 +55,49 @@ const LoginForm:FC<LoginFormProps> = ({ className }) => {
 
   return (
     <div className={cn(className)}>
-      {forgotPasswordOpen ? (
-        <div>abcd</div>
-      ) : (
-        <Form {...form}>
-          <form onSubmit={onSubmit} className="flex flex-col gap-2">
-            <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input {...field} autoComplete="username" placeholder={t('username')}/>
-                  </FormControl>
-                  <FormMessage className="text-center" />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input {...field} autoComplete="password" type="password" placeholder={t('password')}/>
-                  </FormControl>
-                  <FormMessage className="text-center" />
-                </FormItem>
-              )}
-            />
-            <div className="flex justify-between">
-              <Button variant="link" asChild className="w-fit pl-1 py-0 pr-0 h-fit self-left text-xs">
-                <NavLink to="/register">{t('register')}</NavLink>
-              </Button>
-              <Button variant="link" className="w-fit pl-0 py-0 pr-1 h-fit self-right text-xs" onClick={() => setForgotPasswordOpen(true)}>
-                {t('forgotPassword')}
-              </Button>
-            </div>
-            
-            <LoadingButton 
-              type="submit"
-              text={t('loginButton')}
-              className="h-fit mt-1"
-              isLoading={isPending}
-            />
-          </form>
-        </Form>)
-      }
+      <Form {...form}>
+        <form onSubmit={onSubmit} className="flex flex-col gap-2">
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input {...field} autoComplete="username" placeholder={t('username')} />
+                </FormControl>
+                <FormMessage className="text-center" />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input {...field} autoComplete="password" type="password" placeholder={t('password')} />
+                </FormControl>
+                <FormMessage className="text-center" />
+              </FormItem>
+            )}
+          />
+          <div className="flex justify-between">
+            <Button variant="link" asChild className="w-fit pl-1 py-0 pr-0 h-fit self-left text-xs">
+              <NavLink to="/register">{t('register')}</NavLink>
+            </Button>
+            <Button type="button" onClick={() => setResetPasswordOpen(true)} variant="link" className="font-medium text-primary underline-offset-4 hover:underline w-fit pl-0 py-0 pr-1 h-fit self-right text-xs">
+              {t('forgotPassword')}
+            </Button>
+          </div>
+          <LoadingButton
+            type="submit"
+            text={t('loginButton')}
+            className="h-fit mt-1"
+            isLoading={isPending}
+          />
+        </form>
+      </Form>
+      <ResetPassword open={resetPasswordOpen} onOpenChange={() => setResetPasswordOpen(!resetPasswordOpen)} />
     </div>
   );
 }

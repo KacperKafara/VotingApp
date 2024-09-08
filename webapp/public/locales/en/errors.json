@@ -1,4 +1,5 @@
 {
+  "defaultTitle": "Error",
   "USER_BLOCKED": "User is blocked",
   "USER_NOT_FOUND": "User not found",
   "INTERNAL_SERVER_ERROR": "Something went wrong",
@@ -16,5 +17,6 @@
   "USER_NOT_VERIFIED": "User not verified",
   "RESET_PASSWORD_TOKEN_USED": "Reset password token used",
   "RESET_PASSWORD_TOKEN_EXPIRED": "Reset password token expired",
-  "USER_WITH_EMAIL_NOT_FOUND": "User with this email not found"
+  "USER_WITH_EMAIL_NOT_FOUND": "User with this email not found",
+  "RESOURCE_NOT_FOUND": "No resource found"
 }

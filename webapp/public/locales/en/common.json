@@ -1,5 +1,7 @@
 {
   "languageSelector": "Language",
   "themeSelector": "Color theme",
-  "logout": "Logout"
+  "logout": "Logout",
+  "close": "Close",
+  "submit": "Submit"
 }

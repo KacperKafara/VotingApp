@@ -1,17 +1,16 @@
 import { FC } from "react";
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
+import { useUserStore } from "./store/userStore";
 
 const AuthGuard: FC = () => {
-  const token = undefined;
+  const { token } = useUserStore();
 
   const isLoggedIn = token === undefined;
 
   return (
     <>
       {!isLoggedIn ? (
-        <div>
-          <h1>Logged In</h1>
-        </div>
+        <Navigate to="/" replace={true} />
       ) : (
         <div>
           <Outlet />

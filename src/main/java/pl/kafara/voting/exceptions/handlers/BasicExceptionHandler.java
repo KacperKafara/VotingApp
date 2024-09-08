@@ -12,6 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 import pl.kafara.voting.exceptions.ApplicationBaseException;
 import pl.kafara.voting.exceptions.NotFoundException;
 import pl.kafara.voting.exceptions.messages.GenericMessages;
@@ -63,12 +64,14 @@ public class BasicExceptionHandler {
 
     @ExceptionHandler(GenericJDBCException.class)
     ResponseEntity<ExceptionResponse> handleJDBCException(GenericJDBCException e) {
+        log.error("JDBC Exception: ", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(GenericMessages.JDBC_ERROR, ExceptionCodes.INTERNAL_SERVER_ERROR));
     }
 
     @ExceptionHandler(ResponseStatusException.class)
     ResponseEntity<ExceptionResponse> handleResponseStatusException(ResponseStatusException e) {
         if(e.getStatusCode().equals(HttpStatus.INTERNAL_SERVER_ERROR)) {
+            log.error("Internal Server Error: ", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ExceptionResponse(GenericMessages.INTERNAL_SERVER_ERROR, ExceptionCodes.INTERNAL_SERVER_ERROR));
         }
@@ -99,7 +102,14 @@ public class BasicExceptionHandler {
 
     @ExceptionHandler(NoSuchAlgorithmException.class)
     ResponseEntity<ExceptionResponse> handleNoSuchAlgorithmException(NoSuchAlgorithmException e) {
+        log.error("NoSuchAlgorithmException: ", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ExceptionResponse(GenericMessages.SOMETHING_WENT_WRONG, ExceptionCodes.INTERNAL_SERVER_ERROR));
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    ResponseEntity<ExceptionResponse> handleNoResourceFoundException(NoResourceFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ExceptionResponse(GenericMessages.RESOURCE_NOT_FOUND, ExceptionCodes.RESOURCE_NOT_FOUND));
     }
 }

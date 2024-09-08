@@ -1,5 +1,7 @@
 {
   "languageSelector": "Język",
   "themeSelector": "Zmień motyw",
-  "logout": "Wyloguj"
+  "logout": "Wyloguj",
+  "close": "Zamknij",
+  "submit": "Wyślij"
 }

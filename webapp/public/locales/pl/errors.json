@@ -1,4 +1,5 @@
 {
+  "defaultTitle": "Błąd",
   "USER_BLOCKED": "Użytkownik zablokowany",
   "INTERNAL_SERVER_ERROR": "Coś poszło nie tak",
   "NOT_FOUND": "Nie znaleziono",
@@ -16,5 +17,6 @@
   "USER_NOT_VERIFIED": "Użytkownik niezweryfikowany",
   "RESET_PASSWORD_TOKEN_USED": "Token resetowania hasła został użyty",
   "RESET_PASSWORD_TOKEN_EXPIRED": "Token resetowania hasła wygasł",
-  "USER_WITH_EMAIL_NOT_FOUND": "Użytkownik z tym adresem e-mail nie znaleziony"
+  "USER_WITH_EMAIL_NOT_FOUND": "Użytkownik z tym adresem e-mail nie znaleziony",
+  "RESOURCE_NOT_FOUND": "Nie znaleziono takiego adresu"
 }

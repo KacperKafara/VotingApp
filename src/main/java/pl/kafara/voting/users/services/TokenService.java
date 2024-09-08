@@ -64,6 +64,11 @@ public class TokenService {
         return resetPasswordToken;
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public boolean isResetPasswordTokenValid(String token) {
+        return resetPasswordTokenRepository.findByToken(token).isPresent();
+    }
+
     private String generateSafeToken() throws NoSuchAlgorithmException {
         String chars = "0123456789abcdefghijklmnopqrstuvwxyz-_ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         SecureRandom random = SecureRandom.getInstanceStrong();

@@ -28,7 +28,7 @@ public class UserService {
         if(user.isBlocked())
             throw new AccountNotActiveException(UserMessages.USER_BLOCKED, ExceptionCodes.USER_BLOCKED);
 
-        if(user.isVerified())
+        if(!user.isVerified())
             throw new AccountNotActiveException(UserMessages.USER_NOT_VERIFIED, ExceptionCodes.USER_NOT_VERIFIED);
 
         return tokenService.generateResetPasswordToken(user);
