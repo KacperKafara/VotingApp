@@ -70,7 +70,7 @@ export const useChangePassword = () => {
 
   const { mutateAsync, isSuccess, isPending } = useMutation({
     mutationFn: async (data : { password: string, token: string }) => {
-      const response = await api.post<unknown>(`/resetPassword/${data.token}/change`, { password: data.password });
+      const response = await api.post<unknown>(`/resetPassword/${data.token}`, { password: data.password });
       return response.data;
     },
     onError: (error: AxiosError) => {
@@ -84,7 +84,7 @@ export const useChangePassword = () => {
       navigate('/');
       toast({
         title: t('resetPassword:successTitle'),
-        description: t('resetPassword:successDescription'),
+        description: t('resetPassword:successChangePassword'),
       });
     }
   });

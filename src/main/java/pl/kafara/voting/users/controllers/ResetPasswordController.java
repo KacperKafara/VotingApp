@@ -11,6 +11,9 @@ import org.springframework.web.server.ResponseStatusException;
 import pl.kafara.voting.exceptions.NotFoundException;
 import pl.kafara.voting.exceptions.messages.GenericMessages;
 import pl.kafara.voting.exceptions.user.AccountNotActiveException;
+import pl.kafara.voting.exceptions.user.VerificationTokenExpiredException;
+import pl.kafara.voting.exceptions.user.VerificationTokenUsedException;
+import pl.kafara.voting.users.dto.ResetPasswordFormRequest;
 import pl.kafara.voting.users.dto.ResetPasswordRequest;
 import pl.kafara.voting.users.services.EmailService;
 import pl.kafara.voting.users.services.TokenService;
@@ -46,5 +49,19 @@ public class ResetPasswordController {
             return ResponseEntity.ok().build();
         else
             return ResponseEntity.badRequest().build();
+    }
+
+    @PostMapping("/{token}")
+    public ResponseEntity<Void> resetPassword(@PathVariable String token, @Validated @RequestBody ResetPasswordFormRequest resetPasswordRequest) throws NotFoundException {
+        if(tokenService.isResetPasswordTokenValid(token)) {
+            try {
+                userService.resetPassword(token, resetPasswordRequest);
+                return ResponseEntity.ok().build();
+            } catch (VerificationTokenUsedException | VerificationTokenExpiredException e) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+            }
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }
