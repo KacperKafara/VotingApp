@@ -12,9 +12,9 @@ VALUES ('10f41829-09d2-48d0-af87-761fe5e9e6d2', 'FEMALE', now(), now(), 1);
 INSERT INTO public.gender (id, name, created_at, updated_at, version)
 VALUES ('aeead59f-a7c5-4570-bbc7-bd9eae859c20', 'OTHER', now(), now(), 1);
 
-INSERT INTO public.users (id, username, password, created_at, updated_at, verified, blocked, failed_login_attempts, version)
+INSERT INTO public.users (id, username, password, created_at, updated_at, verified, blocked, failed_login_attempts, version, language)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1038', 'user', '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.',
-        now(), now(), true, false, 0, 1);
+        now(), now(), true, false, 0, 1, 'en');
 INSERT INTO public.personal_data (first_name, last_name, phone_number, birth_date, user_id, email, gender_id)
 VALUES ('User', 'User', '123456789',
         '2001-01-01', '5e642d0a-94d4-4a4f-8760-cd6d63cd1038','admin@localhost.com', '10f41829-09d2-48d0-af87-761fe5e9e6d2');

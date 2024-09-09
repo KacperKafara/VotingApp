@@ -5,7 +5,7 @@ import { useUserStore } from "./store/userStore";
 const AuthGuard: FC = () => {
   const { token } = useUserStore();
 
-  const isLoggedIn = token === undefined;
+  const isLoggedIn = token !== undefined;
 
   return (
     <>

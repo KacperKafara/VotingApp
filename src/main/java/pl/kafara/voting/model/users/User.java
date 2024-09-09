@@ -43,6 +43,8 @@ public class User extends AbstractEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "gender_id", table = "personal_data", nullable = false)
     private Gender gender;
+    @Column(name = "language", nullable = false)
+    private String language;
 
     @Column(name = "verified", nullable = false)
     private boolean verified = false;
@@ -52,12 +54,13 @@ public class User extends AbstractEntity {
     @Column(name = "failed_login_attempts", nullable = false)
     private int failedLoginAttempts = 0;
 
-    public User(String firstName, String lastName, String phoneNumber, LocalDateTime birthDate, String username, String email) {
+    public User(String firstName, String lastName, String phoneNumber, LocalDateTime birthDate, String username, String email, String language) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.birthDate = birthDate;
         this.username = username;
         this.email = email;
+        this.language = language;
     }
 }

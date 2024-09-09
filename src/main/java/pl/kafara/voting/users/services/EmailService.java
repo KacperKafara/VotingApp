@@ -1,17 +1,17 @@
 package pl.kafara.voting.users.services;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import pl.kafara.voting.model.users.User;
 import pl.kafara.voting.services.HtmlEmailService;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -40,6 +40,15 @@ public class EmailService {
                 "uri", uri);
         String subject = mailMessageSource.getMessage("resetPassword.subject", null, Locale.of(lang));
         htmlEmailService.createHtmlEmail(email, subject, "resetPassword", templateModel, lang);
+    }
 
+    @Async
+    public void sendAccountDeletedEmail(List<User> users) {
+        for(User user : users) {
+            Map<String, Object> templateModel = Map.of(
+                    "name", user.getUsername());
+            String subject = mailMessageSource.getMessage("accountDeleted.subject", null, Locale.of(user.getLanguage()));
+            htmlEmailService.createHtmlEmail(user.getEmail(), subject, "accountDeleted", templateModel, user.getLanguage());
+        }
     }
 }

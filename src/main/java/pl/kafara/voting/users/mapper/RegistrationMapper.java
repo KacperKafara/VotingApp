@@ -14,7 +14,8 @@ public class RegistrationMapper {
                 registrationRequest.phoneNumber(),
                 registrationRequest.birthDate(),
                 registrationRequest.username(),
-                registrationRequest.email()
+                registrationRequest.email(),
+                registrationRequest.language()
         );
     }
 }
