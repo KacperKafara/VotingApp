@@ -18,6 +18,7 @@ import pl.kafara.voting.users.dto.ResetPasswordRequest;
 import pl.kafara.voting.users.services.EmailService;
 import pl.kafara.voting.users.services.TokenService;
 import pl.kafara.voting.users.services.UserService;
+import pl.kafara.voting.util.SensitiveData;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -33,8 +34,8 @@ public class ResetPasswordController {
     @PostMapping
     public ResponseEntity<Void> resetPassword(@Validated @RequestBody ResetPasswordRequest resetPasswordRequest) throws NotFoundException, NoSuchAlgorithmException {
         try {
-            String token = userService.resetPassword(resetPasswordRequest.email());
-            if (token == null || token.isEmpty())
+            SensitiveData token = userService.resetPassword(resetPasswordRequest.email());
+            if (token == null || token.data().isEmpty())
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, GenericMessages.TOKEN_CANNOT_BE_BLANK);
             emailService.sendResetPasswordEmail(resetPasswordRequest.email(), token, resetPasswordRequest.language());
             return ResponseEntity.ok().build();

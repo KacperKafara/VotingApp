@@ -22,6 +22,7 @@ import pl.kafara.voting.users.repositories.GenderRepository;
 import pl.kafara.voting.users.repositories.RoleRepository;
 import pl.kafara.voting.users.repositories.UserRepository;
 import pl.kafara.voting.util.JwtService;
+import pl.kafara.voting.util.SensitiveData;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -42,7 +43,7 @@ public class AuthenticationService {
     private int maxFailedAttempts;
 
     @PreAuthorize("permitAll()")
-    public String authenticate(LoginRequest loginRequest) throws NotFoundException, AccountNotActiveException, InvalidLoginDataException {
+    public SensitiveData authenticate(LoginRequest loginRequest) throws NotFoundException, AccountNotActiveException, InvalidLoginDataException {
         User user = userRepository.findByUsername(loginRequest.username())
                 .orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.INVALID_CREDENTIALS));
 
@@ -61,11 +62,11 @@ public class AuthenticationService {
         user.setFailedLoginAttempts(0);
         userRepository.save(user);
 
-        return jwtService.createToken(user.getUsername(), user.getId(), user.getRoles());
+        return new SensitiveData(jwtService.createToken(user.getUsername(), user.getId(), user.getRoles()));
     }
 
     @PreAuthorize("permitAll()")
-    public String register(RegistrationRequest registrationRequest) throws NotFoundException, NoSuchAlgorithmException {
+    public SensitiveData register(RegistrationRequest registrationRequest) throws NotFoundException, NoSuchAlgorithmException {
         Role role = roleRepository.findByName(UserRoleEnum.USER)
                 .orElseThrow(() -> new NotFoundException(UserMessages.ROLE_NOT_FOUND, ExceptionCodes.ROLE_NOT_FOUND));
         Gender gender = genderRepository.findByName(GenderEnum.fromInt(registrationRequest.gender()))

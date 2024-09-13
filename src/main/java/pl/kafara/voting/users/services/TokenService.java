@@ -14,6 +14,7 @@ import pl.kafara.voting.model.users.tokens.ResetPasswordToken;
 import pl.kafara.voting.model.users.tokens.SafeToken;
 import pl.kafara.voting.users.repositories.AccountVerificationTokenRepository;
 import pl.kafara.voting.users.repositories.ResetPasswordTokenRepository;
+import pl.kafara.voting.util.SensitiveData;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -28,11 +29,11 @@ public class TokenService {
     private final AccountVerificationTokenRepository accountVerificationTokenRepository;
     private final ResetPasswordTokenRepository resetPasswordTokenRepository;
 
-    public String generateAccountVerificationToken(User user) throws NoSuchAlgorithmException {
-        String token = generateSafeToken();
+    public SensitiveData generateAccountVerificationToken(User user) throws NoSuchAlgorithmException {
+        SensitiveData token = generateSafeToken();
         accountVerificationTokenRepository.deleteByUserId(user.getId());
-        AccountVerificationToken accountVerificationToken = new AccountVerificationToken(token, Instant.now().plus(AccountVerificationToken.EXPIRATION_TIME, ChronoUnit.MINUTES), user);
-        return accountVerificationTokenRepository.save(accountVerificationToken).getToken();
+        AccountVerificationToken accountVerificationToken = new AccountVerificationToken(token.data(), Instant.now().plus(AccountVerificationToken.EXPIRATION_TIME, ChronoUnit.MINUTES), user);
+        return new SensitiveData(accountVerificationTokenRepository.save(accountVerificationToken).getToken());
     }
 
     public SafeToken validateAccountVerificationToken(String token) throws VerificationTokenUsedException, VerificationTokenExpiredException {
@@ -46,11 +47,11 @@ public class TokenService {
         return accountVerificationToken;
     }
 
-    public String generateResetPasswordToken(User user) throws NoSuchAlgorithmException {
-        String token = generateSafeToken();
+    public SensitiveData generateResetPasswordToken(User user) throws NoSuchAlgorithmException {
+        SensitiveData token = generateSafeToken();
         resetPasswordTokenRepository.deleteByUserId(user.getId());
-        ResetPasswordToken resetPasswordToken = new ResetPasswordToken(token, Instant.now().plus(ResetPasswordToken.EXPIRATION_TIME, ChronoUnit.MINUTES), user);
-        return resetPasswordTokenRepository.save(resetPasswordToken).getToken();
+        ResetPasswordToken resetPasswordToken = new ResetPasswordToken(token.data(), Instant.now().plus(ResetPasswordToken.EXPIRATION_TIME, ChronoUnit.MINUTES), user);
+        return new SensitiveData(resetPasswordTokenRepository.save(resetPasswordToken).getToken());
     }
 
     public SafeToken validateResetPasswordToken(String token) throws VerificationTokenUsedException, VerificationTokenExpiredException {
@@ -69,12 +70,13 @@ public class TokenService {
         return resetPasswordTokenRepository.findByToken(token).isPresent();
     }
 
-    private String generateSafeToken() throws NoSuchAlgorithmException {
+    private SensitiveData generateSafeToken() throws NoSuchAlgorithmException {
         String chars = "0123456789abcdefghijklmnopqrstuvwxyz-_ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         SecureRandom random = SecureRandom.getInstanceStrong();
-        return random.ints(32, 0, chars.length())
+        SensitiveData data = new SensitiveData(random.ints(32, 0, chars.length())
                 .mapToObj(chars::charAt)
                 .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
-                .toString();
+                .toString());
+        return data;
     }
 }

@@ -51,10 +51,10 @@ public class JwtService {
     public Authentication validateToken(String token) {
         JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secretKey)).build();
         DecodedJWT decodedJWT = verifier.verify(token);
-        List<String> roles = decodedJWT.getClaim("roles").asList(String.class);
+        List<String> roles = decodedJWT.getClaim("authorities").asList(String.class);
         List<GrantedAuthority> authorities = roles.stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
-        return new UsernamePasswordAuthenticationToken(decodedJWT.getSubject(), null, Collections.unmodifiableCollection(authorities));
+        return new UsernamePasswordAuthenticationToken(token, null, Collections.unmodifiableCollection(authorities));
     }
 }

@@ -9,6 +9,7 @@ import pl.kafara.voting.model.AbstractEntity;
 import pl.kafara.voting.model.users.User;
 
 import java.time.Instant;
+import java.util.StringJoiner;
 
 @Entity
 @AllArgsConstructor
@@ -29,4 +30,13 @@ public abstract class SafeToken extends AbstractEntity {
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, updatable = false)
     private User user;
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", SafeToken.class.getSimpleName() + "[", "]")
+                .add("token='********'")
+                .add("expirationDate=" + expirationDate)
+                .add("user=" + user)
+                .toString();
+    }
 }

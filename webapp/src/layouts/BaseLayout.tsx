@@ -7,19 +7,18 @@ import { FC } from "react";
 import { Outlet } from "react-router-dom";
 
 const BaseLayout: FC = () => {
-
   const { token } = useUserStore();
   const isLogged = token !== undefined;
 
   return (
-    <div className=" h-screen w-screen flex">
-      <header className="w-72 flex flex-col pt-6 items-center">
-        <h1 className="text-3xl font-ec">Voting App</h1>
+    <div className="flex h-screen w-screen">
+      <header className="flex w-72 flex-col items-center pt-6">
+        <h1 className="font-ec text-3xl">Voting App</h1>
         <div className="mt-14 w-10/12">
           {!isLogged ? <LoginForm /> : <div>abcd</div>}
         </div>
-        <div className="w-full h-full flex items-end justify-center pb-4">
-          <div className="flex flex-col w-full items-center gap-2">
+        <div className="flex h-full w-full items-end justify-center pb-4">
+          <div className="flex w-full flex-col items-center gap-2">
             {isLogged && <LogoutButton />}
             <LanguageToogle />
             <ModeToggle />
@@ -31,7 +30,6 @@ const BaseLayout: FC = () => {
       </main>
     </div>
   );
-
 };
 
 export default BaseLayout;

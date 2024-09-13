@@ -27,9 +27,9 @@ export const useAuthenticate = () => {
       toast({
         variant: "destructive",
         title: "Authentication failed",
-        description: t((error.response?.data as ApplicationError).code)
+        description: t((error.response?.data as ApplicationError).code),
       });
-    }
+    },
   });
 
   return { authenticate: mutateAsync, isSuccess, isPending };

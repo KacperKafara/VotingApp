@@ -15,6 +15,7 @@ import pl.kafara.voting.exceptions.NotFoundException;
 import pl.kafara.voting.exceptions.user.VerificationTokenExpiredException;
 import pl.kafara.voting.exceptions.user.VerificationTokenUsedException;
 import pl.kafara.voting.users.services.VerificationService;
+import pl.kafara.voting.util.SensitiveData;
 
 @RestController
 @RequestMapping("/verify")
@@ -28,7 +29,7 @@ public class VerificationController {
     @PostMapping("/{token}")
     public ResponseEntity<Void> verify(@PathVariable String token) throws NotFoundException {
         try {
-            verificationService.verify(token);
+            verificationService.verify(new SensitiveData(token));
             return ResponseEntity.ok().build();
         } catch (VerificationTokenUsedException | VerificationTokenExpiredException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);

@@ -20,6 +20,7 @@ import pl.kafara.voting.users.dto.LoginResponse;
 import pl.kafara.voting.users.dto.RegistrationRequest;
 import pl.kafara.voting.users.services.AuthenticationService;
 import pl.kafara.voting.users.services.EmailService;
+import pl.kafara.voting.util.SensitiveData;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -34,7 +35,7 @@ public class AuthenticationController {
     @PostMapping("/authenticate")
     public ResponseEntity<LoginResponse> authenticate(@Validated @RequestBody LoginRequest loginRequest) throws NotFoundException {
         try {
-            return ResponseEntity.ok(new LoginResponse(authenticationService.authenticate(loginRequest)));
+            return ResponseEntity.ok(new LoginResponse(authenticationService.authenticate(loginRequest).data()));
         } catch (AccountNotActiveException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         } catch (InvalidLoginDataException e) {
@@ -45,8 +46,8 @@ public class AuthenticationController {
     @PreAuthorize("permitAll()")
     @PostMapping("/register")
     public ResponseEntity<Void> register(@Validated @RequestBody RegistrationRequest registrationRequest) throws NotFoundException, NoSuchAlgorithmException {
-        String token = authenticationService.register(registrationRequest);
-        if (token == null || token.isEmpty())
+        SensitiveData token = authenticationService.register(registrationRequest);
+        if (token == null || token.data().isEmpty())
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, GenericMessages.SOMETHING_WENT_WRONG);
         emailService.sendAccountVerificationEmail(registrationRequest.email(), token, registrationRequest.firstName(), registrationRequest.language());
         return ResponseEntity.ok().build();

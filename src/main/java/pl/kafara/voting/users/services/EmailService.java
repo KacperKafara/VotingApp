@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.kafara.voting.model.users.User;
 import pl.kafara.voting.services.HtmlEmailService;
+import pl.kafara.voting.util.SensitiveData;
 
 import java.net.URI;
 import java.util.List;
@@ -25,8 +26,8 @@ public class EmailService {
     @Value("${app.url}")
     private String url;
 
-    public void sendAccountVerificationEmail(String to, String token, String name, String lang) {
-        URI uri = URI.create(url + "/verify/" + token);
+    public void sendAccountVerificationEmail(String to, SensitiveData token, String name, String lang) {
+        URI uri = URI.create(url + "/verify/" + token.data());
         Map<String, Object> templateModel = Map.of(
                 "name", name,
                 "uri", uri);
@@ -34,8 +35,8 @@ public class EmailService {
         htmlEmailService.createHtmlEmail(to, subject, "accountVerification", templateModel, lang);
     }
 
-    public void sendResetPasswordEmail(String email, String token, String lang) {
-        URI uri = URI.create(url + "/resetPassword/" + token);
+    public void sendResetPasswordEmail(String email, SensitiveData token, String lang) {
+        URI uri = URI.create(url + "/resetPassword/" + token.data());
         Map<String, Object> templateModel = Map.of(
                 "uri", uri);
         String subject = mailMessageSource.getMessage("resetPassword.subject", null, Locale.of(lang));
@@ -46,7 +47,8 @@ public class EmailService {
     public void sendAccountDeletedEmail(List<User> users) {
         for(User user : users) {
             Map<String, Object> templateModel = Map.of(
-                    "name", user.getUsername());
+                    "name", user.getUsername()
+            );
             String subject = mailMessageSource.getMessage("accountDeleted.subject", null, Locale.of(user.getLanguage()));
             htmlEmailService.createHtmlEmail(user.getEmail(), subject, "accountDeleted", templateModel, user.getLanguage());
         }

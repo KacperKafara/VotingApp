@@ -7,12 +7,14 @@ import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import pl.kafara.voting.model.AbstractEntity;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Entity
+@ToString
 public class Role extends AbstractEntity {
 
     @Column(nullable = false, unique = true, updatable = false, length = 20)

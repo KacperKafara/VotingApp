@@ -15,6 +15,7 @@ import pl.kafara.voting.model.users.User;
 import pl.kafara.voting.model.users.tokens.SafeToken;
 import pl.kafara.voting.users.dto.ResetPasswordFormRequest;
 import pl.kafara.voting.users.repositories.UserRepository;
+import pl.kafara.voting.util.SensitiveData;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -26,7 +27,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public String resetPassword(String email) throws NotFoundException, AccountNotActiveException, NoSuchAlgorithmException {
+    public SensitiveData resetPassword(String email) throws NotFoundException, AccountNotActiveException, NoSuchAlgorithmException {
         User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.USER_WITH_EMAIL_NOT_FOUND)
         );

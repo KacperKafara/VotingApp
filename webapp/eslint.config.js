@@ -6,8 +6,7 @@ import tseslint from 'typescript-eslint'
 
 export default tseslint.config({
   extends: [js.configs.recommended, ...tseslint.configs.recommended],
-  files: ['**/*.{ts,tsx}'],
-  ignores: ['dist'],
+  ignores: ['dist', '.eslint.config.js', './src/components/ui/*'],
   languageOptions: {
     ecmaVersion: 2020,
     globals: globals.browser,
