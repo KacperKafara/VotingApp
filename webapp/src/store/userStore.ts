@@ -12,8 +12,6 @@ interface UserStore {
   clearActiveRole: () => void;
 }
 
-export type Role = "administrator" | "moderator" | "user";
-
 export const roleMapping: Record<string, string> = {
   ROLE_ADMINISTRATOR: "admin",
   ROLE_MODERATOR: "moderator",
