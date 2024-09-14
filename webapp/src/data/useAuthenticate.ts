@@ -8,6 +8,7 @@ import { ApplicationError } from "@/types/applicationError";
 interface LoginRequest {
   username: string;
   password: string;
+  language: string;
 }
 
 interface LoginResponse {

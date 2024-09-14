@@ -18,5 +18,6 @@
   "RESET_PASSWORD_TOKEN_USED": "Token resetowania hasła został użyty",
   "RESET_PASSWORD_TOKEN_EXPIRED": "Token resetowania hasła wygasł",
   "USER_WITH_EMAIL_NOT_FOUND": "Użytkownik z tym adresem e-mail nie znaleziony",
-  "RESOURCE_NOT_FOUND": "Nie znaleziono takiego adresu"
+  "RESOURCE_NOT_FOUND": "Nie znaleziono takiego adresu",
+  "AUTHENTICATION_BLOCKED": "Autoryzacja zablokowana z powodu zbyt wielu nieudanych prób"
 }

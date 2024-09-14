@@ -12,6 +12,7 @@ public class UserMessages {
     public static final String ACCOUNT_VERIFICATION_TOKEN_EXPIRED = "Account verification token expired";
     public static final String RESET_PASSWORD_TOKEN_USED = "Reset password token used";
     public static final String RESET_PASSWORD_TOKEN_EXPIRED = "Reset password token expired";
+    public static final String AUTHENTICATION_BLOCKED = "Authentication blocked";
 
     private UserMessages() {
     }

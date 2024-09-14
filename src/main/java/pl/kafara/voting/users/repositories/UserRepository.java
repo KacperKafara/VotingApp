@@ -21,6 +21,4 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByEmail(String email);
     @Transactional(readOnly = true, propagation = Propagation.MANDATORY)
     List<User> getUsersByCreatedAtBeforeAndVerifiedIsFalse(LocalDateTime createdAt);
-    @Transactional(readOnly = true, propagation = Propagation.MANDATORY)
-    List<User> getUsersByLastFailedLoginBeforeAndBlockedIsTrue(LocalDateTime lastFailedLogin);
 }

@@ -1,6 +1,12 @@
 import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "../ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "../ui/form";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
 import LoadingButton from "../loading-button";
@@ -8,23 +14,23 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuthenticate } from "@/data/useAuthenticate";
 import { useTranslation } from "react-i18next";
-import { TFunction } from "i18next";
+import i18next, { TFunction } from "i18next";
 import { useUserStore } from "@/store/userStore";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import ResetPassword from "./forgot-password";
 
-const getLoginSchema = (t: TFunction<'loginPage'>) =>
+const getLoginSchema = (t: TFunction<"loginPage">) =>
   z.object({
     username: z
       .string()
-      .min(3, { message: t('loginToShort') })
-      .max(50, { message: t('loginToLong') }),
+      .min(3, { message: t("loginToShort") })
+      .max(50, { message: t("loginToLong") }),
     password: z
       .string()
-      .min(8, { message: t('passwordToShort') })
-      .max(50, { message: t('passwordToLong') }),
-  })
+      .min(8, { message: t("passwordToShort") })
+      .max(50, { message: t("passwordToLong") }),
+  });
 
 type LoginSchema = z.infer<ReturnType<typeof getLoginSchema>>;
 
@@ -34,7 +40,7 @@ interface LoginFormProps {
 
 const LoginForm: FC<LoginFormProps> = ({ className }) => {
   const { authenticate, isPending } = useAuthenticate();
-  const { t } = useTranslation('loginPage');
+  const { t } = useTranslation("loginPage");
   const { setToken } = useUserStore();
   const navigate = useNavigate();
   const [resetPasswordOpen, setResetPasswordOpen] = useState(false);
@@ -48,7 +54,11 @@ const LoginForm: FC<LoginFormProps> = ({ className }) => {
   });
 
   const onSubmit = form.handleSubmit(async ({ username, password }) => {
-    const result = await authenticate({ username, password });
+    const result = await authenticate({
+      username,
+      password,
+      language: i18next.language,
+    });
     setToken(result.token);
     navigate("/");
   });
@@ -63,7 +73,11 @@ const LoginForm: FC<LoginFormProps> = ({ className }) => {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input {...field} autoComplete="username" placeholder={t('username')} />
+                  <Input
+                    {...field}
+                    autoComplete="username"
+                    placeholder={t("username")}
+                  />
                 </FormControl>
                 <FormMessage className="text-center" />
               </FormItem>
@@ -75,31 +89,48 @@ const LoginForm: FC<LoginFormProps> = ({ className }) => {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input {...field} autoComplete="password" type="password" placeholder={t('password')} />
+                  <Input
+                    {...field}
+                    autoComplete="password"
+                    type="password"
+                    placeholder={t("password")}
+                  />
                 </FormControl>
                 <FormMessage className="text-center" />
               </FormItem>
             )}
           />
           <div className="flex justify-between">
-            <Button variant="link" asChild className="w-fit pl-1 py-0 pr-0 h-fit self-left text-xs">
-              <NavLink to="/register">{t('register')}</NavLink>
+            <Button
+              variant="link"
+              asChild
+              className="self-left h-fit w-fit py-0 pl-1 pr-0 text-xs"
+            >
+              <NavLink to="/register">{t("register")}</NavLink>
             </Button>
-            <Button type="button" onClick={() => setResetPasswordOpen(true)} variant="link" className="font-medium text-primary underline-offset-4 hover:underline w-fit pl-0 py-0 pr-1 h-fit self-right text-xs">
-              {t('forgotPassword')}
+            <Button
+              type="button"
+              onClick={() => setResetPasswordOpen(true)}
+              variant="link"
+              className="self-right h-fit w-fit py-0 pl-0 pr-1 text-xs font-medium text-primary underline-offset-4 hover:underline"
+            >
+              {t("forgotPassword")}
             </Button>
           </div>
           <LoadingButton
             type="submit"
-            text={t('loginButton')}
-            className="h-fit mt-1"
+            text={t("loginButton")}
+            className="mt-1 h-fit"
             isLoading={isPending}
           />
         </form>
       </Form>
-      <ResetPassword open={resetPasswordOpen} onOpenChange={() => setResetPasswordOpen(!resetPasswordOpen)} />
+      <ResetPassword
+        open={resetPasswordOpen}
+        onOpenChange={() => setResetPasswordOpen(!resetPasswordOpen)}
+      />
     </div>
   );
-}
+};
 
 export default LoginForm;

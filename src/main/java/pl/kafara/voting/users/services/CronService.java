@@ -27,14 +27,4 @@ public class CronService {
         emailService.sendAccountDeletedEmail(users);
         userRepository.deleteAll(users);
     }
-
-    @Scheduled(cron = "0 0 * * * *", zone = "UTC")
-    public void unblockUsers() {
-        List<User>  users = userRepository.getUsersByLastFailedLoginBeforeAndBlockedIsTrue(LocalDateTime.now().minusDays(1));
-        users.forEach(user -> {
-            user.setBlocked(false);
-            user.setFailedLoginAttempts(0);
-        });
-        userRepository.saveAll(users);
-    }
 }
