@@ -25,6 +25,7 @@ import pl.kafara.voting.util.JwtService;
 import pl.kafara.voting.util.SensitiveData;
 
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
 
 @Slf4j
 @Service
@@ -48,18 +49,20 @@ public class AuthenticationService {
                 .orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.INVALID_CREDENTIALS));
 
         if(!user.isVerified()) throw new AccountNotActiveException(UserMessages.USER_NOT_VERIFIED, ExceptionCodes.USER_NOT_VERIFIED);
-        if(user.isBlocked()) throw new AccountNotActiveException(UserMessages.USER_BLOCKED, ExceptionCodes.USER_BLOCKED);
 
         if(!passwordEncoder.matches(loginRequest.password(), user.getPassword())) {
             user.setFailedLoginAttempts(user.getFailedLoginAttempts() + 1);
             if(user.getFailedLoginAttempts() >= maxFailedAttempts) {
                 user.setBlocked(true);
+                user.setLastFailedLogin(LocalDateTime.now());
             }
             userRepository.save(user);
             throw new InvalidLoginDataException(UserMessages.INVALID_CREDENTIALS, ExceptionCodes.INVALID_CREDENTIALS);
         }
+        if(user.isBlocked()) throw new AccountNotActiveException(UserMessages.USER_BLOCKED, ExceptionCodes.USER_BLOCKED);
 
         user.setFailedLoginAttempts(0);
+        user.setLastLogin(LocalDateTime.now());
         userRepository.save(user);
 
         return new SensitiveData(jwtService.createToken(user.getUsername(), user.getId(), user.getRoles()));

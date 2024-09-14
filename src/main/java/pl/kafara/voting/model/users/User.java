@@ -53,6 +53,10 @@ public class User extends AbstractEntity {
 
     @Column(name = "failed_login_attempts", nullable = false)
     private int failedLoginAttempts = 0;
+    @Column(name = "last_login")
+    private LocalDateTime lastLogin;
+    @Column(name = "last_failed_login")
+    private LocalDateTime lastFailedLogin;
 
     public User(String firstName, String lastName, String phoneNumber, LocalDateTime birthDate, String username, String email, String language) {
         this.firstName = firstName;
