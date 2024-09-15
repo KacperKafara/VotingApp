@@ -30,7 +30,7 @@ public class JwtService {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(String username, UUID id, List<Role> roles) {
+    public String createToken(String username, UUID id, Set<Role> roles) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime expirationTime = now.plusSeconds(expireLength);
         List<String> rolesString = new ArrayList<>();

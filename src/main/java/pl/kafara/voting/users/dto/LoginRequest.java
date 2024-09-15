@@ -13,6 +13,7 @@ public record LoginRequest(
         @NotBlank
         @Length(min = 8)
         String password,
+        @NotBlank
         @Pattern(regexp = "pl|en")
         String language
         ) {

@@ -19,5 +19,6 @@
   "RESET_PASSWORD_TOKEN_EXPIRED": "Reset password token expired",
   "USER_WITH_EMAIL_NOT_FOUND": "User with this email not found",
   "RESOURCE_NOT_FOUND": "No resource found",
-  "AUTHENTICATION_BLOCKED": "Authentication is blocker because of too many failed attempts"
+  "AUTHENTICATION_BLOCKED": "Authentication is blocker because of too many failed attempts",
+  "USER_MUST_HAVE_AT_LEAST_ONE_ROLE": "User must have at least one role"
 }

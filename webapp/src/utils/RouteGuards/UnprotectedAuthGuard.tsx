@@ -12,9 +12,7 @@ const UnprotectedAuthGuard: FC = () => {
       {isLoggedIn ? (
         <Navigate to={`/${roleMapping[activeRole!]}`} replace={true} />
       ) : (
-        <div>
-          <Outlet />
-        </div>
+        <Outlet />
       )}
     </>
   );

@@ -19,5 +19,6 @@
   "RESET_PASSWORD_TOKEN_EXPIRED": "Token resetowania hasła wygasł",
   "USER_WITH_EMAIL_NOT_FOUND": "Użytkownik z tym adresem e-mail nie znaleziony",
   "RESOURCE_NOT_FOUND": "Nie znaleziono takiego adresu",
-  "AUTHENTICATION_BLOCKED": "Autoryzacja zablokowana z powodu zbyt wielu nieudanych prób"
+  "AUTHENTICATION_BLOCKED": "Autoryzacja zablokowana z powodu zbyt wielu nieudanych prób",
+  "USER_MUST_HAVE_AT_LEAST_ONE_ROLE": "Użytkownik musi mieć przynajmniej jedną rolę"
 }

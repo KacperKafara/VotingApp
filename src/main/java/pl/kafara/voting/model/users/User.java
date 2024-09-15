@@ -8,8 +8,8 @@ import lombok.ToString;
 import pl.kafara.voting.model.AbstractEntity;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -28,7 +28,7 @@ public class User extends AbstractEntity {
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    List<Role> roles = new ArrayList<>();
+    Set<Role> roles = new HashSet<>();
 
     @Column(name = "first_name", table = "personal_data", nullable = false)
     private String firstName;

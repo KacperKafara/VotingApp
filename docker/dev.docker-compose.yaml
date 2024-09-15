@@ -12,6 +12,12 @@ services:
       - /tmp/data:/var/lib/postgresql/data
     networks:
       - docker-network
+  cache:
+    image: redis:7.4-alpine3.20
+    ports:
+      - "6379:6379"
+    networks:
+      - docker-network
 
   spring-app:
     build:
@@ -22,6 +28,7 @@ services:
     restart: no
     depends_on:
       - database
+      - cache
     ports:
       - "8080:8080"
     networks:
