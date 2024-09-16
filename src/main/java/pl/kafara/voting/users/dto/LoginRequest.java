@@ -22,6 +22,7 @@ public record LoginRequest(
         return new StringJoiner(", ", LoginRequest.class.getSimpleName() + "[", "]")
                 .add("username='" + username + "'")
                 .add("password='********'")
+                .add("language='" + language + "'")
                 .toString();
     }
 }

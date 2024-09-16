@@ -21,6 +21,7 @@ import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -59,7 +60,7 @@ public class AuthenticationServiceTest {
     public void Register_GenderNotFound_ShouldThrowNotFoundException() {
         User user = new User();
         Role role = new Role(UserRoleEnum.USER);
-        user.setRoles(List.of(role));
+        user.setRoles(Set.of(role));
         when(roleRepository.findByName(UserRoleEnum.USER)).thenReturn(Optional.of(role));
         when(genderRepository.findByName(GenderEnum.fromInt(registrationRequest.gender()))).thenReturn(Optional.empty());
         assertThrows(NotFoundException.class, () -> {

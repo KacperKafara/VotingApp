@@ -71,6 +71,9 @@ public class UserService {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.USER_NOT_FOUND));
         Role roleEntity = roleRepository.findByName(UserRoleEnum.fromString(role)).orElseThrow(() -> new NotFoundException(UserMessages.ROLE_NOT_FOUND, ExceptionCodes.ROLE_NOT_FOUND));
 
+        if(!user.getRoles().contains(roleEntity))
+            return;
+
         if(user.getRoles().size() == 1) {
             throw new UserMustHaveAtLeastOneRoleException(UserMessages.USER_MUST_HAVE_AT_LEAST_ONE_ROLE, ExceptionCodes.USER_MUST_HAVE_AT_LEAST_ONE_ROLE);
         }
