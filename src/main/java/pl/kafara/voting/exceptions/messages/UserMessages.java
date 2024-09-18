@@ -14,6 +14,8 @@ public class UserMessages {
     public static final String RESET_PASSWORD_TOKEN_EXPIRED = "Reset password token expired";
     public static final String AUTHENTICATION_BLOCKED = "Authentication blocked";
     public static final String USER_MUST_HAVE_AT_LEAST_ONE_ROLE = "User must have at least one role";
+    public static final String CANNOT_BLOCK_YOURSELF = "Cannot block yourself";
+    public static final String CANNOT_UNBLOCK_YOURSELF = "Cannot unblock yourself";
 
     private UserMessages() {
     }

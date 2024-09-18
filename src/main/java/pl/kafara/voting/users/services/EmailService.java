@@ -55,4 +55,20 @@ public class EmailService {
             htmlEmailService.createHtmlEmail(user.getEmail(), subject, "accountDeleted", templateModel, user.getLanguage());
         }
     }
+
+    public void sendAccountBlockedEmail(String email, String username, String language) {
+        Map<String, Object> templateModel = Map.of(
+                "name", username
+        );
+        String subject = mailMessageSource.getMessage("accountBlocked.subject", null, Locale.of(language));
+        htmlEmailService.createHtmlEmail(email, subject, "accountBlocked", templateModel, language);
+    }
+
+    public void sendAccountUnblockedEmail(String email, String username, String language) {
+        Map<String, Object> templateModel = Map.of(
+                "name", username
+        );
+        String subject = mailMessageSource.getMessage("accountUnblocked.subject", null, Locale.of(language));
+        htmlEmailService.createHtmlEmail(email, subject, "accountUnblocked", templateModel, language);
+    }
 }

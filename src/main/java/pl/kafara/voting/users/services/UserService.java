@@ -1,7 +1,10 @@
 package pl.kafara.voting.users.services;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -9,10 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.kafara.voting.exceptions.NotFoundException;
 import pl.kafara.voting.exceptions.handlers.ExceptionCodes;
 import pl.kafara.voting.exceptions.messages.UserMessages;
-import pl.kafara.voting.exceptions.user.AccountNotActiveException;
-import pl.kafara.voting.exceptions.user.UserMustHaveAtLeastOneRoleException;
-import pl.kafara.voting.exceptions.user.VerificationTokenExpiredException;
-import pl.kafara.voting.exceptions.user.VerificationTokenUsedException;
+import pl.kafara.voting.exceptions.user.*;
 import pl.kafara.voting.model.users.Role;
 import pl.kafara.voting.model.users.User;
 import pl.kafara.voting.model.users.UserRoleEnum;
@@ -80,5 +80,29 @@ public class UserService {
 
         user.getRoles().remove(roleEntity);
         userRepository.save(user);
+    }
+
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public User block(UUID id) throws NotFoundException, UserBlockException {
+        DecodedJWT jwt =  JWT.decode((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
+        if(jwt.getSubject().equals(id.toString()))
+            throw new UserBlockException(UserMessages.CANNOT_BLOCK_YOURSELF, ExceptionCodes.CANNOT_BLOCK_YOURSELF);
+
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.USER_NOT_FOUND));
+        user.setBlocked(true);
+        return userRepository.save(user);
+    }
+
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public User unblock(UUID id) throws NotFoundException, UserBlockException {
+        DecodedJWT jwt =  JWT.decode((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
+        if(jwt.getSubject().equals(id.toString()))
+            throw new UserBlockException(UserMessages.CANNOT_UNBLOCK_YOURSELF, ExceptionCodes.CANNOT_UNBLOCK_YOURSELF);
+
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.USER_NOT_FOUND));
+        user.setBlocked(false);
+        return userRepository.save(user);
     }
 }

@@ -10,9 +10,14 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.kafara.voting.exceptions.NotFoundException;
+import pl.kafara.voting.exceptions.user.UserBlockException;
 import pl.kafara.voting.exceptions.user.UserMustHaveAtLeastOneRoleException;
+import pl.kafara.voting.model.users.User;
 import pl.kafara.voting.users.dto.RoleRequest;
+import pl.kafara.voting.users.services.EmailService;
 import pl.kafara.voting.users.services.UserService;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")
@@ -20,6 +25,7 @@ import pl.kafara.voting.users.services.UserService;
 @Transactional(propagation = Propagation.NEVER)
 public class UserController {
     private final UserService userService;
+    private final EmailService emailService;
 
     @PutMapping("/role")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
@@ -35,6 +41,30 @@ public class UserController {
             userService.removeRole(roleRequest.userId(), roleRequest.role());
             return ResponseEntity.ok().build();
         } catch (UserMustHaveAtLeastOneRoleException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
+    }
+
+    @PutMapping("/block/{userId}")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public ResponseEntity<Void> blockUser(@PathVariable UUID userId) throws NotFoundException {
+        try {
+            User user = userService.block(userId);
+            emailService.sendAccountBlockedEmail(user.getEmail(), user.getUsername(), user.getLanguage());
+            return ResponseEntity.ok().build();
+        } catch (UserBlockException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
+    }
+
+    @DeleteMapping("/block/{userId}")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public ResponseEntity<Void> unblockUser(@PathVariable UUID userId) throws NotFoundException {
+        try {
+            User user = userService.unblock(userId);
+            emailService.sendAccountUnblockedEmail(user.getEmail(), user.getUsername(), user.getLanguage());
+            return ResponseEntity.ok().build();
+        } catch (UserBlockException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
     }

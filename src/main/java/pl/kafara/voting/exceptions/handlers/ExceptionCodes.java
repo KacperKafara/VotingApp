@@ -22,6 +22,8 @@ public class ExceptionCodes {
     public static final String RESOURCE_NOT_FOUND = "RESOURCE_NOT_FOUND";
     public static final String AUTHENTICATION_BLOCKED = "AUTHENTICATION_BLOCKED";
     public static final String USER_MUST_HAVE_AT_LEAST_ONE_ROLE = "USER_MUST_HAVE_AT_LEAST_ONE_ROLE";
+    public static final String CANNOT_BLOCK_YOURSELF = "CANNOT_BLOCK_YOURSELF";
+    public static final String CANNOT_UNBLOCK_YOURSELF = "CANNOT_UNBLOCK_YOURSELF";
 
     private ExceptionCodes() {
     }
