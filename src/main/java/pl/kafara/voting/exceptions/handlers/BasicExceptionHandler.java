@@ -55,7 +55,7 @@ public class BasicExceptionHandler {
         StringBuilder sb = new StringBuilder();
         sb.append(GenericMessages.VALIDATION_ERROR + " ");
         for (FieldError error : e.getFieldErrors()) {
-            sb.append(error.getDefaultMessage()).append(", ");
+            sb.append(error.getField()).append(" ").append(error.getDefaultMessage()).append(", ");
         }
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)

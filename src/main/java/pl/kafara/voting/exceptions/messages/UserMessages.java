@@ -16,6 +16,7 @@ public class UserMessages {
     public static final String USER_MUST_HAVE_AT_LEAST_ONE_ROLE = "User must have at least one role";
     public static final String CANNOT_BLOCK_YOURSELF = "Cannot block yourself";
     public static final String CANNOT_UNBLOCK_YOURSELF = "Cannot unblock yourself";
+    public static final String WRONG_PASSWORD = "Wrong password";
 
     private UserMessages() {
     }

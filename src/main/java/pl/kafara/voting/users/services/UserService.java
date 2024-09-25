@@ -17,6 +17,7 @@ import pl.kafara.voting.model.users.Role;
 import pl.kafara.voting.model.users.User;
 import pl.kafara.voting.model.users.UserRoleEnum;
 import pl.kafara.voting.model.users.tokens.SafeToken;
+import pl.kafara.voting.users.dto.ChangePasswordRequest;
 import pl.kafara.voting.users.dto.ResetPasswordFormRequest;
 import pl.kafara.voting.users.repositories.RoleRepository;
 import pl.kafara.voting.users.repositories.UserRepository;
@@ -103,6 +104,16 @@ public class UserService {
 
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.USER_NOT_FOUND));
         user.setBlocked(false);
+        return userRepository.save(user);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    public User changePassword(ChangePasswordRequest password, UUID userId) throws NotFoundException, WrongPasswordException {
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.USER_NOT_FOUND));
+        if(!passwordEncoder.matches(password.oldPassword(), user.getPassword()))
+            throw new WrongPasswordException(UserMessages.WRONG_PASSWORD, ExceptionCodes.WRONG_PASSWORD);
+
+        user.setPassword(passwordEncoder.encode(password.newPassword()));
         return userRepository.save(user);
     }
 }

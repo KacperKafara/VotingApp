@@ -3,7 +3,7 @@
     {
       "id": "f77cf369-337e-4bfd-bc85-aa7d63fa244b",
       "username": "user1",
-      "password": "password1",
+      "password": "$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.",
       "created_at": "2021-01-01 00:00:00",
       "updated_at": "2021-01-01 00:00:00",
       "verified": true,
@@ -15,7 +15,7 @@
     {
       "id": "f77cf369-337e-4bfd-bc85-aa7d63fa244c",
       "username": "user2",
-      "password": "password",
+      "password": "$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.",
       "created_at": "2021-01-01 00:00:00",
       "updated_at": "2021-01-01 00:00:00",
       "verified": true,

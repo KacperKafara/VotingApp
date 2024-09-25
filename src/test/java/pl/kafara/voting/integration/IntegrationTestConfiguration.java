@@ -13,6 +13,7 @@ import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.MountableFile;
 import pl.kafara.voting.users.dto.LoginRequest;
@@ -35,6 +36,7 @@ public abstract class IntegrationTestConfiguration {
     static MountableFile jar = MountableFile
             .forHostPath(Paths.get("target/votingApp.jar").toAbsolutePath());
 
+    @Container
     static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16.4-alpine3.20")
             .withNetwork(network)
             .withNetworkAliases("testDatabase")
@@ -42,23 +44,23 @@ public abstract class IntegrationTestConfiguration {
             .withUsername("postgres")
             .withPassword("postgres")
             .withDatabaseName("voting")
-            .withReuse(true)
             .waitingFor(Wait.defaultWaitStrategy());
 
+    @Container
     static final GenericContainer<?> redis = new GenericContainer<>("redis:7.4-alpine3.20")
             .withNetworkAliases("redis")
             .withNetwork(network)
             .withExposedPorts(6379)
-            .withReuse(true)
             .waitingFor(Wait.defaultWaitStrategy());
 
+    @Container
     static final GenericContainer<?> mail = new GenericContainer<>("rnwood/smtp4dev:3.6.0")
             .withNetworkAliases("mail")
             .withNetwork(network)
             .withExposedPorts(25)
-            .withReuse(true)
             .waitingFor(Wait.defaultWaitStrategy());
 
+    @Container
     static final GenericContainer<?> application = new GenericContainer<>("eclipse-temurin:21.0.2_13-jdk")
             .withNetwork(network)
             .withExposedPorts(8080)
@@ -73,15 +75,10 @@ public abstract class IntegrationTestConfiguration {
             .withEnv("SPRING_DATASOURCE_PASSWORD", "postgres")
             .withCopyToContainer(jar, "/opt/app.jar")
             .withCommand("sh", "-c", "java -jar /opt/app.jar")
-            .withReuse(true)
             .waitingFor(Wait.forHttp("/api/v1/actuator/health").forPort(8080).forStatusCode(200));
 
     @BeforeAll
     public static void setUp() {
-        postgres.start();
-        redis.start();
-        mail.start();
-        application.start();
         baseUrl = "http://" + application.getHost() + ":" + application.getMappedPort(8080) + "/api/v1";
         connectionHolder = () -> DriverManager.getConnection(
                 postgres.getJdbcUrl(), postgres.getUsername(), postgres.getPassword()
@@ -102,12 +99,5 @@ public abstract class IntegrationTestConfiguration {
         token = response.path("token");
     }
 
-//    @AfterAll
-//    public static void tearDown() {
-//        application.stop();
-//        mail.stop();
-//        redis.stop();
-//        postgres.stop();
-//    }
 }
 

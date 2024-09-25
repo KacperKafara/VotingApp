@@ -24,6 +24,7 @@ public class ExceptionCodes {
     public static final String USER_MUST_HAVE_AT_LEAST_ONE_ROLE = "USER_MUST_HAVE_AT_LEAST_ONE_ROLE";
     public static final String CANNOT_BLOCK_YOURSELF = "CANNOT_BLOCK_YOURSELF";
     public static final String CANNOT_UNBLOCK_YOURSELF = "CANNOT_UNBLOCK_YOURSELF";
+    public static final String WRONG_PASSWORD = "WRONG_PASSWORD_CHANGE_PASSWORD";
 
     private ExceptionCodes() {
     }
