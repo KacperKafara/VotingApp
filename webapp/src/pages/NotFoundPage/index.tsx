@@ -1,11 +1,14 @@
-import { FC } from "react";
+import { FC, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const NotFoundPage: FC = () => {
-  return (
-    <div>
-      <h1>Not Found</h1>
-    </div>
-  );
-}
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    navigate('/');
+  }, [navigate]);
+
+  return <></>;
+};
 
 export default NotFoundPage;

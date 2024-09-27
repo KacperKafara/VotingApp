@@ -1,5 +1,7 @@
 {
   "defaultTitle": "Error",
+  "sessionExpired": "Session expired",
+  "sessionExpiredMessage": "Your session has expired. Please log in again.",
   "USER_BLOCKED": "User is blocked",
   "USER_NOT_FOUND": "User not found",
   "INTERNAL_SERVER_ERROR": "Something went wrong",
@@ -20,5 +22,9 @@
   "USER_WITH_EMAIL_NOT_FOUND": "User with this email not found",
   "RESOURCE_NOT_FOUND": "No resource found",
   "AUTHENTICATION_BLOCKED": "Authentication is blocker because of too many failed attempts",
-  "USER_MUST_HAVE_AT_LEAST_ONE_ROLE": "User must have at least one role"
+  "USER_MUST_HAVE_AT_LEAST_ONE_ROLE": "User must have at least one role",
+  "CANNOT_BLOCK_YOURSELF": "You cannot block yourself",
+  "CANNOT_UNBLOCK_YOURSELF": "You cannot unblock yourself",
+  "WRONG_PASSWORD": "Old password is incorrect",
+  "NOT_AUTHORIZED_TO_PERFORM_THIS_ACTION": "You are not authorized to perform this action"
 }

@@ -1,15 +1,28 @@
-import { FC } from "react";
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "../ui/dialog";
-import { Button } from "../ui/button";
-import { useTranslation } from "react-i18next";
-import i18next, { TFunction } from "i18next";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "../ui/form";
-import { Input } from "../ui/input";
-import LoadingButton from "../loading-button";
-import { useResetPassword } from "@/data/useResetPassword";
+import { FC } from 'react';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '../ui/dialog';
+import { Button } from '../ui/button';
+import { useTranslation } from 'react-i18next';
+import i18next, { TFunction } from 'i18next';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from '../ui/form';
+import { Input } from '../ui/input';
+import LoadingButton from '../loading-button';
+import { useResetPassword } from '@/data/useResetPassword';
 
 interface ResetPasswordProps {
   open: boolean;
@@ -36,7 +49,7 @@ const ResetPassword: FC<ResetPasswordProps> = ({ open, onOpenChange }) => {
     },
   });
 
-  const onSubmit = form.handleSubmit(async data => {
+  const onSubmit = form.handleSubmit(async (data) => {
     await resetPassword({
       email: data.email,
       language: i18next.language,
@@ -47,9 +60,7 @@ const ResetPassword: FC<ResetPasswordProps> = ({ open, onOpenChange }) => {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>
-            {t('resetPassword:title')}
-          </DialogTitle>
+          <DialogTitle>{t('resetPassword:title')}</DialogTitle>
           <DialogDescription>
             {t('resetPassword:description')}
           </DialogDescription>
@@ -61,14 +72,23 @@ const ResetPassword: FC<ResetPasswordProps> = ({ open, onOpenChange }) => {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <Input {...field} type="email" autoComplete="email" placeholder="Email"/>
+                      <Input
+                        {...field}
+                        type="email"
+                        autoComplete="email"
+                        placeholder="Email"
+                      />
                     </FormControl>
                     <FormMessage className="text-center" />
                   </FormItem>
                 )}
               />
-              <div className="flex mt-2 justify-between">
-                <LoadingButton type="submit" text={t('common:submit')} isLoading={isPending} />
+              <div className="mt-2 flex justify-between">
+                <LoadingButton
+                  type="submit"
+                  text={t('common:submit')}
+                  isLoading={isPending}
+                />
                 <DialogClose asChild>
                   <Button type="button" variant="secondary">
                     {t('common:close')}
@@ -81,6 +101,6 @@ const ResetPassword: FC<ResetPasswordProps> = ({ open, onOpenChange }) => {
       </DialogContent>
     </Dialog>
   );
-}
+};
 
 export default ResetPassword;

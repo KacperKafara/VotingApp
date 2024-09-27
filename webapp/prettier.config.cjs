@@ -15,7 +15,7 @@ const config = {
   quoteProps: "as-needed",
   requirePragma: false,
   semi: true,
-  singleQuote: false,
+  singleQuote: true,
   tabWidth: 2,
   trailingComma: "es5",
   useTabs: false,

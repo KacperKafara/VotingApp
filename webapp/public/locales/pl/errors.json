@@ -1,5 +1,7 @@
 {
   "defaultTitle": "Błąd",
+  "sessionExpired": "Sesja wygasła",
+  "sessionExpiredMessage": "Twoja sesja wygasła. Zaloguj się ponownie.",
   "USER_BLOCKED": "Użytkownik zablokowany",
   "INTERNAL_SERVER_ERROR": "Coś poszło nie tak",
   "NOT_FOUND": "Nie znaleziono",
@@ -20,5 +22,9 @@
   "USER_WITH_EMAIL_NOT_FOUND": "Użytkownik z tym adresem e-mail nie znaleziony",
   "RESOURCE_NOT_FOUND": "Nie znaleziono takiego adresu",
   "AUTHENTICATION_BLOCKED": "Autoryzacja zablokowana z powodu zbyt wielu nieudanych prób",
-  "USER_MUST_HAVE_AT_LEAST_ONE_ROLE": "Użytkownik musi mieć przynajmniej jedną rolę"
+  "USER_MUST_HAVE_AT_LEAST_ONE_ROLE": "Użytkownik musi mieć przynajmniej jedną rolę",
+  "CANNOT_BLOCK_YOURSELF": "Nie możesz zablokować samego siebie",
+  "CANNOT_UNBLOCK_YOURSELF": "Nie możesz odblokować samego siebie",
+  "WRONG_PASSWORD": "Stare hasło jest nieprawidłowe",
+  "NOT_AUTHORIZED_TO_PERFORM_THIS_ACTION": "Nie masz uprawnień do wykonania tej akcji"
 }

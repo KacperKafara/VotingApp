@@ -6,6 +6,7 @@ import org.hibernate.exception.GenericJDBCException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -111,5 +112,11 @@ public class BasicExceptionHandler {
     ResponseEntity<ExceptionResponse> handleNoResourceFoundException(NoResourceFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ExceptionResponse(GenericMessages.RESOURCE_NOT_FOUND, ExceptionCodes.RESOURCE_NOT_FOUND));
+    }
+
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    ResponseEntity<ExceptionResponse> handleAuthorizationDeniedException(AuthorizationDeniedException e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new ExceptionResponse(GenericMessages.NOT_AUTHORIZED_TO_PERFORM_THIS_ACTION, ExceptionCodes.NOT_AUTHORIZED_TO_PERFORM_THIS_ACTION));
     }
 }
