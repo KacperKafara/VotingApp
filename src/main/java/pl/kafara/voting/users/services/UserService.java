@@ -3,6 +3,7 @@ package pl.kafara.voting.users.services;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,9 +22,11 @@ import pl.kafara.voting.users.dto.ChangePasswordRequest;
 import pl.kafara.voting.users.dto.ResetPasswordFormRequest;
 import pl.kafara.voting.users.repositories.RoleRepository;
 import pl.kafara.voting.users.repositories.UserRepository;
+import pl.kafara.voting.util.FilteringCriteria;
 import pl.kafara.voting.util.SensitiveData;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -115,5 +118,16 @@ public class UserService {
 
         user.setPassword(passwordEncoder.encode(password.newPassword()));
         return userRepository.save(user);
+    }
+
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public User getUser(UUID userId) throws NotFoundException {
+        return userRepository.findById(userId).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.USER_NOT_FOUND));
+    }
+
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public List<User> getUsers(FilteringCriteria filteringCriteria) {
+        Page<User> users = userRepository.getAllByUsernameContains(filteringCriteria.getPageable(), filteringCriteria.getUsername());
+        return users.getContent();
     }
 }

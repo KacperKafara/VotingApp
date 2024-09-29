@@ -1,6 +1,9 @@
 package pl.kafara.voting.users.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,9 +17,13 @@ import pl.kafara.voting.exceptions.user.UserBlockException;
 import pl.kafara.voting.exceptions.user.UserMustHaveAtLeastOneRoleException;
 import pl.kafara.voting.model.users.User;
 import pl.kafara.voting.users.dto.RoleRequest;
+import pl.kafara.voting.users.dto.UserResponse;
+import pl.kafara.voting.users.mapper.UserMapper;
 import pl.kafara.voting.users.services.EmailService;
 import pl.kafara.voting.users.services.UserService;
+import pl.kafara.voting.util.FilteringCriteria;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -67,5 +74,29 @@ public class UserController {
         } catch (UserBlockException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
+    }
+
+    @GetMapping("/{userId}")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public ResponseEntity<UserResponse> getUser(@PathVariable UUID userId) throws NotFoundException {
+        return ResponseEntity.ok(UserMapper.mapToUserResponse(userService.getUser(userId)));
+    }
+
+    @GetMapping
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public ResponseEntity<List<UserResponse>> getUsers(@RequestParam(name = "page", defaultValue = "0") int page,
+                                                       @RequestParam(name = "size", defaultValue = "10") int size,
+                                                       @RequestParam(name = "username", defaultValue = "") String username,
+                                                       @RequestParam(name = "sort", defaultValue = "username") String sort) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
+        FilteringCriteria filteringCriteria = FilteringCriteria.builder()
+                .pageable(pageable)
+                .username(username)
+                .build();
+        List<UserResponse> userResponses = userService.getUsers(filteringCriteria).stream()
+                .map(UserMapper::mapToUserResponse)
+                .toList();
+
+        return ResponseEntity.ok(userResponses);
     }
 }
