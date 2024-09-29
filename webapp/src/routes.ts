@@ -8,6 +8,7 @@ const ResetPasswordPage = loadable(() => import('./pages/ResetPassword'));
 const MainPage = loadable(() => import('./pages/Main'));
 
 const AdminTestPage = loadable(() => import('./pages/@Admin/test'));
+const UsersPage = loadable(() => import('./pages/@Admin/users'));
 
 const ModeratorTestPage = loadable(() => import('./pages/@Moderator/test'));
 
@@ -19,7 +20,10 @@ const Routes: RouteObject[] = [
   { path: '/resetPassword/:token', Component: ResetPasswordPage },
 ];
 
-const AdminRoutes: RouteObject[] = [{ index: true, Component: AdminTestPage }];
+const AdminRoutes: RouteObject[] = [
+  { index: true, Component: AdminTestPage },
+  { path: 'users', Component: UsersPage },
+];
 const ModeratorRoutes: RouteObject[] = [
   { index: true, Component: ModeratorTestPage },
 ];
