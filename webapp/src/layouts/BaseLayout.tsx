@@ -1,11 +1,11 @@
-import AccountsLinks from "@/components/account-links";
-import { LanguageToogle } from "@/components/language-toogle";
-import LoginForm from "@/components/login/login-form";
-import LogoutButton from "@/components/logout-button";
-import { ModeToggle } from "@/components/mode-toogle";
-import { useUserStore } from "@/store/userStore";
-import { FC } from "react";
-import { Outlet } from "react-router-dom";
+import AccountsLinks from '@/components/account-links';
+import { LanguageToogle } from '@/components/language-toogle';
+import LoginForm from '@/components/login/login-form';
+import LogoutButton from '@/components/logout-button';
+import { ModeToggle } from '@/components/mode-toogle';
+import { useUserStore } from '@/store/userStore';
+import { FC } from 'react';
+import { Outlet } from 'react-router-dom';
 
 const BaseLayout: FC = () => {
   const { token } = useUserStore();
@@ -26,7 +26,7 @@ const BaseLayout: FC = () => {
           </div>
         </div>
       </header>
-      <main className="flex h-full w-full bg-main-background shadow-lg">
+      <main className="scrollbar scrollbar-thumb-primary scrollbar-thumb-rounded-full scrollbar-w-1 w-full overflow-y-auto bg-main-background shadow-lg">
         <Outlet />
       </main>
     </div>

@@ -20,6 +20,9 @@ import pl.kafara.voting.model.users.UserRoleEnum;
 import pl.kafara.voting.model.users.tokens.SafeToken;
 import pl.kafara.voting.users.dto.ChangePasswordRequest;
 import pl.kafara.voting.users.dto.ResetPasswordFormRequest;
+import pl.kafara.voting.users.dto.UserResponse;
+import pl.kafara.voting.users.dto.UsersResponse;
+import pl.kafara.voting.users.mapper.UserMapper;
 import pl.kafara.voting.users.repositories.RoleRepository;
 import pl.kafara.voting.users.repositories.UserRepository;
 import pl.kafara.voting.util.FilteringCriteria;
@@ -126,8 +129,17 @@ public class UserService {
     }
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public List<User> getUsers(FilteringCriteria filteringCriteria) {
+    public UsersResponse getUsers(FilteringCriteria filteringCriteria) {
         Page<User> users = userRepository.getAllByUsernameContains(filteringCriteria.getPageable(), filteringCriteria.getUsername());
-        return users.getContent();
+        List<UserResponse> usersResponse = users.getContent().stream()
+                .map(UserMapper::mapToUserResponse)
+                .toList();
+
+        return new UsersResponse(
+                usersResponse,
+                users.getTotalPages(),
+                users.getNumber(),
+                users.getSize()
+        );
     }
 }

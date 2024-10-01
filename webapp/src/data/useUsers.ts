@@ -1,21 +1,32 @@
 import { useQuery } from '@tanstack/react-query';
 import useAxiosPrivate from './useAxiosPrivate';
-import { User } from '@/types/user';
+import { UsersFilteded } from '@/types/user';
 import { AxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
 import { useToast } from '@/hooks/use-toast';
 import { ApplicationError } from '@/types/applicationError';
+import { useUsersFilters } from '@/hooks/useUsersFilters';
 
 export const useUsers = () => {
   const { api } = useAxiosPrivate();
   const { t } = useTranslation('errors');
   const { toast } = useToast();
+  const { pageNumber, pageSize, setFilters } = useUsersFilters();
 
-  return useQuery({
-    queryKey: ['users'],
+  const { data, isLoading } = useQuery({
+    queryKey: ['users', pageNumber, pageSize],
     queryFn: async () => {
       try {
-        const response = await api.get<User[]>('/users');
+        const response = await api.get<UsersFilteded>('/users', {
+          params: {
+            page: pageNumber,
+            size: pageSize,
+          },
+        });
+        setFilters({
+          pageNumber: response.data.pageNumber,
+          pageSize: response.data.pageSize,
+        });
         return response.data;
       } catch (e) {
         console.log(e);
@@ -28,4 +39,12 @@ export const useUsers = () => {
       }
     },
   });
+
+  return {
+    users: data?.users,
+    isLoading,
+    totalPages: data?.totalPages,
+    pageNumber: data?.pageNumber,
+    pageSize: data?.pageSize,
+  };
 };

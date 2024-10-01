@@ -10,3 +10,10 @@ export interface User {
   phoneNumber: string;
   birthDate: Date;
 }
+
+export interface UsersFilteded {
+  users: User[];
+  totalPages: number;
+  pageNumber: number;
+  pageSize: number;
+}

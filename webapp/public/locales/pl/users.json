@@ -3,5 +3,10 @@
   "lastName": "Nazwisko",
   "email": "Email",
   "username": "Nazwa użytkownika",
-  "phoneNumber": "Numer telefonu"
+  "phoneNumber": "Numer telefonu",
+  "pageChanger": {
+    "numberOfElements": "Liczba użytkowników",
+    "page": "Strona",
+    "of": "z"
+  }
 }

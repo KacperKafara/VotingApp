@@ -18,6 +18,7 @@ import pl.kafara.voting.exceptions.user.UserMustHaveAtLeastOneRoleException;
 import pl.kafara.voting.model.users.User;
 import pl.kafara.voting.users.dto.RoleRequest;
 import pl.kafara.voting.users.dto.UserResponse;
+import pl.kafara.voting.users.dto.UsersResponse;
 import pl.kafara.voting.users.mapper.UserMapper;
 import pl.kafara.voting.users.services.EmailService;
 import pl.kafara.voting.users.services.UserService;
@@ -84,19 +85,16 @@ public class UserController {
 
     @GetMapping
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<List<UserResponse>> getUsers(@RequestParam(name = "page", defaultValue = "0") int page,
-                                                       @RequestParam(name = "size", defaultValue = "10") int size,
-                                                       @RequestParam(name = "username", defaultValue = "") String username,
-                                                       @RequestParam(name = "sort", defaultValue = "username") String sort) {
+    public ResponseEntity<UsersResponse> getUsers(@RequestParam(name = "page", defaultValue = "0") int page,
+                                                  @RequestParam(name = "size", defaultValue = "10") int size,
+                                                  @RequestParam(name = "username", defaultValue = "") String username,
+                                                  @RequestParam(name = "sort", defaultValue = "username") String sort) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
         FilteringCriteria filteringCriteria = FilteringCriteria.builder()
                 .pageable(pageable)
                 .username(username)
                 .build();
-        List<UserResponse> userResponses = userService.getUsers(filteringCriteria).stream()
-                .map(UserMapper::mapToUserResponse)
-                .toList();
 
-        return ResponseEntity.ok(userResponses);
+        return ResponseEntity.ok(userService.getUsers(filteringCriteria));
     }
 }
