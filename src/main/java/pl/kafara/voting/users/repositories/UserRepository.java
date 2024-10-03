@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import pl.kafara.voting.model.users.Role;
 import pl.kafara.voting.model.users.User;
 
 import java.time.LocalDateTime;
@@ -24,4 +25,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     List<User> getUsersByCreatedAtBeforeAndVerifiedIsFalse(LocalDateTime createdAt);
     @Transactional(readOnly = true, propagation = Propagation.MANDATORY)
     Page<User> getAllByUsernameContains(Pageable pageable, String username);
+    @Transactional(readOnly = true, propagation = Propagation.MANDATORY)
+    Page<User> getAllByUsernameContainsAndRolesContaining(Pageable pageable, String username, Role role);
 }

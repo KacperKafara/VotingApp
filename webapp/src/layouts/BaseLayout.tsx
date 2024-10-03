@@ -26,7 +26,7 @@ const BaseLayout: FC = () => {
           </div>
         </div>
       </header>
-      <main className="scrollbar scrollbar-thumb-primary scrollbar-thumb-rounded-full scrollbar-w-1 w-full overflow-y-auto bg-main-background shadow-lg">
+      <main className="w-full overflow-y-auto bg-main-background shadow-lg scrollbar scrollbar-thumb-primary scrollbar-thumb-rounded-full scrollbar-w-1">
         <Outlet />
       </main>
     </div>

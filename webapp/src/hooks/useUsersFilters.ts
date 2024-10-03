@@ -1,9 +1,12 @@
+import { UserRole } from '@/types/roles';
 import { useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 interface UsersFilters {
   pageNumber?: number;
   pageSize?: number;
+  username?: string;
+  role?: UserRole | '' | 'all';
 }
 
 export const useUsersFilters = () => {
@@ -15,6 +18,9 @@ export const useUsersFilters = () => {
   const pageSize = parseInt(
     searchParams.get('size') || '10'
   ) as UsersFilters['pageSize'];
+  const username = (searchParams.get('username') ||
+    '') as UsersFilters['username'];
+  const role = (searchParams.get('role') || '') as UsersFilters['role'];
 
   const setFilters = useCallback(
     (filters: UsersFilters) => {
@@ -25,6 +31,19 @@ export const useUsersFilters = () => {
         if (filters.pageSize !== undefined) {
           params.set('size', filters.pageSize.toString());
         }
+        if (filters.username !== undefined) {
+          params.set('username', filters.username);
+        }
+        if (filters.role !== undefined && filters.role !== 'all') {
+          params.set('role', filters.role.toLowerCase());
+        }
+        if (filters.role === '' || filters.role === 'all') {
+          params.delete('role');
+        }
+        if (filters.username === '') {
+          params.delete('username');
+        }
+
         return params;
       });
     },
@@ -34,6 +53,8 @@ export const useUsersFilters = () => {
   return {
     pageNumber,
     pageSize,
+    username,
+    role,
     setFilters,
   };
 };

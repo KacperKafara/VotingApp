@@ -124,13 +124,21 @@ public class UserService {
     }
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public User getUser(UUID userId) throws NotFoundException {
         return userRepository.findById(userId).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.USER_NOT_FOUND));
     }
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public UsersResponse getUsers(FilteringCriteria filteringCriteria) {
-        Page<User> users = userRepository.getAllByUsernameContains(filteringCriteria.getPageable(), filteringCriteria.getUsername());
+        Role role = roleRepository.findByName(UserRoleEnum.fromString(filteringCriteria.getRole())).orElse(null);
+        Page<User> users;
+        if (role != null)
+            users = userRepository.getAllByUsernameContainsAndRolesContaining(filteringCriteria.getPageable(), filteringCriteria.getUsername(), role);
+        else
+            users = userRepository.getAllByUsernameContains(filteringCriteria.getPageable(), filteringCriteria.getUsername());
+
         List<UserResponse> usersResponse = users.getContent().stream()
                 .map(UserMapper::mapToUserResponse)
                 .toList();

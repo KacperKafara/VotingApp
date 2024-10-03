@@ -11,16 +11,19 @@ export const useUsers = () => {
   const { api } = useAxiosPrivate();
   const { t } = useTranslation('errors');
   const { toast } = useToast();
-  const { pageNumber, pageSize, setFilters } = useUsersFilters();
+  const { pageNumber, pageSize, username, role, setFilters } =
+    useUsersFilters();
 
   const { data, isLoading } = useQuery({
-    queryKey: ['users', pageNumber, pageSize],
+    queryKey: ['users', pageNumber, pageSize, username, role],
     queryFn: async () => {
       try {
         const response = await api.get<UsersFilteded>('/users', {
           params: {
             page: pageNumber,
             size: pageSize,
+            username: username,
+            role: role,
           },
         });
         setFilters({

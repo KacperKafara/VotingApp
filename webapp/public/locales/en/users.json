@@ -4,9 +4,17 @@
   "email": "Email",
   "username": "Username",
   "phoneNumber": "Phone Number",
+  "users": "Users",
   "pageChanger": {
     "numberOfElements": "Number of users",
     "page": "Page",
     "of": "of"
+  },
+  "filter": {
+    "ADMINISTRATOR": "Administrator",
+    "MODERATOR": "Moderator",
+    "USER": "User",
+    "all": "All",
+    "role": "Role"
   }
 }

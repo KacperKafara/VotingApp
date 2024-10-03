@@ -9,4 +9,5 @@ import org.springframework.data.domain.Pageable;
 public class FilteringCriteria {
     private Pageable pageable;
     private String username;
+    private String role;
 }

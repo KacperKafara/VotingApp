@@ -27,12 +27,12 @@ import java.util.UUID;
 @Aspect
 @Component
 public class LoggingAspect {
-    @Pointcut("@within(transactional)")
-    private void transactionalMethods(Transactional transactional) {
+    @Pointcut("@within(org.springframework.transaction.annotation.Transactional) || @annotation(org.springframework.transaction.annotation.Transactional)")
+    private void transactionalLog() {
     }
 
-    @Around(value = "transactionalMethods(transactional)", argNames = "jp, transactional")
-    private Object logTransaction(ProceedingJoinPoint jp, Transactional transactional) throws Throwable {
+    @Around(value = "transactionalLog()", argNames = "jp")
+    private Object logTransaction(ProceedingJoinPoint jp) throws Throwable {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = "<anonymous>";
 
@@ -58,9 +58,17 @@ public class LoggingAspect {
             }
         }
 
-//        String callerClass = jp.getTarget().getClass().getName();
         String callerMethod = jp.getSignature().getName();
         String txId = UUID.randomUUID().toString();
+
+        MethodSignature signature = (MethodSignature) jp.getSignature();
+        Method method = signature.getMethod();
+
+        Transactional transactional = method.getAnnotation(Transactional.class);
+
+        if(transactional == null) {
+            transactional = jp.getTarget().getClass().getAnnotation(Transactional.class);
+        }
 
         Object obj;
         if(TransactionSynchronizationManager.isActualTransactionActive()) {

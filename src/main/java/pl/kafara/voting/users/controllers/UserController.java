@@ -24,7 +24,6 @@ import pl.kafara.voting.users.services.EmailService;
 import pl.kafara.voting.users.services.UserService;
 import pl.kafara.voting.util.FilteringCriteria;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -88,11 +87,13 @@ public class UserController {
     public ResponseEntity<UsersResponse> getUsers(@RequestParam(name = "page", defaultValue = "0") int page,
                                                   @RequestParam(name = "size", defaultValue = "10") int size,
                                                   @RequestParam(name = "username", defaultValue = "") String username,
+                                                  @RequestParam(name = "role", defaultValue = "") String role,
                                                   @RequestParam(name = "sort", defaultValue = "username") String sort) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
         FilteringCriteria filteringCriteria = FilteringCriteria.builder()
                 .pageable(pageable)
                 .username(username)
+                .role(role.toUpperCase())
                 .build();
 
         return ResponseEntity.ok(userService.getUsers(filteringCriteria));
