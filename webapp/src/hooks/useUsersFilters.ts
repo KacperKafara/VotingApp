@@ -7,6 +7,7 @@ interface UsersFilters {
   pageSize?: number;
   username?: string;
   role?: UserRole | '' | 'all';
+  sort?: 'asc' | 'desc';
 }
 
 export const useUsersFilters = () => {
@@ -21,6 +22,8 @@ export const useUsersFilters = () => {
   const username = (searchParams.get('username') ||
     '') as UsersFilters['username'];
   const role = (searchParams.get('role') || '') as UsersFilters['role'];
+  const sort =
+    ((searchParams.get('sort') || '') as UsersFilters['sort']) || 'asc';
 
   const setFilters = useCallback(
     (filters: UsersFilters) => {
@@ -36,6 +39,9 @@ export const useUsersFilters = () => {
         }
         if (filters.role !== undefined && filters.role !== 'all') {
           params.set('role', filters.role.toLowerCase());
+        }
+        if (filters.sort !== undefined) {
+          params.set('sort', filters.sort);
         }
         if (filters.role === '' || filters.role === 'all') {
           params.delete('role');
@@ -55,6 +61,7 @@ export const useUsersFilters = () => {
     pageSize,
     username,
     role,
+    sort,
     setFilters,
   };
 };

@@ -46,7 +46,3 @@ security:
       secret-key: secret-key
       expiration-time: 86400000
   max-failed-attempts: 3
-
-#logging:
-#  level:
-#    root: debug

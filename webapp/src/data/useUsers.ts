@@ -11,11 +11,11 @@ export const useUsers = () => {
   const { api } = useAxiosPrivate();
   const { t } = useTranslation('errors');
   const { toast } = useToast();
-  const { pageNumber, pageSize, username, role, setFilters } =
+  const { pageNumber, pageSize, username, role, sort, setFilters } =
     useUsersFilters();
 
   const { data, isLoading } = useQuery({
-    queryKey: ['users', pageNumber, pageSize, username, role],
+    queryKey: ['users', pageNumber, pageSize, username, role, sort],
     queryFn: async () => {
       try {
         const response = await api.get<UsersFilteded>('/users', {
@@ -24,6 +24,7 @@ export const useUsers = () => {
             size: pageSize,
             username: username,
             role: role,
+            sort: sort,
           },
         });
         setFilters({

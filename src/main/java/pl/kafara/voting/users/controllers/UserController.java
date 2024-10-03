@@ -1,5 +1,6 @@
 package pl.kafara.voting.users.controllers;
 
+import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -88,8 +89,10 @@ public class UserController {
                                                   @RequestParam(name = "size", defaultValue = "10") int size,
                                                   @RequestParam(name = "username", defaultValue = "") String username,
                                                   @RequestParam(name = "role", defaultValue = "") String role,
-                                                  @RequestParam(name = "sort", defaultValue = "username") String sort) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
+                                                  @RequestParam(name = "sort", defaultValue = "asc") @Pattern(regexp = "asc|desc") String sort) {
+
+        Sort sortBy = Sort.by(Sort.Direction.fromString(sort), "username");
+        Pageable pageable = PageRequest.of(page, size, sortBy);
         FilteringCriteria filteringCriteria = FilteringCriteria.builder()
                 .pageable(pageable)
                 .username(username)

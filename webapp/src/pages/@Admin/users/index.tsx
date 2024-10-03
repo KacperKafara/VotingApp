@@ -2,6 +2,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableHead,
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
@@ -29,23 +30,32 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { FaAngleDown, FaAngleUp } from 'react-icons/fa';
 
 const UsersPage: FC = () => {
   const { users, totalPages } = useUsers();
   const { t } = useTranslation('users');
-  const { username, role, setFilters } = useUsersFilters();
+  const { username, role, sort, setFilters } = useUsersFilters();
   const [debouncedUsername, setDebouncedUsername] = useState<string>(username!);
   const [value] = useDebounce(debouncedUsername, 500);
 
   useEffect(() => {
     setFilters({ username: value });
-  }, [value, setFilters]);
+  }, [value, setFilters, sort]);
+
+  const handleChangeSortDirection = () => {
+    if (sort === 'asc') {
+      setFilters({ sort: 'desc' });
+    } else {
+      setFilters({ sort: 'asc' });
+    }
+  };
 
   return (
     <div className="flex min-h-full w-full flex-col items-center justify-center p-3">
       <div className="w-4/5">
         <h1 className="text-2xl font-bold">{t('users')}</h1>
-        <span className="flex">
+        <span className="my-3 flex w-1/2 gap-4">
           <Select
             onValueChange={(e) => {
               setFilters({
@@ -82,15 +92,27 @@ const UsersPage: FC = () => {
           />
         </span>
         <div className="rounded-md border">
-          <Table className="min-h-400px">
-            <TableHeader className="font-bold">
+          <Table>
+            <TableHeader>
               <TableRow>
-                <TableCell>{t('username')}</TableCell>
-                <TableCell>{t('firstName')}</TableCell>
-                <TableCell>{t('lastName')}</TableCell>
-                <TableCell>{t('email')}</TableCell>
-                <TableCell>{t('phoneNumber')}</TableCell>
-                <TableCell></TableCell>
+                <TableHead
+                  className="w-1/5 hover:cursor-pointer"
+                  onClick={handleChangeSortDirection}
+                >
+                  <span className="flex w-full items-center gap-3">
+                    {t('username')}{' '}
+                    {sort === 'desc' ? (
+                      <FaAngleDown className="size-3" />
+                    ) : (
+                      <FaAngleUp className="size-3" />
+                    )}
+                  </span>
+                </TableHead>
+                <TableHead className="w-1/5">{t('firstName')}</TableHead>
+                <TableHead className="w-1/5">{t('lastName')}</TableHead>
+                <TableHead className="w-1/5">{t('email')}</TableHead>
+                <TableHead className="w-1/5">{t('phoneNumber')}</TableHead>
+                <TableHead className="pr-8"></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
