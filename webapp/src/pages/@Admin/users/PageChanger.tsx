@@ -30,7 +30,6 @@ const PageChanger: FC<PageChangerProps> = ({ totalPages = 0 }) => {
 
   const prevPage = () => {
     if (pageNumber > 0) {
-      console.log(pageNumber - 1);
       setFilters({ pageNumber: pageNumber - 1 });
     }
   };
@@ -54,7 +53,7 @@ const PageChanger: FC<PageChangerProps> = ({ totalPages = 0 }) => {
       <div className="flex items-center gap-2">
         <p className="mr-1">{t('pageChanger.numberOfElements')}</p>
         <DropdownMenu>
-          <DropdownMenuTrigger>
+          <DropdownMenuTrigger asChild>
             <Button
               className="flex h-8 items-center px-2"
               variant="outline"

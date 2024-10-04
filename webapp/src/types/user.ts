@@ -11,7 +11,7 @@ export interface User {
   birthDate: Date;
 }
 
-export interface UsersFilteded {
+export interface UsersFiltered {
   users: User[];
   totalPages: number;
   pageNumber: number;

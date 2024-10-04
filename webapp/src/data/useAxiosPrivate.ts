@@ -31,6 +31,7 @@ const useAxiosPrivate = () => {
             description: t('sessionExpiredMessage'),
           });
         }
+        return Promise.reject(error);
       }
     );
 

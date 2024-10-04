@@ -31,17 +31,21 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa';
+import axios from 'axios';
+import { toast } from '@/hooks/use-toast';
+import { ApplicationError } from '@/types/applicationError';
+import LoadingIcon from '@/components/loading';
 
 const UsersPage: FC = () => {
-  const { users, totalPages } = useUsers();
-  const { t } = useTranslation('users');
+  const { isError, isLoading, error, data } = useUsers();
+  const { t } = useTranslation(['users', 'errors']);
   const { username, role, sort, setFilters } = useUsersFilters();
   const [debouncedUsername, setDebouncedUsername] = useState<string>(username!);
   const [value] = useDebounce(debouncedUsername, 500);
 
   useEffect(() => {
     setFilters({ username: value });
-  }, [value, setFilters, sort]);
+  }, [value, setFilters]);
 
   const handleChangeSortDirection = () => {
     if (sort === 'asc') {
@@ -50,6 +54,28 @@ const UsersPage: FC = () => {
       setFilters({ sort: 'asc' });
     }
   };
+
+  useEffect(() => {
+    if (isError) {
+      if (axios.isAxiosError(error)) {
+        toast({
+          variant: 'destructive',
+          title: t('errors:defaultTitle'),
+          description: t(
+            'errors:' + (error.response?.data as ApplicationError).code
+          ),
+        });
+      }
+    }
+  }, [error, isError, t]);
+
+  if (isLoading || isError) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <LoadingIcon />
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-full w-full flex-col items-center justify-center p-3">
@@ -116,8 +142,8 @@ const UsersPage: FC = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {users &&
-                users.map((user) => (
+              {data?.users &&
+                data.users.map((user) => (
                   <TableRow key={user.id}>
                     <TableCell>{user.username}</TableCell>
                     <TableCell>{user.firstName}</TableCell>
@@ -141,7 +167,7 @@ const UsersPage: FC = () => {
           </Table>
         </div>
         <div className="mt-1 flex justify-end">
-          <PageChanger totalPages={totalPages} />
+          <PageChanger totalPages={data?.totalPages} />
         </div>
       </div>
     </div>
