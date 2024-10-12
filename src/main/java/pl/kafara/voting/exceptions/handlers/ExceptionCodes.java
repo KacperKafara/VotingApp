@@ -26,6 +26,7 @@ public class ExceptionCodes {
     public static final String CANNOT_UNBLOCK_YOURSELF = "CANNOT_UNBLOCK_YOURSELF";
     public static final String WRONG_PASSWORD = "WRONG_PASSWORD_CHANGE_PASSWORD";
     public static final String NOT_AUTHORIZED_TO_PERFORM_THIS_ACTION = "NOT_AUTHORIZED_TO_PERFORM_THIS_ACTION";
+    public static final String CANNOT_MODIFY_YOURSELF_ROLES = "CANNOT_MODIFY_YOURSELF_ROLES";
 
     private ExceptionCodes() {
     }

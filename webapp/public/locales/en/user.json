@@ -1,0 +1,17 @@
+{
+  "userRoles": "User Roles",
+  "basicInformation": "Basic Information",
+  "basicInformationDescription": "Base information about user: ",
+  "firstName": "First Name",
+  "lastName": "Last Name",
+  "email": "Email",
+  "phoneNumber": "Phone Number",
+  "birthDate": "Birth Date",
+  "roles": {
+    "administrator": "Administrator",
+    "moderator": "Moderator",
+    "user": "User",
+    "updateUserRoles": "Update user roles",
+    "updateUserRolesDescription": "Are you sure that you want to update user roles?"
+  }
+}

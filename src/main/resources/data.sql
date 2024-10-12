@@ -4,6 +4,8 @@ INSERT INTO public.role (id, name, created_at, updated_at, version)
 VALUES ('b7a8dedb-bccc-4461-9b28-b60b5bf83e7f', 'ADMINISTRATOR', now(), now(), 1);
 INSERT INTO public.role (id, name, created_at, updated_at, version)
 VALUES ('4d877c20-ebe9-4a7b-92e5-785873f277fe', 'MODERATOR', now(), now(), 1);
+INSERT INTO public.role (id, name, created_at, updated_at, version)
+VALUES ('c07e7fce-134c-4004-bd70-b1e3a576a23b', 'VOTER', now(), now(), 1);
 
 INSERT INTO public.gender (id, name, created_at, updated_at, version)
 VALUES ('cc8e8196-1bd8-4be6-a8b4-a1dc1973a7eb', 'MALE', now(), now(), 1);
@@ -25,6 +27,8 @@ INSERT INTO public.users_roles (user_id, roles_id)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1038', 'b7a8dedb-bccc-4461-9b28-b60b5bf83e7f');
 INSERT INTO public.users_roles (user_id, roles_id)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1038', '4d877c20-ebe9-4a7b-92e5-785873f277fe');
+INSERT INTO public.users_roles (user_id, roles_id)
+VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1038', 'c07e7fce-134c-4004-bd70-b1e3a576a23b');
 
 
 -- User 2

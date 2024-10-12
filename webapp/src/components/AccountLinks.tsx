@@ -3,7 +3,7 @@ import { Button } from './ui/button';
 import { cn } from '@/lib/utils';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import ChangePasswordDialog from './change-password-dialog';
+import ChangePasswordDialog from './ChangePasswordDialog';
 
 interface AccountsLinksProps {
   className?: string;

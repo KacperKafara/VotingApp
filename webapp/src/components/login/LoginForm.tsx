@@ -9,7 +9,7 @@ import {
 } from '../ui/form';
 import { Input } from '../ui/input';
 import { cn } from '@/lib/utils';
-import LoadingButton from '../loading-button';
+import LoadingButton from '../LoadingButton';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuthenticate } from '@/data/useAuthenticate';
@@ -18,7 +18,7 @@ import i18next, { TFunction } from 'i18next';
 import { useUserStore } from '@/store/userStore';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Button } from '../ui/button';
-import ResetPassword from './forgot-password';
+import ResetPassword from './ForgotPassword';
 
 const getLoginSchema = (t: TFunction<'loginPage'>) =>
   z.object({

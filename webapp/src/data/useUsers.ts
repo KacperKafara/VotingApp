@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import useAxiosPrivate from './useAxiosPrivate';
-import { UsersFiltered } from '@/types/user';
+import { User, UsersFiltered } from '@/types/user';
 import { useUsersFilters } from '@/hooks/useUsersFilters';
 
 export const useUsers = () => {
@@ -20,6 +20,24 @@ export const useUsers = () => {
             sort: sort,
           },
         });
+        return data;
+      } catch (e) {
+        return Promise.reject(e);
+      }
+    },
+  });
+
+  return { isError, isLoading, error, data };
+};
+
+export const useUser = (id: string) => {
+  const { api } = useAxiosPrivate();
+
+  const { isError, isLoading, error, data } = useQuery({
+    queryKey: ['user'],
+    queryFn: async () => {
+      try {
+        const { data } = await api.get<User>(`/users/${id}`);
         return data;
       } catch (e) {
         return Promise.reject(e);

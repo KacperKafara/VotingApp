@@ -1,0 +1,17 @@
+{
+  "userRoles": "Role użytkownika",
+  "basicInformation": "Podstawowe informacje",
+  "basicInformationDescription": "Podstawowe informacje o użytkowniku: ",
+  "firstName": "Imię",
+  "lastName": "Nazwisko",
+  "email": "Email",
+  "phoneNumber": "Numer telefonu",
+  "birthDate": "Data urodzenia",
+  "roles": {
+    "administrator": "Administrator",
+    "moderator": "Moderator",
+    "user": "Użytkownik",
+    "updateUserRoles": "Aktualizacja ról użytkownika",
+    "updateUserRolesDescription": "Czy na pewno chcesz zaktualizować role użytkownika?"
+  }
+}

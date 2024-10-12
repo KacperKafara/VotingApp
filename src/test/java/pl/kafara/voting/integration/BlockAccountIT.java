@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 
 public class BlockAccountIT extends IntegrationTestConfiguration {
 
@@ -19,7 +20,7 @@ public class BlockAccountIT extends IntegrationTestConfiguration {
                 .contentType("application/json")
                 .header("Authorization", "Bearer " + token)
                 .when()
-                .put(baseUrl + "/users/block/" + userId)
+                .put(baseUrl + "/users/" + userId + "/block")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.NOT_FOUND.value());
@@ -33,10 +34,20 @@ public class BlockAccountIT extends IntegrationTestConfiguration {
                 .contentType("application/json")
                 .header("Authorization", "Bearer " + token)
                 .when()
-                .put(baseUrl + "/users/block/" + userId)
+                .put(baseUrl + "/users/" + userId + "/block")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK.value());
+
+        given()
+                .contentType("application/json")
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .get(baseUrl + "/users/user2")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .body("blocked", equalTo(true));
     }
 
     @Test
@@ -47,10 +58,20 @@ public class BlockAccountIT extends IntegrationTestConfiguration {
                 .contentType("application/json")
                 .header("Authorization", "Bearer " + token)
                 .when()
-                .put(baseUrl + "/users/block/" + userId)
+                .put(baseUrl + "/users/" + userId + "/block")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK.value());
+
+        given()
+                .contentType("application/json")
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .get(baseUrl + "/users/user1")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .body("blocked", equalTo(true));
     }
 
     @Test
@@ -61,10 +82,20 @@ public class BlockAccountIT extends IntegrationTestConfiguration {
                 .contentType("application/json")
                 .header("Authorization", "Bearer " + token)
                 .when()
-                .put(baseUrl + "/users/block/" + userId)
+                .put(baseUrl + "/users/" + userId + "/block")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.BAD_REQUEST.value());
+
+        given()
+                .contentType("application/json")
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .get(baseUrl + "/users/user")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .body("blocked", equalTo(false));
     }
 
     @Test
@@ -75,7 +106,7 @@ public class BlockAccountIT extends IntegrationTestConfiguration {
                 .contentType("application/json")
                 .header("Authorization", "Bearer " + token)
                 .when()
-                .delete(baseUrl + "/users/block/" + userId)
+                .delete(baseUrl + "/users/" + userId + "/block")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.NOT_FOUND.value());
@@ -89,10 +120,20 @@ public class BlockAccountIT extends IntegrationTestConfiguration {
                 .contentType("application/json")
                 .header("Authorization", "Bearer " + token)
                 .when()
-                .delete(baseUrl + "/users/block/" + userId)
+                .delete(baseUrl + "/users/" + userId + "/block")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK.value());
+
+        given()
+                .contentType("application/json")
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .get(baseUrl + "/users/user1")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .body("blocked", equalTo(false));
     }
 
     @Test
@@ -103,10 +144,20 @@ public class BlockAccountIT extends IntegrationTestConfiguration {
                 .contentType("application/json")
                 .header("Authorization", "Bearer " + token)
                 .when()
-                .delete(baseUrl + "/users/block/" + userId)
+                .delete(baseUrl + "/users/" + userId + "/block")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK.value());
+
+        given()
+                .contentType("application/json")
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .get(baseUrl + "/users/user2")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .body("blocked", equalTo(false));
     }
 
     @Test
@@ -117,9 +168,19 @@ public class BlockAccountIT extends IntegrationTestConfiguration {
                 .contentType("application/json")
                 .header("Authorization", "Bearer " + token)
                 .when()
-                .delete(baseUrl + "/users/block/" + userId)
+                .delete(baseUrl + "/users/" + userId + "/block")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.BAD_REQUEST.value());
+
+        given()
+                .contentType("application/json")
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .get(baseUrl + "/users/user")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .body("blocked", equalTo(false));
     }
 }

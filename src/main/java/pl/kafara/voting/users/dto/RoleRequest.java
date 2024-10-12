@@ -1,16 +1,12 @@
 package pl.kafara.voting.users.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.NotEmpty;
+import pl.kafara.voting.model.users.UserRoleEnum;
 
-import java.util.UUID;
+import java.util.Set;
 
 public record RoleRequest(
-        @NotNull
-        UUID userId,
-        @NotBlank
-        @Pattern(regexp = "ADMINISTRATOR|USER|MODERATOR")
-        String role
+        @NotEmpty
+        Set<UserRoleEnum> roles
 ) {
 }

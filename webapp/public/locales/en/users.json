@@ -5,6 +5,8 @@
   "username": "Username",
   "phoneNumber": "Phone Number",
   "users": "Users",
+  "role": "Roles",
+  "userPage": "User Page",
   "pageChanger": {
     "numberOfElements": "Number of users",
     "page": "Page",
@@ -16,5 +18,11 @@
     "USER": "User",
     "all": "All",
     "role": "Role"
+  },
+  "roleDialog": {
+    "titleAdd": "Are you sure you want to add the role?",
+    "titleRemove": "Are you sure you want to remove the role?",
+    "contentAdd": "The role will be added to the user.",
+    "contentRemove": "The role will be removed from the user."
   }
 }

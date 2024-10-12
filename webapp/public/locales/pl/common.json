@@ -3,5 +3,7 @@
   "themeSelector": "Zmień motyw",
   "logout": "Wyloguj",
   "close": "Zamknij",
-  "submit": "Wyślij"
+  "submit": "Wyślij",
+  "cancel": "Anuluj",
+  "confirm": "Potwierdź"
 }

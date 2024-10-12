@@ -17,6 +17,7 @@ public class UserMessages {
     public static final String CANNOT_BLOCK_YOURSELF = "Cannot block yourself";
     public static final String CANNOT_UNBLOCK_YOURSELF = "Cannot unblock yourself";
     public static final String WRONG_PASSWORD = "Wrong password";
+    public static final String CANNOT_MODIFY_YOURSELF_ROLES = "Cannot modify yourself roles";
 
     private UserMessages() {
     }

@@ -21,7 +21,7 @@ import {
   FormMessage,
 } from '../ui/form';
 import { Input } from '../ui/input';
-import LoadingButton from '../loading-button';
+import LoadingButton from '../LoadingButton';
 import { useResetPassword } from '@/data/useResetPassword';
 
 interface ResetPasswordProps {

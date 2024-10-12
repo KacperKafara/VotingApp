@@ -9,6 +9,7 @@ const MainPage = loadable(() => import('./pages/Main'));
 
 const AdminTestPage = loadable(() => import('./pages/@Admin/test'));
 const UsersPage = loadable(() => import('./pages/@Admin/users'));
+const UserPage = loadable(() => import('./pages/@Admin/user'));
 
 const ModeratorTestPage = loadable(() => import('./pages/@Moderator/test'));
 
@@ -23,6 +24,7 @@ const Routes: RouteObject[] = [
 const AdminRoutes: RouteObject[] = [
   { index: true, Component: AdminTestPage },
   { path: 'users', Component: UsersPage },
+  { path: 'users/:username', Component: UserPage },
 ];
 const ModeratorRoutes: RouteObject[] = [
   { index: true, Component: ModeratorTestPage },

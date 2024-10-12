@@ -35,6 +35,7 @@ import axios from 'axios';
 import { toast } from '@/hooks/use-toast';
 import { ApplicationError } from '@/types/applicationError';
 import LoadingIcon from '@/components/loading';
+import { useNavigate } from 'react-router-dom';
 
 const UsersPage: FC = () => {
   const { isError, isLoading, error, data } = useUsers();
@@ -42,6 +43,7 @@ const UsersPage: FC = () => {
   const { username, role, sort, setFilters } = useUsersFilters();
   const [debouncedUsername, setDebouncedUsername] = useState<string>(username!);
   const [value] = useDebounce(debouncedUsername, 500);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setFilters({ username: value });
@@ -97,15 +99,11 @@ const UsersPage: FC = () => {
               <SelectGroup>
                 <SelectItem value="all">{t('filter.all')}</SelectItem>
                 <SelectSeparator />
-                <SelectItem value={UserRoles.admin}>
-                  {t(`filter.${UserRoles.admin}`)}
-                </SelectItem>
-                <SelectItem value={UserRoles.moderator}>
-                  {t(`filter.${UserRoles.moderator}`)}
-                </SelectItem>
-                <SelectItem value={UserRoles.user}>
-                  {t(`filter.${UserRoles.user}`)}
-                </SelectItem>
+                {Object.values(UserRoles).map((role) => (
+                  <SelectItem key={role} value={role}>
+                    {t(`filter.${role}`)}
+                  </SelectItem>
+                ))}
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -156,8 +154,13 @@ const UsersPage: FC = () => {
                           <Button variant="ghost">...</Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
-                          <DropdownMenuItem>abcd</DropdownMenuItem>
-                          <DropdownMenuItem>efgh</DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() =>
+                              navigate(`/admin/users/${user.username}`)
+                            }
+                          >
+                            {t('userPage')}
+                          </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>

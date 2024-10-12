@@ -14,7 +14,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { TFunction } from 'i18next';
 import { z } from 'zod';
 import { Input } from './ui/input';
-import LoadingButton from './loading-button';
+import LoadingButton from './LoadingButton';
 import { Button } from './ui/button';
 import { useChangePassword } from '@/data/useChangePassword';
 

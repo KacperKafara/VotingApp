@@ -29,8 +29,7 @@ import pl.kafara.voting.util.FilteringCriteria;
 import pl.kafara.voting.util.SensitiveData;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -65,49 +64,38 @@ public class UserService {
     }
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public void addRole(UUID id, String role) throws NotFoundException {
+    public void modifyUserRoles(UUID id, Set<UserRoleEnum> roles) throws NotFoundException, UserMustHaveAtLeastOneRoleException {
+
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.USER_NOT_FOUND));
-        Role roleEntity = roleRepository.findByName(UserRoleEnum.fromString(role)).orElseThrow(() -> new NotFoundException(UserMessages.ROLE_NOT_FOUND, ExceptionCodes.ROLE_NOT_FOUND));
+        Set<Role> rolesEntities = new HashSet<>();
 
-        user.getRoles().add(roleEntity);
-        userRepository.save(user);
-    }
-
-    @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public void removeRole(UUID id, String role) throws NotFoundException, UserMustHaveAtLeastOneRoleException {
-        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.USER_NOT_FOUND));
-        Role roleEntity = roleRepository.findByName(UserRoleEnum.fromString(role)).orElseThrow(() -> new NotFoundException(UserMessages.ROLE_NOT_FOUND, ExceptionCodes.ROLE_NOT_FOUND));
-
-        if(!user.getRoles().contains(roleEntity))
-            return;
-
-        if(user.getRoles().size() == 1) {
-            throw new UserMustHaveAtLeastOneRoleException(UserMessages.USER_MUST_HAVE_AT_LEAST_ONE_ROLE, ExceptionCodes.USER_MUST_HAVE_AT_LEAST_ONE_ROLE);
+        for (UserRoleEnum role : roles) {
+            Role roleEntity = roleRepository.findByName(role).orElseThrow(() -> new NotFoundException(UserMessages.ROLE_NOT_FOUND, ExceptionCodes.ROLE_NOT_FOUND));
+            rolesEntities.add(roleEntity);
         }
 
-        user.getRoles().remove(roleEntity);
-        userRepository.save(user);
+        if(rolesEntities.isEmpty())
+            throw new UserMustHaveAtLeastOneRoleException(UserMessages.USER_MUST_HAVE_AT_LEAST_ONE_ROLE, ExceptionCodes.USER_MUST_HAVE_AT_LEAST_ONE_ROLE);
+
+        Role voterRole = roleRepository.findByName(UserRoleEnum.VOTER).orElseThrow(() -> new NotFoundException(UserMessages.ROLE_NOT_FOUND, ExceptionCodes.ROLE_NOT_FOUND));
+        Role userRole = roleRepository.findByName(UserRoleEnum.USER).orElseThrow(() -> new NotFoundException(UserMessages.ROLE_NOT_FOUND, ExceptionCodes.ROLE_NOT_FOUND));
+
+        boolean hasVoterRole = user.getRoles().contains(voterRole);
+        user.setRoles(rolesEntities);
+        if(hasVoterRole && rolesEntities.contains(userRole)) {
+            user.getRoles().add(voterRole);
+        }
     }
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public User block(UUID id) throws NotFoundException, UserBlockException {
-        DecodedJWT jwt =  JWT.decode((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-
-        if(jwt.getSubject().equals(id.toString()))
-            throw new UserBlockException(UserMessages.CANNOT_BLOCK_YOURSELF, ExceptionCodes.CANNOT_BLOCK_YOURSELF);
-
+    public User block(UUID id) throws NotFoundException {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.USER_NOT_FOUND));
         user.setBlocked(true);
         return userRepository.save(user);
     }
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public User unblock(UUID id) throws NotFoundException, UserBlockException {
-        DecodedJWT jwt =  JWT.decode((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-
-        if(jwt.getSubject().equals(id.toString()))
-            throw new UserBlockException(UserMessages.CANNOT_UNBLOCK_YOURSELF, ExceptionCodes.CANNOT_UNBLOCK_YOURSELF);
-
+    public User unblock(UUID id) throws NotFoundException {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.USER_NOT_FOUND));
         user.setBlocked(false);
         return userRepository.save(user);
@@ -125,8 +113,8 @@ public class UserService {
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-    public User getUser(UUID userId) throws NotFoundException {
-        return userRepository.findById(userId).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.USER_NOT_FOUND));
+    public User getUser(String username) throws NotFoundException {
+        return userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.USER_NOT_FOUND));
     }
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")

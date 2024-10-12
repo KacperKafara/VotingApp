@@ -3,5 +3,7 @@
   "themeSelector": "Color theme",
   "logout": "Logout",
   "close": "Close",
-  "submit": "Submit"
+  "submit": "Submit",
+  "cancel": "Cancel",
+  "confirm": "Confirm"
 }

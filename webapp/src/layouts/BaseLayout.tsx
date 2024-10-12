@@ -1,7 +1,7 @@
-import AccountsLinks from '@/components/account-links';
+import AccountsLinks from '@/components/AccountLinks';
 import { LanguageToogle } from '@/components/language-toogle';
-import LoginForm from '@/components/login/login-form';
-import LogoutButton from '@/components/logout-button';
+import LoginForm from '@/components/login/LoginForm';
+import LogoutButton from '@/components/LogoutButton';
 import { ModeToggle } from '@/components/mode-toogle';
 import { useUserStore } from '@/store/userStore';
 import { FC } from 'react';
