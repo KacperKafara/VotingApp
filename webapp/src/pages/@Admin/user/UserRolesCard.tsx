@@ -8,11 +8,11 @@ import {
   FormItem,
   FormLabel,
 } from '@/components/ui/form';
+import { useRole } from '@/data/useRole';
 import { useUserStore } from '@/store/userStore';
 import { UserRoles } from '@/types/roles';
 import { User } from '@/types/user';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useQueryClient } from '@tanstack/react-query';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -31,8 +31,7 @@ const rolesFormSchema = z.object({
 const UserRolesCard: FC<UserRolesCardProps> = ({ user }) => {
   const { t } = useTranslation(['user', 'common']);
   const { id } = useUserStore();
-  // const { addRole, deleteRole } = useRole();
-  const queryClient = useQueryClient();
+  const { modifyRoles } = useRole();
   const isCurrentUser = id === user.id;
 
   const form = useForm<z.infer<typeof rolesFormSchema>>({
@@ -45,9 +44,17 @@ const UserRolesCard: FC<UserRolesCardProps> = ({ user }) => {
   });
 
   const handleFormSubmit = form.handleSubmit(
-    async ({ user, administrator, moderator }) => {
-      console.log(administrator, moderator, user);
-      await queryClient.invalidateQueries({ queryKey: ['user'] });
+    async ({ user: userRole, administrator, moderator }) => {
+      const roles = [];
+
+      if (userRole) roles.push('USER');
+      if (administrator) roles.push('ADMINISTRATOR');
+      if (moderator) roles.push('MODERATOR');
+
+      await modifyRoles({
+        roles,
+        userId: user.id,
+      });
     }
   );
 

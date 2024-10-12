@@ -12,6 +12,8 @@
     "moderator": "Moderator",
     "user": "Użytkownik",
     "updateUserRoles": "Aktualizacja ról użytkownika",
-    "updateUserRolesDescription": "Czy na pewno chcesz zaktualizować role użytkownika?"
+    "updateUserRolesDescription": "Czy na pewno chcesz zaktualizować role użytkownika?",
+    "successTitle": "Sukces",
+    "successDescription": "Role użytkownika zostały zaktualizowane pomyślnie"
   }
 }

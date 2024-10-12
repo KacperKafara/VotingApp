@@ -7,14 +7,19 @@ import { ApplicationError } from '@/types/applicationError';
 
 export const useRole = () => {
   const { toast } = useToast();
-  const { t } = useTranslation(['errors', 'roles']);
+  const { t } = useTranslation(['errors', 'user']);
   const { api } = useAxiosPrivate();
 
-  const { mutateAsync: mutateAddRole, isSuccess } = useMutation({
-    mutationFn: async ({ role, userId }: { role: string; userId: string }) => {
-      const response = await api.put<unknown>('/users/role', {
-        userId: userId,
-        role: role,
+  const { mutateAsync } = useMutation({
+    mutationFn: async ({
+      roles,
+      userId,
+    }: {
+      roles: string[];
+      userId: string;
+    }) => {
+      const response = await api.put<unknown>(`/users/${userId}/roles`, {
+        roles,
       });
       return response.data;
     },
@@ -27,28 +32,13 @@ export const useRole = () => {
         ),
       });
     },
-  });
-
-  const { mutateAsync: mutateDeleteRole, isSuccess } = useMutation({
-    mutationFn: async ({ role, userId }: { role: string; userId: string }) => {
-      const response = await api.delete<unknown>('/users/role', {
-        data: {
-          userId: userId,
-          role: role,
-        },
-      });
-      return response.data;
-    },
-    onError: (error: AxiosError) => {
+    onSuccess: () => {
       toast({
-        variant: 'destructive',
-        title: t('errors:defaultTitle'),
-        description: t(
-          'errors:' + (error.response?.data as ApplicationError).code
-        ),
+        title: t('user:roles.successTitle'),
+        description: t('user:roles.successDescription'),
       });
     },
   });
 
-  return { addRole: mutateAddRole, deleteRole: mutateDeleteRole, isSuccess };
+  return { modifyRoles: mutateAsync };
 };
