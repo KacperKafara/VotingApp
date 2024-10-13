@@ -10,6 +10,9 @@ export interface User {
   phoneNumber: string;
   birthDate: Date;
   blocked: boolean;
+  verified: boolean;
+  lastLogin: Date;
+  lastFailedLogin: Date;
 }
 
 export interface UsersFiltered {

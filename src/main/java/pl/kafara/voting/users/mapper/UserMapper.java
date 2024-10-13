@@ -26,7 +26,10 @@ public class UserMapper {
                 user.getUsername(),
                 user.getEmail(),
                 roles,
-                user.isBlocked()
+                user.isBlocked(),
+                user.isVerified(),
+                user.getLastLogin(),
+                user.getLastFailedLogin()
         );
     }
 }

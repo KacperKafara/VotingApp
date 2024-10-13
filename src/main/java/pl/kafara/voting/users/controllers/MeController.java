@@ -10,14 +10,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.kafara.voting.exceptions.NotFoundException;
 import pl.kafara.voting.exceptions.user.WrongPasswordException;
 import pl.kafara.voting.users.dto.ChangePasswordRequest;
+import pl.kafara.voting.users.dto.UserResponse;
+import pl.kafara.voting.users.mapper.UserMapper;
 import pl.kafara.voting.users.services.UserService;
 
 import java.util.UUID;
@@ -40,5 +39,13 @@ public class MeController {
         } catch (WrongPasswordException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
+    }
+
+    @GetMapping
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<UserResponse> getMe() throws NotFoundException {
+        DecodedJWT jwt =  JWT.decode((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        UUID id = UUID.fromString(jwt.getSubject());
+        return ResponseEntity.ok(UserMapper.mapToUserResponse(userService.getUserById(id)));
     }
 }

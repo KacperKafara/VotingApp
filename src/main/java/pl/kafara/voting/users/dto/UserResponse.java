@@ -15,6 +15,9 @@ public record UserResponse(
         String username,
         String email,
         Set<UserRoleEnum> roles,
-        boolean blocked
+        boolean blocked,
+        boolean verified,
+        LocalDateTime lastLogin,
+        LocalDateTime lastFailedLogin
 ) {
 }

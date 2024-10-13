@@ -7,6 +7,12 @@
   "email": "Email",
   "phoneNumber": "Numer telefonu",
   "birthDate": "Data urodzenia",
+  "lastLogin": "Ostatnie udane logowanie",
+  "lastFailedLogin": "Ostatnie nieudane logowanie",
+  "blocked": "Zablokowany",
+  "verified": "Zweryfikowany",
+  "yes": "Tak",
+  "no": "Nie",
   "roles": {
     "administrator": "Administrator",
     "moderator": "Moderator",
@@ -15,5 +21,11 @@
     "updateUserRolesDescription": "Czy na pewno chcesz zaktualizować role użytkownika?",
     "successTitle": "Sukces",
     "successDescription": "Role użytkownika zostały zaktualizowane pomyślnie"
+  },
+  "block": {
+    "blockTitle": "Zablokuj użytkownika",
+    "blockDescriptionSuccess": "Użytkownik został zablokowany pomyślnie",
+    "unBlockTitle": "Odblokuj użytkownika",
+    "unBlockDescriptionSuccess": "Użytkownik został odblokowany pomyślnie"
   }
 }

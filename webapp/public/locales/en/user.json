@@ -7,6 +7,12 @@
   "email": "Email",
   "phoneNumber": "Phone Number",
   "birthDate": "Birth Date",
+  "lastLogin": "Last success login",
+  "lastFailedLogin": "Last failed login",
+  "blocked": "Blocked",
+  "verified": "Verified",
+  "yes": "Yes",
+  "no": "No",
   "roles": {
     "administrator": "Administrator",
     "moderator": "Moderator",
@@ -15,5 +21,11 @@
     "updateUserRolesDescription": "Are you sure that you want to update user roles?",
     "successTitle": "Success",
     "successDescription": "User roles updated successfully"
+  },
+  "block": {
+    "blockTitle": "Block user",
+    "blockDescriptionSuccess": "User has been blocked successfully",
+    "unBlockTitle": "Unblock user",
+    "unBlockDescriptionSuccess": "User has been unblocked successfully"
   }
 }

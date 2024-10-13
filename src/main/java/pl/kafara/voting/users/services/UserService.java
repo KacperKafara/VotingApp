@@ -117,6 +117,12 @@ public class UserService {
         return userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.USER_NOT_FOUND));
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
+    public User getUserById(UUID id) throws NotFoundException {
+        return userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.USER_NOT_FOUND));
+    }
+
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public UsersResponse getUsers(FilteringCriteria filteringCriteria) {

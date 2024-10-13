@@ -7,21 +7,27 @@ import { AxiosError } from 'axios';
 
 export const useBlockUser = () => {
   const { toast } = useToast();
-  const { t } = useTranslation(['errors']);
+  const { t } = useTranslation(['errors', 'user']);
   const { api } = useAxiosPrivate();
 
   const { mutateAsync, isSuccess } = useMutation({
     mutationFn: async (userId: string) => {
-      const response = await api.put<unknown>(`/users/block/${userId}`);
+      const response = await api.put<unknown>(`/users/${userId}/block`);
       return response.data;
     },
     onError: (error: AxiosError) => {
       toast({
         variant: 'destructive',
-        title: t('errors:defaultTitle'),
+        title: t('user:block.blockTitle'),
         description: t(
           'errors:' + (error.response?.data as ApplicationError).code
         ),
+      });
+    },
+    onSuccess: () => {
+      toast({
+        title: t('user:block.blockTitle'),
+        description: t('user:block.blockDescriptionSuccess'),
       });
     },
   });
@@ -31,21 +37,27 @@ export const useBlockUser = () => {
 
 export const useUnblockUser = () => {
   const { toast } = useToast();
-  const { t } = useTranslation(['errors']);
+  const { t } = useTranslation(['errors', 'user']);
   const { api } = useAxiosPrivate();
 
   const { mutateAsync, isSuccess } = useMutation({
     mutationFn: async (userId: string) => {
-      const response = await api.delete<unknown>(`/users/block/${userId}`);
+      const response = await api.delete<unknown>(`/users/${userId}/block`);
       return response.data;
     },
     onError: (error: AxiosError) => {
       toast({
         variant: 'destructive',
-        title: t('errors:defaultTitle'),
+        title: t('user:block.unBlockTitle'),
         description: t(
           'errors:' + (error.response?.data as ApplicationError).code
         ),
+      });
+    },
+    onSuccess: () => {
+      toast({
+        title: t('user:block.unBlockTitle'),
+        description: t('user:block.unBlockDescriptionSuccess'),
       });
     },
   });
