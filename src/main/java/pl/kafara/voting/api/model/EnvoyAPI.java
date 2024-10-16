@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 public class EnvoyAPI {
-    private int id;
+    private Long id;
     private String club;
     private String firstName;
     private String lastName;
