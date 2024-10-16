@@ -3,6 +3,7 @@ package pl.kafara.voting.api.mappers;
 import pl.kafara.voting.api.model.VotingAPI;
 import pl.kafara.voting.model.vote.Sitting;
 import pl.kafara.voting.model.vote.Voting;
+import pl.kafara.voting.model.vote.VotingKind;
 
 public class VotingMapper {
     public static Voting update(VotingAPI votingAPI, Sitting sitting) {
@@ -20,6 +21,7 @@ public class VotingMapper {
         votingToUpdate.setTitle(votingAPI.getTitle());
         votingToUpdate.setDescription(votingAPI.getDescription());
         votingToUpdate.setTopic(votingAPI.getTopic());
+        votingToUpdate.setKind(VotingKind.fromString(votingAPI.getKind()));
 
         return votingToUpdate;
     }

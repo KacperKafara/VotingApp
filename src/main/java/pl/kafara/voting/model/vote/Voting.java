@@ -29,6 +29,9 @@ public class Voting extends AbstractEntity {
     private int totalVoted;
     private LocalDateTime date;
 
+    @Enumerated(EnumType.STRING)
+    private VotingKind kind;
+
     @Column(length = 1000)
     private String title;
     @Column(length = 1000)

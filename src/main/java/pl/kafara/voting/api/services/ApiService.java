@@ -5,11 +5,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.server.ResponseStatusException;
 import pl.kafara.voting.api.mappers.EnvoyMapper;
 import pl.kafara.voting.api.mappers.VotingMapper;
 import pl.kafara.voting.api.model.EnvoyAPI;
@@ -53,7 +58,8 @@ public class ApiService {
         List<ParliamentaryClub> parliamentaryClubs = restClient.get()
                 .uri(term + "/clubs")
                 .retrieve()
-                .body(new ParameterizedTypeReference<>() {});
+                .body(new ParameterizedTypeReference<>() {
+                });
 
         if (parliamentaryClubs == null)
             throw new NullPointerException("parliamentaryClubs is null");
@@ -66,7 +72,8 @@ public class ApiService {
         List<EnvoyAPI> envoys = restClient.get()
                 .uri(term + "/MP")
                 .retrieve()
-                .body(new ParameterizedTypeReference<>() {});
+                .body(new ParameterizedTypeReference<>() {
+                });
 
         if (envoys == null)
             throw new NullPointerException("envoys is null");
@@ -74,7 +81,7 @@ public class ApiService {
         ParliamentaryClub savedClub;
         for (EnvoyAPI envoyAPI : envoys) {
             Optional<ParliamentaryClub> parliamentaryClubOptional = parliamentaryClubRepository.findById(envoyAPI.getClub());
-            if (parliamentaryClubOptional.isEmpty()){
+            if (parliamentaryClubOptional.isEmpty()) {
                 ParliamentaryClub parliamentaryClub = restClient.get()
                         .uri(term + "/clubs/" + envoyAPI.getClub())
                         .retrieve()
@@ -84,8 +91,7 @@ public class ApiService {
                     continue;
 
                 savedClub = parliamentaryClubRepository.save(parliamentaryClub);
-            }
-            else {
+            } else {
                 savedClub = parliamentaryClubOptional.get();
             }
             envoyRepository.save(EnvoyMapper.update(envoyAPI, savedClub));
@@ -97,7 +103,8 @@ public class ApiService {
         List<Sitting> sittings = restClient.get()
                 .uri(term + "/proceedings")
                 .retrieve()
-                .body(new ParameterizedTypeReference<>() {});
+                .body(new ParameterizedTypeReference<>() {
+                });
 
         if (sittings == null)
             throw new NullPointerException("sittings is null");
@@ -111,21 +118,29 @@ public class ApiService {
     public void updateVotingList() {
         List<Sitting> sittings = sittingRepository.findAll();
 
-        for(Sitting sitting : sittings) {
-            List<VotingAPI> votings = restClient.get()
-                    .uri(term + "/votings/" + sitting.getNumber())
-                    .retrieve()
-                    .body(new ParameterizedTypeReference<>() {});
+        for (Sitting sitting : sittings) {
+            int iterator = 1;
+            while (true) {
+                ResponseEntity<VotingAPI> votingResult;
 
-            if(votings == null || votings.isEmpty())
-                continue;
+                try {
+                    votingResult = restClient.get()
+                            .uri(term + "/votings/" + sitting.getNumber() + "/" + iterator)
+                            .retrieve()
+                            .toEntity(VotingAPI.class);
+                } catch (HttpClientErrorException.NotFound e) {
+                    break;
+                }
 
-            for(VotingAPI votingAPI : votings) {
-                Optional<Voting> isVoting = votingRepository.getVotingFiltered(votingAPI.getSittingDay(), votingAPI.getVotingNumber(), sitting);
-                if(isVoting.isPresent())
+                VotingAPI voting = votingResult.getBody();
+
+                Optional<Voting> isVoting = votingRepository.getVotingFiltered(voting.getSittingDay(), voting.getVotingNumber(), sitting);
+                if (isVoting.isPresent())
                     continue;
-                Voting voting = VotingMapper.update(votingAPI, sitting);
-                votingRepository.save(voting);
+                Voting votingEntity = VotingMapper.update(voting, sitting);
+                votingRepository.save(votingEntity);
+
+                iterator++;
             }
         }
     }
