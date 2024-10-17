@@ -8,6 +8,7 @@ import lombok.Setter;
 import pl.kafara.voting.model.AbstractEntity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,6 +30,10 @@ public class Voting extends AbstractEntity {
     private int notParticipating;
     private int totalVoted;
     private LocalDateTime date;
+    private String pdfLink;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "voting")
+    private List<VotingOption> votingOptions;
 
     @Enumerated(EnumType.STRING)
     private VotingKind kind;

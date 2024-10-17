@@ -71,6 +71,7 @@ public abstract class IntegrationTestConfiguration {
             .withEnv("SPRING_DATASOURCE_URL", "jdbc:postgresql://testDatabase:5432/voting")
             .withEnv("SPRING_DATASOURCE_USERNAME", "postgres")
             .withEnv("SPRING_DATASOURCE_PASSWORD", "postgres")
+            .withEnv("SPRING_TESTS", "true")
             .withCopyToContainer(jar, "/opt/app.jar")
             .withCommand("sh", "-c", "java -jar /opt/app.jar")
             .waitingFor(Wait.forHttp("/api/v1/actuator/health").forPort(8080).forStatusCode(200));

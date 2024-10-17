@@ -4,6 +4,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
+import pl.kafara.voting.model.vote.*;
 import pl.kafara.voting.vote.api.mappers.EnvoyMapper;
 import pl.kafara.voting.vote.api.mappers.VotingMapper;
 import pl.kafara.voting.vote.api.model.EnvoyAPI;
@@ -20,9 +22,6 @@ import pl.kafara.voting.vote.repositories.EnvoyRepository;
 import pl.kafara.voting.vote.repositories.ParliamentaryClubRepository;
 import pl.kafara.voting.vote.repositories.SittingRepository;
 import pl.kafara.voting.vote.repositories.VotingRepository;
-import pl.kafara.voting.model.vote.ParliamentaryClub;
-import pl.kafara.voting.model.vote.Sitting;
-import pl.kafara.voting.model.vote.Voting;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +30,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 @Transactional(propagation = Propagation.REQUIRES_NEW)
+@ConditionalOnProperty(name = "spring.tests", havingValue = "false", matchIfMissing = true)
 public class ApiService {
 
     @Value("${sejm.term}")
@@ -138,10 +138,15 @@ public class ApiService {
 
                 VotingAPI voting = votingResult.getBody();
 
+                if (voting == null)
+                    break;
+
                 Optional<Voting> isVoting = votingRepository.getVotingFiltered(voting.getSittingDay(), voting.getVotingNumber(), sitting);
                 if (isVoting.isPresent())
                     continue;
-                Voting votingEntity = VotingMapper.update(voting, sitting);
+
+                Voting votingEntity = VotingMapper.update(voting, sitting, voting.getVotingOptions());
+
                 votingRepository.save(votingEntity);
 
                 iterator++;

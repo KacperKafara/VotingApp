@@ -1,9 +1,12 @@
 package pl.kafara.voting.vote.api.mappers;
 
+import pl.kafara.voting.model.vote.VotingOption;
 import pl.kafara.voting.vote.api.model.VotingAPI;
 import pl.kafara.voting.model.vote.Sitting;
 import pl.kafara.voting.model.vote.Voting;
 import pl.kafara.voting.model.vote.VotingKind;
+
+import java.util.List;
 
 public class VotingMapper {
     public static Voting update(VotingAPI votingAPI, Sitting sitting) {
@@ -22,6 +25,14 @@ public class VotingMapper {
         votingToUpdate.setDescription(votingAPI.getDescription());
         votingToUpdate.setTopic(votingAPI.getTopic());
         votingToUpdate.setKind(VotingKind.fromString(votingAPI.getKind()));
+        votingToUpdate.setPdfLink(votingAPI.getPdfLink());
+
+        return votingToUpdate;
+    }
+
+    public static Voting update(VotingAPI votingAPI, Sitting sitting, List<VotingOption> votingOptions) {
+        Voting votingToUpdate = VotingMapper.update(votingAPI, sitting);
+        votingToUpdate.setVotingOptions(votingOptions);
 
         return votingToUpdate;
     }
