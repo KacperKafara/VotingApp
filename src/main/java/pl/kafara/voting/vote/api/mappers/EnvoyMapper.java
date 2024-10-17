@@ -1,6 +1,6 @@
-package pl.kafara.voting.api.mappers;
+package pl.kafara.voting.vote.api.mappers;
 
-import pl.kafara.voting.api.model.EnvoyAPI;
+import pl.kafara.voting.vote.api.model.EnvoyAPI;
 import pl.kafara.voting.model.vote.Envoy;
 import pl.kafara.voting.model.vote.ParliamentaryClub;
 

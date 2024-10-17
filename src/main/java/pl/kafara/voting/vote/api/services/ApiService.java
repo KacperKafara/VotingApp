@@ -1,12 +1,10 @@
-package pl.kafara.voting.api.services;
+package pl.kafara.voting.vote.api.services;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -14,15 +12,14 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
-import org.springframework.web.server.ResponseStatusException;
-import pl.kafara.voting.api.mappers.EnvoyMapper;
-import pl.kafara.voting.api.mappers.VotingMapper;
-import pl.kafara.voting.api.model.EnvoyAPI;
-import pl.kafara.voting.api.model.VotingAPI;
-import pl.kafara.voting.api.repositories.EnvoyRepository;
-import pl.kafara.voting.api.repositories.ParliamentaryClubRepository;
-import pl.kafara.voting.api.repositories.SittingRepository;
-import pl.kafara.voting.api.repositories.VotingRepository;
+import pl.kafara.voting.vote.api.mappers.EnvoyMapper;
+import pl.kafara.voting.vote.api.mappers.VotingMapper;
+import pl.kafara.voting.vote.api.model.EnvoyAPI;
+import pl.kafara.voting.vote.api.model.VotingAPI;
+import pl.kafara.voting.vote.repositories.EnvoyRepository;
+import pl.kafara.voting.vote.repositories.ParliamentaryClubRepository;
+import pl.kafara.voting.vote.repositories.SittingRepository;
+import pl.kafara.voting.vote.repositories.VotingRepository;
 import pl.kafara.voting.model.vote.ParliamentaryClub;
 import pl.kafara.voting.model.vote.Sitting;
 import pl.kafara.voting.model.vote.Voting;
@@ -120,6 +117,7 @@ public class ApiService {
 
         for (Sitting sitting : sittings) {
             int iterator = 1;
+            boolean isEnd = false;
             while (true) {
                 ResponseEntity<VotingAPI> votingResult;
 
@@ -129,7 +127,13 @@ public class ApiService {
                             .retrieve()
                             .toEntity(VotingAPI.class);
                 } catch (HttpClientErrorException.NotFound e) {
-                    break;
+                    iterator++;
+                    if (!isEnd) {
+                        isEnd = true;
+                        continue;
+                    } else {
+                        break;
+                    }
                 }
 
                 VotingAPI voting = votingResult.getBody();

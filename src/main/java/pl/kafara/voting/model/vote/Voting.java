@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
+@Table(name = "votings")
 public class Voting extends AbstractEntity {
 
     private int votingNumber;

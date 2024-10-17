@@ -1,4 +1,4 @@
-package pl.kafara.voting.api.repositories;
+package pl.kafara.voting.vote.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

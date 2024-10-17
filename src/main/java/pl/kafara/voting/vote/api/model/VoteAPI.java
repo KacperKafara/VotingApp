@@ -1,4 +1,4 @@
-package pl.kafara.voting.api.model;
+package pl.kafara.voting.vote.api.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

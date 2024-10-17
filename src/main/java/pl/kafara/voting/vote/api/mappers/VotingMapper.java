@@ -1,6 +1,6 @@
-package pl.kafara.voting.api.mappers;
+package pl.kafara.voting.vote.api.mappers;
 
-import pl.kafara.voting.api.model.VotingAPI;
+import pl.kafara.voting.vote.api.model.VotingAPI;
 import pl.kafara.voting.model.vote.Sitting;
 import pl.kafara.voting.model.vote.Voting;
 import pl.kafara.voting.model.vote.VotingKind;
