@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import pl.kafara.voting.model.AbstractEntity;
 
 @NoArgsConstructor
@@ -11,6 +12,7 @@ import pl.kafara.voting.model.AbstractEntity;
 @Getter
 @Entity
 @Table(name = "votes")
+@Setter
 public class Vote extends AbstractEntity {
 
     @ManyToOne
@@ -20,4 +22,13 @@ public class Vote extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private VoteResult vote;
 
+    private String club;
+
+    @ManyToOne
+    @JoinColumn(name = "voting_option_id")
+    private VotingOption votingOption;
+
+    @ManyToOne
+    @JoinColumn(name = "voting_id")
+    private Voting voting;
 }

@@ -15,15 +15,19 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 import pl.kafara.voting.model.vote.*;
 import pl.kafara.voting.vote.api.mappers.EnvoyMapper;
+import pl.kafara.voting.vote.api.mappers.VoteMapper;
 import pl.kafara.voting.vote.api.mappers.VotingMapper;
 import pl.kafara.voting.vote.api.model.EnvoyAPI;
+import pl.kafara.voting.vote.api.model.VoteAPI;
 import pl.kafara.voting.vote.api.model.VotingAPI;
 import pl.kafara.voting.vote.repositories.EnvoyRepository;
 import pl.kafara.voting.vote.repositories.ParliamentaryClubRepository;
 import pl.kafara.voting.vote.repositories.SittingRepository;
 import pl.kafara.voting.vote.repositories.VotingRepository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -145,12 +149,52 @@ public class ApiService {
                 if (isVoting.isPresent())
                     continue;
 
-                Voting votingEntity = VotingMapper.update(voting, sitting, voting.getVotingOptions());
+                Voting votingEntity;
+                if(voting.getVotingOptions() != null)
+                    votingEntity = VotingMapper.update(voting, sitting, voting.getVotingOptions());
+                else
+                    votingEntity = VotingMapper.update(voting, sitting);
 
+                votingEntity.setVotes(updateVotes(voting.getVotes(), votingEntity));
                 votingRepository.save(votingEntity);
 
                 iterator++;
             }
         }
+    }
+
+    private List<Vote> updateVotes(List<VoteAPI> votes, Voting voting) {
+        List<Vote> votesList = new ArrayList<>();
+        for(VoteAPI voteAPI : votes) {
+            Optional<Envoy> envoyOptional = envoyRepository.findById(voteAPI.getMP());
+            if (envoyOptional.isEmpty())
+                continue;
+
+            Envoy envoy = envoyOptional.get();
+
+            if(!voting.getKind().equals(VotingKind.ON_LIST))
+                votesList.add(VoteMapper.update(voteAPI, voting, envoy));
+            else {
+                Optional<String> keyForYes = voteAPI.getListVotes()
+                        .entrySet()
+                        .stream()
+                        .filter(entry -> entry.getValue().equals("YES"))
+                        .map(Map.Entry::getKey)
+                        .findFirst();
+
+                if (keyForYes.isEmpty()) {
+                    votesList.add(VoteMapper.update(voteAPI, voting, envoy));
+                    continue;
+                }
+
+                voting.getVotingOptions()
+                        .stream()
+                        .filter(votingOption -> votingOption.getOptionIndex() == Integer.parseInt(keyForYes.get()))
+                        .findFirst()
+                        .ifPresent(votingOption -> votesList.add(VoteMapper.update(voteAPI, voting, envoy, votingOption)));
+            }
+        }
+
+        return votesList;
     }
 }

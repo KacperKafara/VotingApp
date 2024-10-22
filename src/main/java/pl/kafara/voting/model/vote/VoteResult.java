@@ -1,7 +1,7 @@
 package pl.kafara.voting.model.vote;
 
 public enum VoteResult {
-    YES, NO, ABSTAIN, VOTE_VALID;
+    YES, NO, ABSTAIN, ABSENT, VOTE_VALID;
 
     public static VoteResult fromString(String value) {
         if (value == null || value.isEmpty())

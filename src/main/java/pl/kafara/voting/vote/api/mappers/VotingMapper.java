@@ -25,7 +25,6 @@ public class VotingMapper {
         votingToUpdate.setDescription(votingAPI.getDescription());
         votingToUpdate.setTopic(votingAPI.getTopic());
         votingToUpdate.setKind(VotingKind.fromString(votingAPI.getKind()));
-        votingToUpdate.setPdfLink(votingAPI.getPdfLink());
 
         return votingToUpdate;
     }
@@ -33,6 +32,8 @@ public class VotingMapper {
     public static Voting update(VotingAPI votingAPI, Sitting sitting, List<VotingOption> votingOptions) {
         Voting votingToUpdate = VotingMapper.update(votingAPI, sitting);
         votingToUpdate.setVotingOptions(votingOptions);
+        for(VotingOption vo : votingOptions)
+            vo.setVoting(votingToUpdate);
 
         return votingToUpdate;
     }

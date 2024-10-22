@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import pl.kafara.voting.model.vote.Envoy;
 
 @Repository
-public interface EnvoyRepository extends JpaRepository<Envoy, Integer> {
+public interface EnvoyRepository extends JpaRepository<Envoy, Long> {
 }

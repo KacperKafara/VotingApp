@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.UUID;
 
@@ -23,6 +24,7 @@ public class VotingOption {
 
     @ManyToOne
     @JoinColumn(name = "voting_id")
+    @Setter
     private Voting voting;
 
 }

@@ -3,6 +3,7 @@ package pl.kafara.voting.vote.api.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import pl.kafara.voting.model.vote.VotingOption;
 
 import java.time.LocalDateTime;
@@ -11,6 +12,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class VotingAPI {
     private int votingNumber;
     private int sitting;
@@ -26,6 +28,6 @@ public class VotingAPI {
     private String description;
     private String topic;
     private String kind;
-    private String pdfLink;
     private List<VotingOption> votingOptions;
+    private List<VoteAPI> votes;
 }
