@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -35,6 +36,7 @@ import java.util.Optional;
 @Slf4j
 @Transactional(propagation = Propagation.REQUIRES_NEW)
 @ConditionalOnProperty(name = "spring.tests", havingValue = "false", matchIfMissing = true)
+@DependsOn("delayedFlywayInitializer")
 public class ApiService {
 
     @Value("${sejm.term}")
@@ -51,11 +53,12 @@ public class ApiService {
         updateParliamentaryClubList();
         updateEnvoyList();
         updateSittingList();
-        updateVotingList();
+//        updateVotingList();
     }
 
     @Scheduled(cron = "0 5 0 */2 * *")
     public void updateParliamentaryClubList() {
+        log.info("Updating parliamentary club list");
         List<ParliamentaryClub> parliamentaryClubs = restClient.get()
                 .uri(term + "/clubs")
                 .retrieve()
@@ -70,6 +73,7 @@ public class ApiService {
 
     @Scheduled(cron = "0 10 0 */2 * *")
     public void updateEnvoyList() {
+        log.info("Updating envoy list");
         List<EnvoyAPI> envoys = restClient.get()
                 .uri(term + "/MP")
                 .retrieve()
@@ -101,6 +105,7 @@ public class ApiService {
 
     @Scheduled(cron = "0 15 0 */2 * *")
     public void updateSittingList() {
+        log.info("Updating sitting list");
         List<Sitting> sittings = restClient.get()
                 .uri(term + "/proceedings")
                 .retrieve()
@@ -117,6 +122,7 @@ public class ApiService {
 
     @Scheduled(cron = "0 20 0 */2 * *")
     public void updateVotingList() {
+        log.info("Updating voting list");
         List<Sitting> sittings = sittingRepository.findAll();
 
         for (Sitting sitting : sittings) {
@@ -164,6 +170,7 @@ public class ApiService {
     }
 
     private List<Vote> updateVotes(List<VoteAPI> votes, Voting voting) {
+        log.info("Updating votes for voting: " + voting.getVotingNumber());
         List<Vote> votesList = new ArrayList<>();
         for(VoteAPI voteAPI : votes) {
             Optional<Envoy> envoyOptional = envoyRepository.findById(voteAPI.getMP());
