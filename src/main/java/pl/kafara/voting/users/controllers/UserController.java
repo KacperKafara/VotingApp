@@ -24,6 +24,7 @@ import pl.kafara.voting.exceptions.user.UserBlockException;
 import pl.kafara.voting.exceptions.user.UserMustHaveAtLeastOneRoleException;
 import pl.kafara.voting.model.users.User;
 import pl.kafara.voting.users.dto.RoleRequest;
+import pl.kafara.voting.users.dto.UpdateUserDataRequest;
 import pl.kafara.voting.users.dto.UserResponse;
 import pl.kafara.voting.users.dto.UsersResponse;
 import pl.kafara.voting.users.mapper.UserMapper;
@@ -107,5 +108,11 @@ public class UserController {
                 .build();
 
         return ResponseEntity.ok(userService.getUsers(filteringCriteria));
+    }
+
+    @PutMapping("/{userId}")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public ResponseEntity<UserResponse> updateUser(@Validated @RequestBody UpdateUserDataRequest userData, @PathVariable UUID userId) throws NotFoundException {
+        return ResponseEntity.ok(UserMapper.mapToUserResponse(userService.updateUser(userData, userId)));
     }
 }

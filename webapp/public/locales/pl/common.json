@@ -5,5 +5,6 @@
   "close": "Zamknij",
   "submit": "Wyślij",
   "cancel": "Anuluj",
-  "confirm": "Potwierdź"
+  "confirm": "Potwierdź",
+  "defaultTitleSuccess": "Sukces"
 }

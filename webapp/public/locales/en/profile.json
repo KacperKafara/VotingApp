@@ -27,5 +27,8 @@
   "birthDateRequired": "Birth date is required",
   "birthDateInvalid": "Birth date is invalid",
   "genderRequired": "Gender is required",
-  "genderInvalid": "Gender is invalid"
+  "genderInvalid": "Gender is invalid",
+  "personalDataUpdated": "Personal data updated",
+  "emailInvalid": "Email is invalid",
+  "selectGender:": "Select gender"
 }

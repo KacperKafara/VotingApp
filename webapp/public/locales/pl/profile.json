@@ -27,5 +27,8 @@
   "birthDateRequired": "Data urodzenia jest wymagana",
   "birthDateInvalid": "Data urodzenia jest nieprawidłowa",
   "genderRequired": "Płeć jest wymagana",
-  "genderInvalid": "Płeć jest nieprawidłowa"
+  "genderInvalid": "Płeć jest nieprawidłowa",
+  "personalDataUpdated": "Dane osobowe zaktualizowane",
+  "emailInvalid": "Email jest nieprawidłowy",
+  "selectGender": "Wybierz płeć"
 }

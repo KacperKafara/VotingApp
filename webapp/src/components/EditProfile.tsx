@@ -18,11 +18,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from './ui/select';
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
-import { Button } from './ui/button';
-import { CalendarIcon } from 'lucide-react';
-import { Calendar } from './ui/calendar';
 import ConfirmDialog from './ConfirmDialog';
+import { useUpdatePersonalData } from '@/data/useUpdatePersonalData';
 
 interface EditProfileProps {
   open: boolean;
@@ -61,6 +58,8 @@ const EditProfile: FC<EditProfileProps> = ({
   variant,
 }) => {
   const { t } = useTranslation('profile');
+  const { updatePersonalData, updateOtherUserPersonalData } =
+    useUpdatePersonalData();
 
   const form = useForm<EditProfileInfoSchema>({
     resolver: zodResolver(getEditProfileInfoSchema(t)),
@@ -75,8 +74,12 @@ const EditProfile: FC<EditProfileProps> = ({
   });
 
   const handleFormSubmit = form.handleSubmit(async (data) => {
-    console.log(data);
-    onOpenChange(false);
+    if (variant == 'personalData') {
+      await updatePersonalData(data);
+    } else {
+      await updateOtherUserPersonalData({ data, userId: user.id });
+    }
+    onOpenChange();
   });
 
   return (
