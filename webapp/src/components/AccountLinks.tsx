@@ -17,12 +17,15 @@ const AccountsLinks: FC<AccountsLinksProps> = ({ className }) => {
 
   return (
     <div className={cn(className, 'flex flex-col items-center gap-2')}>
-      <Button onClick={() => navigate('/')} className="w-3/4">
+      <Button onClick={() => navigate('/')} className="w-3/4 scale-95">
         {t('home')}
+      </Button>
+      <Button onClick={() => navigate('/profile')} className="w-3/4 scale-95">
+        {t('profile')}
       </Button>
       <Button
         onClick={() => setChangePasswordDialogOpen(true)}
-        className="w-3/4"
+        className="w-3/4 scale-95"
       >
         {t('changePassword')}
       </Button>

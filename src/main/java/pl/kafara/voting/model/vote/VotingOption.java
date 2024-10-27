@@ -12,6 +12,7 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "voting_options")
 public class VotingOption {
 
     @Id

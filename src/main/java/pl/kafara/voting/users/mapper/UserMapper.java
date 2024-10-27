@@ -25,6 +25,7 @@ public class UserMapper {
                 user.getBirthDate(),
                 user.getUsername(),
                 user.getEmail(),
+                user.getGender().getName().toString(),
                 roles,
                 user.isBlocked(),
                 user.isVerified(),

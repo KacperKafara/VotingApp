@@ -12,17 +12,14 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.kafara.voting.exceptions.NotFoundException;
 import pl.kafara.voting.exceptions.handlers.ExceptionCodes;
+import pl.kafara.voting.exceptions.messages.GenericMessages;
 import pl.kafara.voting.exceptions.messages.UserMessages;
 import pl.kafara.voting.exceptions.user.*;
-import pl.kafara.voting.model.users.Role;
-import pl.kafara.voting.model.users.User;
-import pl.kafara.voting.model.users.UserRoleEnum;
+import pl.kafara.voting.model.users.*;
 import pl.kafara.voting.model.users.tokens.SafeToken;
-import pl.kafara.voting.users.dto.ChangePasswordRequest;
-import pl.kafara.voting.users.dto.ResetPasswordFormRequest;
-import pl.kafara.voting.users.dto.UserResponse;
-import pl.kafara.voting.users.dto.UsersResponse;
+import pl.kafara.voting.users.dto.*;
 import pl.kafara.voting.users.mapper.UserMapper;
+import pl.kafara.voting.users.repositories.GenderRepository;
 import pl.kafara.voting.users.repositories.RoleRepository;
 import pl.kafara.voting.users.repositories.UserRepository;
 import pl.kafara.voting.util.FilteringCriteria;
@@ -39,6 +36,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    private final GenderRepository genderRepository;
 
     public SensitiveData resetPassword(String email) throws NotFoundException, AccountNotActiveException, NoSuchAlgorithmException {
         User user = userRepository.findByEmail(email).orElseThrow(
@@ -143,5 +141,17 @@ public class UserService {
                 users.getNumber(),
                 users.getSize()
         );
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    public User updateUser(UpdateUserDataRequest userData, UUID id) throws NotFoundException {
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.USER_NOT_FOUND));
+        Gender gender = genderRepository.findByName(GenderEnum.valueOf(userData.gender())).orElseThrow(() -> new NotFoundException(GenericMessages.NOT_FOUND, ExceptionCodes.NOT_FOUND));
+        user.setFirstName(userData.firstName());
+        user.setLastName(userData.lastName());
+        user.setPhoneNumber(userData.phoneNumber());
+        user.setEmail(userData.email());
+        user.setGender(gender);
+        return userRepository.save(user);
     }
 }

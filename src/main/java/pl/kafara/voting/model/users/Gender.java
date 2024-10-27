@@ -1,9 +1,6 @@
 package pl.kafara.voting.model.users;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +12,7 @@ import pl.kafara.voting.model.AbstractEntity;
 @Getter
 @Entity
 @ToString
+@Table(name = "genders")
 public class Gender extends AbstractEntity {
 
     @Column(nullable = false, unique = true, updatable = false)

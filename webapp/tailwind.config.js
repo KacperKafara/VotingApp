@@ -76,6 +76,7 @@ module.exports = {
       },
       fontFamily: {
         ec: ["Sacramento", "cursive"],
+        raleway: ["Raleway", "sans-serif"],
       },
     },
   },

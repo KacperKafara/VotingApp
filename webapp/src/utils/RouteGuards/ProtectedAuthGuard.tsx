@@ -1,15 +1,21 @@
-import { FC } from "react";
-import { Navigate, Outlet } from "react-router-dom";
-import { roleMapping, useUserStore } from "../../store/userStore";
+import { FC } from 'react';
+import { Navigate, Outlet } from 'react-router-dom';
+import { roleMapping, useUserStore } from '../../store/userStore';
 
 interface AuthGuardProps {
-  role: string;
+  role?: string;
 }
 
 const ProtectedAuthGuard: FC<AuthGuardProps> = ({ role }) => {
   const { token, roles, activeRole } = useUserStore();
+  let isLoggedIn = false;
 
-  const isLoggedIn = token !== undefined && roles?.includes(role);
+  if (role === undefined) {
+    isLoggedIn = token !== undefined;
+  } else {
+    isLoggedIn =
+      token !== undefined && roles !== undefined && roles.includes(role);
+  }
 
   return (
     <>

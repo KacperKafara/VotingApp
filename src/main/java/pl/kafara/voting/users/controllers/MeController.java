@@ -15,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 import pl.kafara.voting.exceptions.NotFoundException;
 import pl.kafara.voting.exceptions.user.WrongPasswordException;
 import pl.kafara.voting.users.dto.ChangePasswordRequest;
+import pl.kafara.voting.users.dto.UpdateUserDataRequest;
 import pl.kafara.voting.users.dto.UserResponse;
 import pl.kafara.voting.users.mapper.UserMapper;
 import pl.kafara.voting.users.services.UserService;
@@ -47,5 +48,13 @@ public class MeController {
         DecodedJWT jwt =  JWT.decode((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         UUID id = UUID.fromString(jwt.getSubject());
         return ResponseEntity.ok(UserMapper.mapToUserResponse(userService.getUserById(id)));
+    }
+
+    @PutMapping
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<UserResponse> updateMe(@Validated @RequestBody UpdateUserDataRequest userData) throws NotFoundException {
+        DecodedJWT jwt =  JWT.decode((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        UUID id = UUID.fromString(jwt.getSubject());
+        return ResponseEntity.ok(UserMapper.mapToUserResponse(userService.updateUser(userData, id)));
     }
 }

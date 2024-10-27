@@ -19,7 +19,6 @@ import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
-import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import {
   Select,
@@ -226,7 +225,9 @@ const RegisterPage: FC = () => {
                     <FormControl>
                       <Button variant={'outline'}>
                         {field.value ? (
-                          format(field.value, 'PPP')
+                          new Date(field.value).toLocaleDateString(
+                            navigator.language || 'pl-PL'
+                          )
                         ) : (
                           <span>{t('pickDate')}</span>
                         )}

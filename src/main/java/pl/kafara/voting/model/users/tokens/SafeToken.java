@@ -17,6 +17,7 @@ import java.util.StringJoiner;
 @Getter
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING, name = "purpose")
+@Table(name = "safe_tokens")
 public abstract class SafeToken extends AbstractEntity {
 
     @Column(nullable = false)

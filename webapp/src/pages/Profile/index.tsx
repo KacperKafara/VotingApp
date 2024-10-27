@@ -1,0 +1,53 @@
+import LoadingIcon from '@/components/loading';
+import { useProfile } from '@/data/useProfile';
+import { toast } from '@/hooks/use-toast';
+import { ApplicationError } from '@/types/applicationError';
+import axios from 'axios';
+import { FC, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import PersonalData from './PersonalData';
+import LastLoginData from './LastLoginData';
+
+const ProfilePage: FC = () => {
+  const { data: user, isLoading, isError, error } = useProfile();
+  const { t } = useTranslation(['profile', 'errors']);
+  const naviagte = useNavigate();
+
+  useEffect(() => {
+    if (isError && axios.isAxiosError(error)) {
+      toast({
+        variant: 'destructive',
+        title: t('errors:defaultTitle'),
+        description: t(
+          'errors:' + (error.response?.data as ApplicationError).code
+        ),
+      });
+      if (error.response?.status === 404) {
+        naviagte(-1);
+      }
+    }
+  }, [error, isError, naviagte, t]);
+
+  if (isLoading || isError || !user) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <LoadingIcon />
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex h-full justify-center">
+      <div className="flex h-full w-4/5 flex-col gap-y-4">
+        <span className="font-raleway pb-5 pt-20 text-center text-4xl">
+          {t('hello') + user.username}
+        </span>
+        <PersonalData className="w-full py-4" user={user} />
+        <LastLoginData className="w-full" user={user} />
+      </div>
+    </div>
+  );
+};
+
+export default ProfilePage;

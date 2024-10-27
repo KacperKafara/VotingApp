@@ -6,15 +6,18 @@ spring:
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
-
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:/db/users.sql
   jpa:
-    open-in-view: false
     hibernate:
       ddl-auto: create-drop
+    defer-datasource-initialization: true
   flyway:
+    enabled: false
     baseline-on-migrate: true
-    clean-disabled: false
-    clean-on-validation-error: true
+
   mail:
     host: localhost
     port: 25

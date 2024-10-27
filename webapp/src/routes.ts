@@ -15,6 +15,12 @@ const ModeratorTestPage = loadable(() => import('./pages/@Moderator/test'));
 
 const UserTestPage = loadable(() => import('./pages/@User/test'));
 
+const ProfilePage = loadable(() => import('./pages/Profile'));
+
+const SharedRoutes: RouteObject[] = [
+  { path: '/profile', Component: ProfilePage },
+];
+
 const Routes: RouteObject[] = [
   { index: true, Component: MainPage },
   { path: '/register', Component: RegisterPage },
@@ -39,6 +45,10 @@ export const ModeratorProtectedRoutes: RouteObject[] = [
 ];
 export const UserProtectedRoutes: RouteObject[] = [
   { path: '/user', Component: BaseLayout, children: UserRoutes },
+];
+
+export const ProtectedRoutes: RouteObject[] = [
+  { path: '/', Component: BaseLayout, children: SharedRoutes },
 ];
 
 export const UnprotectedRoutes: RouteObject[] = [

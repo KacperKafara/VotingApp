@@ -8,6 +8,7 @@ export interface User {
   firstName: string;
   lastName: string;
   phoneNumber: string;
+  gender: 'MALE' | 'FEMALE' | 'OTHER';
   birthDate: Date;
   blocked: boolean;
   verified: boolean;
