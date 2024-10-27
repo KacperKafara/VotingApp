@@ -20,6 +20,7 @@ import {
 } from './ui/select';
 import ConfirmDialog from './ConfirmDialog';
 import { useUpdatePersonalData } from '@/data/useUpdatePersonalData';
+import { useNavigate } from 'react-router-dom';
 
 interface EditProfileProps {
   open: boolean;
@@ -58,6 +59,7 @@ const EditProfile: FC<EditProfileProps> = ({
   variant,
 }) => {
   const { t } = useTranslation('profile');
+  const navigate = useNavigate();
   const { updatePersonalData, updateOtherUserPersonalData } =
     useUpdatePersonalData();
 
@@ -74,10 +76,14 @@ const EditProfile: FC<EditProfileProps> = ({
   });
 
   const handleFormSubmit = form.handleSubmit(async (data) => {
-    if (variant == 'personalData') {
+    if (variant === 'personalData') {
       await updatePersonalData(data);
-    } else {
-      await updateOtherUserPersonalData({ data, userId: user.id });
+    } else if (variant == 'otherUserData') {
+      const updatedData = await updateOtherUserPersonalData({
+        data,
+        userId: user.id,
+      });
+      navigate(`/admin/users/${updatedData.username}`);
     }
     onOpenChange();
   });

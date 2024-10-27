@@ -13,6 +13,11 @@
   "verified": "Zweryfikowany",
   "yes": "Tak",
   "no": "Nie",
+  "updateData": "Aktualizuj",
+  "gender": "Płeć",
+  "MALE": "Mężczyzna",
+  "FEMALE": "Kobieta",
+  "OTHER": "Inna",
   "roles": {
     "administrator": "Administrator",
     "moderator": "Moderator",

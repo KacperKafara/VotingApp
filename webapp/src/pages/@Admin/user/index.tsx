@@ -25,12 +25,12 @@ const UserPage: FC = () => {
         ),
       });
       if (error.response?.status === 404) {
-        naviagte('/admin/users');
+        naviagte(-1);
       }
     }
   }, [error, isError, naviagte, t]);
 
-  if (isLoading || isError) {
+  if (isLoading || isError || !user) {
     return (
       <div className="flex h-full items-center justify-center">
         <LoadingIcon />
@@ -40,8 +40,8 @@ const UserPage: FC = () => {
 
   return (
     <div className="flex flex-wrap gap-3 p-10">
-      <UserDataCard user={user!} />
-      <UserRolesCard user={user!} />
+      <UserDataCard user={user} />
+      <UserRolesCard user={user} />
     </div>
   );
 };

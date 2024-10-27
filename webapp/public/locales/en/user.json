@@ -13,6 +13,11 @@
   "verified": "Verified",
   "yes": "Yes",
   "no": "No",
+  "updateData": "Update",
+  "gender": "Gender",
+  "MALE": "Male",
+  "FEMALE": "Female",
+  "OTHER": "Other",
   "roles": {
     "administrator": "Administrator",
     "moderator": "Moderator",

@@ -147,6 +147,7 @@ public class UserService {
     public User updateUser(UpdateUserDataRequest userData, UUID id) throws NotFoundException {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.USER_NOT_FOUND));
         Gender gender = genderRepository.findByName(GenderEnum.valueOf(userData.gender())).orElseThrow(() -> new NotFoundException(GenericMessages.NOT_FOUND, ExceptionCodes.NOT_FOUND));
+        user.setUsername(userData.username());
         user.setFirstName(userData.firstName());
         user.setLastName(userData.lastName());
         user.setPhoneNumber(userData.phoneNumber());

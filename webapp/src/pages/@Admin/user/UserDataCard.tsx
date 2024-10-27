@@ -1,3 +1,5 @@
+import EditProfile from '@/components/EditProfile';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -6,7 +8,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { User } from '@/types/user';
-import { FC } from 'react';
+import { FC, startTransition, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface UserDataCardProps {
@@ -15,9 +17,10 @@ interface UserDataCardProps {
 
 const UserDataCard: FC<UserDataCardProps> = ({ user }) => {
   const { t } = useTranslation(['user']);
+  const [editProfileOpen, setEditProfileOpen] = useState(false);
 
   return (
-    <Card>
+    <Card className="relative">
       <CardHeader>
         <CardTitle>{t('basicInformation')}</CardTitle>
         <CardDescription>
@@ -49,6 +52,10 @@ const UserDataCard: FC<UserDataCardProps> = ({ user }) => {
           )}
         </p>
         <p>
+          <b>{t('gender')}: </b>
+          {t(user.gender)}
+        </p>
+        <p>
           <b>{t('lastLogin')}: </b>
           {new Date(user.lastLogin).toLocaleString(
             navigator.language || 'pl-PL'
@@ -69,6 +76,23 @@ const UserDataCard: FC<UserDataCardProps> = ({ user }) => {
           {user.verified ? t('yes') : t('no')}
         </p>
       </CardContent>
+      <Button
+        variant="ghost"
+        className="absolute right-0 top-0 m-1"
+        onClick={() => {
+          startTransition(() => setEditProfileOpen(!editProfileOpen));
+        }}
+      >
+        {t('updateData')}
+      </Button>
+      {editProfileOpen && (
+        <EditProfile
+          open={editProfileOpen}
+          onOpenChange={() => setEditProfileOpen(!editProfileOpen)}
+          user={user}
+          variant="otherUserData"
+        />
+      )}
     </Card>
   );
 };
