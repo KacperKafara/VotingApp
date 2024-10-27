@@ -20,7 +20,7 @@ const UserDataCard: FC<UserDataCardProps> = ({ user }) => {
   const [editProfileOpen, setEditProfileOpen] = useState(false);
 
   return (
-    <Card className="relative">
+    <Card className="relative w-full min-w-96">
       <CardHeader>
         <CardTitle>{t('basicInformation')}</CardTitle>
         <CardDescription>
@@ -29,52 +29,48 @@ const UserDataCard: FC<UserDataCardProps> = ({ user }) => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <p>
-          <b>{t('firstName')}: </b>
-          {user.firstName}
-        </p>
-        <p>
-          <b>{t('lastName')}: </b>
-          {user.lastName}
-        </p>
-        <p>
-          <b>{t('email')}: </b>
-          {user.email}
-        </p>
-        <p>
-          <b>{t('phoneNumber')}: </b>
-          {user.phoneNumber}
-        </p>
-        <p>
-          <b>{t('birthDate')}: </b>
-          {new Date(user.birthDate).toLocaleDateString(
-            navigator.language || 'pl-PL'
-          )}
-        </p>
-        <p>
-          <b>{t('gender')}: </b>
-          {t(user.gender)}
-        </p>
-        <p>
-          <b>{t('lastLogin')}: </b>
-          {new Date(user.lastLogin).toLocaleString(
-            navigator.language || 'pl-PL'
-          )}
-        </p>
-        <p>
-          <b>{t('lastFailedLogin')}: </b>
-          {new Date(user.lastFailedLogin).toLocaleString(
-            navigator.language || 'pl-PL'
-          )}
-        </p>
-        <p>
-          <b>{t('blocked')}: </b>
-          {user.blocked ? t('yes') : t('no')}
-        </p>
-        <p>
-          <b>{t('verified')}: </b>
-          {user.verified ? t('yes') : t('no')}
-        </p>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <span className="text-sm font-semibold text-gray-500">
+              {t('firstName')}
+            </span>
+            <p>{user.firstName}</p>
+          </div>
+          <div>
+            <span className="text-sm font-semibold text-gray-500">
+              {t('lastName')}
+            </span>
+            <p>{user.lastName}</p>
+          </div>
+          <div>
+            <span className="text-sm font-semibold text-gray-500">
+              {t('email')}
+            </span>
+            <p>{user.email}</p>
+          </div>
+          <div>
+            <span className="text-sm font-semibold text-gray-500">
+              {t('phoneNumber')}
+            </span>
+            <p>{user.phoneNumber}</p>
+          </div>
+          <div>
+            <span className="text-sm font-semibold text-gray-500">
+              {t('birthDate')}
+            </span>
+            <p>
+              {new Date(user.birthDate).toLocaleDateString(
+                navigator.language || 'pl-PL'
+              )}
+            </p>
+          </div>
+          <div>
+            <span className="text-sm font-semibold text-gray-500">
+              {t('gender')}
+            </span>
+            <p>{t(user.gender)}</p>
+          </div>
+        </div>
       </CardContent>
       <Button
         variant="ghost"

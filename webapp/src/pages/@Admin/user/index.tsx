@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import UserRolesCard from './UserRolesCard';
 import UserDataCard from './UserDataCard';
+import UserBuisnessData from './UserBuisnessData';
 
 const UserPage: FC = () => {
   const { username } = useParams<{ username: string }>();
@@ -39,9 +40,14 @@ const UserPage: FC = () => {
   }
 
   return (
-    <div className="flex flex-wrap gap-3 p-10">
-      <UserDataCard user={user} />
-      <UserRolesCard user={user} />
+    <div className="flex h-full w-full items-center justify-center">
+      <div className="flex h-4/5 w-11/12 flex-wrap gap-3 p-10">
+        <UserDataCard user={user} />
+        <div className="flex w-full gap-3">
+          <UserBuisnessData user={user} />
+          <UserRolesCard user={user} />
+        </div>
+      </div>
     </div>
   );
 };

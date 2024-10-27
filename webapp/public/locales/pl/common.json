@@ -1,6 +1,8 @@
 {
   "languageSelector": "Język",
   "themeSelector": "Zmień motyw",
+  "dark": "Ciemny",
+  "light": "Jasny",
   "logout": "Wyloguj",
   "close": "Zamknij",
   "submit": "Wyślij",

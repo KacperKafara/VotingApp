@@ -24,13 +24,13 @@ export function ModeToggle() {
           className="hover:cursor-pointer"
           onClick={() => setTheme('light')}
         >
-          Light
+          {t('light')}
         </DropdownMenuItem>
         <DropdownMenuItem
           className="hover:cursor-pointer"
           onClick={() => setTheme('dark')}
         >
-          Dark
+          {t('dark')}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
