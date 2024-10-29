@@ -37,14 +37,20 @@ const ProfilePage: FC = () => {
     );
   }
 
+  const etag = user.headers.etag as string;
+
   return (
     <div className="flex h-full justify-center">
       <div className="flex h-full w-4/5 flex-col gap-y-4">
-        <span className="font-raleway pb-5 pt-20 text-center text-4xl">
-          {t('hello') + user.username}
+        <span className="pb-5 pt-20 text-center font-raleway text-4xl">
+          {t('hello') + user.data.username}
         </span>
-        <PersonalData className="w-full py-4" user={user} />
-        <LastLoginData className="w-full" user={user} />
+        <PersonalData
+          className="w-full py-4"
+          user={user.data}
+          tag_value={etag.substring(1, etag.length - 1)}
+        />
+        <LastLoginData className="w-full" user={user.data} />
       </div>
     </div>
   );

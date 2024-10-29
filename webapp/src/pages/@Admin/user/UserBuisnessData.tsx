@@ -8,9 +8,10 @@ import { useTranslation } from 'react-i18next';
 
 interface UserBuisnessDataProps {
   user: User;
+  tag_value: string;
 }
 
-const UserBuisnessData: FC<UserBuisnessDataProps> = ({ user }) => {
+const UserBuisnessData: FC<UserBuisnessDataProps> = ({ user, tag_value }) => {
   const { t } = useTranslation(['user']);
   const { blockUser } = useBlockUser();
   const { unblockUser } = useUnblockUser();
@@ -18,10 +19,10 @@ const UserBuisnessData: FC<UserBuisnessDataProps> = ({ user }) => {
 
   const handleClick = async (blocked: boolean) => {
     if (blocked) {
-      await blockUser(user.id);
+      await blockUser({ userId: user.id, if_match: tag_value });
       queryClient.invalidateQueries({ queryKey: ['user'] });
     } else {
-      await unblockUser(user.id);
+      await unblockUser({ userId: user.id, if_match: tag_value });
       queryClient.invalidateQueries({ queryKey: ['user'] });
     }
   };

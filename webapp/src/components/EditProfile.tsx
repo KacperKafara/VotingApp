@@ -26,6 +26,7 @@ interface EditProfileProps {
   open: boolean;
   onOpenChange: () => void;
   user: User;
+  tag_value: string;
   variant: 'personalData' | 'otherUserData';
 }
 
@@ -57,6 +58,7 @@ const EditProfile: FC<EditProfileProps> = ({
   onOpenChange,
   user,
   variant,
+  tag_value,
 }) => {
   const { t } = useTranslation('profile');
   const navigate = useNavigate();
@@ -77,10 +79,13 @@ const EditProfile: FC<EditProfileProps> = ({
 
   const handleFormSubmit = form.handleSubmit(async (data) => {
     if (variant === 'personalData') {
-      await updatePersonalData(data);
+      await updatePersonalData({ data, if_match: tag_value });
     } else if (variant == 'otherUserData') {
       const updatedData = await updateOtherUserPersonalData({
-        data,
+        data: {
+          data,
+          if_match: tag_value,
+        },
         userId: user.id,
       });
       navigate(`/admin/users/${updatedData.username}`, { replace: true });

@@ -39,13 +39,24 @@ const UserPage: FC = () => {
     );
   }
 
+  const etag = user.headers.etag as string;
+
   return (
     <div className="flex h-full w-full items-center justify-center">
       <div className="flex h-4/5 w-11/12 flex-wrap gap-3 p-10">
-        <UserDataCard user={user} />
+        <UserDataCard
+          user={user.data}
+          tag_value={etag.substring(1, etag.length - 1)}
+        />
         <div className="flex w-full gap-3">
-          <UserBuisnessData user={user} />
-          <UserRolesCard user={user} />
+          <UserBuisnessData
+            user={user.data}
+            tag_value={etag.substring(1, etag.length - 1)}
+          />
+          <UserRolesCard
+            user={user.data}
+            tag_value={etag.substring(1, etag.length - 1)}
+          />
         </div>
       </div>
     </div>

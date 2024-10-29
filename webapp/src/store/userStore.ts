@@ -23,6 +23,7 @@ export const rolePriority: Record<string, number> = {
   ROLE_ADMINISTRATOR: 0,
   ROLE_MODERATOR: 2,
   ROLE_USER: 3,
+  ROLE_VOTER: 4,
 };
 
 const getActiveRole = (roles: string[]): string =>

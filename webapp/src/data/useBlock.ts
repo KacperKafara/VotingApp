@@ -11,8 +11,22 @@ export const useBlockUser = () => {
   const { api } = useAxiosPrivate();
 
   const { mutateAsync, isSuccess } = useMutation({
-    mutationFn: async (userId: string) => {
-      const response = await api.put<unknown>(`/users/${userId}/block`);
+    mutationFn: async ({
+      userId,
+      if_match,
+    }: {
+      userId: string;
+      if_match: string;
+    }) => {
+      const response = await api.put<unknown>(
+        `/users/${userId}/block`,
+        {},
+        {
+          headers: {
+            'If-Match': if_match,
+          },
+        }
+      );
       return response.data;
     },
     onError: (error: AxiosError) => {
@@ -41,8 +55,18 @@ export const useUnblockUser = () => {
   const { api } = useAxiosPrivate();
 
   const { mutateAsync, isSuccess } = useMutation({
-    mutationFn: async (userId: string) => {
-      const response = await api.delete<unknown>(`/users/${userId}/block`);
+    mutationFn: async ({
+      userId,
+      if_match,
+    }: {
+      userId: string;
+      if_match: string;
+    }) => {
+      const response = await api.delete<unknown>(`/users/${userId}/block`, {
+        headers: {
+          'If-Match': if_match,
+        },
+      });
       return response.data;
     },
     onError: (error: AxiosError) => {

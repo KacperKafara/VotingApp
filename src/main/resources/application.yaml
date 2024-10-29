@@ -48,6 +48,9 @@ security:
     token:
       secret-key: secret-key
       expiration-time: 86400000
+  jws:
+    token:
+      secret-key: jws-secret-key
   max-failed-attempts: 3
 
 sejm:

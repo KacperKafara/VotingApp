@@ -11,6 +11,7 @@ public class GenericMessages {
     public static final String RESOURCE_NOT_FOUND = "Resource not found";
     public static final String TOKEN_CANNOT_BE_BLANK = "Token cannot be blank";
     public static final String NOT_AUTHORIZED_TO_PERFORM_THIS_ACTION = "You are not authorized to perform this action";
+    public static final String INVALID_TOKEN = "Invalid token";
 
     private GenericMessages() {
     }

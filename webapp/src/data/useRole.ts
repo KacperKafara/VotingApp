@@ -14,13 +14,23 @@ export const useRole = () => {
     mutationFn: async ({
       roles,
       userId,
+      if_match,
     }: {
       roles: string[];
       userId: string;
+      if_match: string;
     }) => {
-      const response = await api.put<unknown>(`/users/${userId}/roles`, {
-        roles,
-      });
+      const response = await api.put<unknown>(
+        `/users/${userId}/roles`,
+        {
+          roles,
+        },
+        {
+          headers: {
+            'If-Match': if_match,
+          },
+        }
+      );
       return response.data;
     },
     onError: (error: AxiosError) => {

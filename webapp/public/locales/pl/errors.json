@@ -26,5 +26,9 @@
   "CANNOT_BLOCK_YOURSELF": "Nie możesz zablokować samego siebie",
   "CANNOT_UNBLOCK_YOURSELF": "Nie możesz odblokować samego siebie",
   "WRONG_PASSWORD": "Stare hasło jest nieprawidłowe",
-  "NOT_AUTHORIZED_TO_PERFORM_THIS_ACTION": "Nie masz uprawnień do wykonania tej akcji"
+  "NOT_AUTHORIZED_TO_PERFORM_THIS_ACTION": "Nie masz uprawnień do wykonania tej akcji",
+  "CANNOT_MODIFY_YOURSELF_ROLES": "Nie możesz zmodyfikować swoich ról",
+  "USER_OPTIMISTIC_LOCK": "Nie pracujesz na najnowszych danych. Odśwież stronę i spróbuj ponownie",
+  "MISSING_REQUEST_HEADER" : "Brak nagłówka żądania",
+  "INVALID_TOKEN": "Nieprawidłowy token"
 }

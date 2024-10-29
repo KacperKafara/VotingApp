@@ -13,9 +13,10 @@ import { useTranslation } from 'react-i18next';
 
 interface UserDataCardProps {
   user: User;
+  tag_value: string;
 }
 
-const UserDataCard: FC<UserDataCardProps> = ({ user }) => {
+const UserDataCard: FC<UserDataCardProps> = ({ user, tag_value }) => {
   const { t } = useTranslation(['user']);
   const [editProfileOpen, setEditProfileOpen] = useState(false);
 
@@ -87,6 +88,7 @@ const UserDataCard: FC<UserDataCardProps> = ({ user }) => {
           onOpenChange={() => setEditProfileOpen(!editProfileOpen)}
           user={user}
           variant="otherUserData"
+          tag_value={tag_value}
         />
       )}
     </Card>

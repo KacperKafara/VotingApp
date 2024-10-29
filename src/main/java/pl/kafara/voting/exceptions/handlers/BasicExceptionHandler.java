@@ -1,5 +1,7 @@
 package pl.kafara.voting.exceptions.handlers;
 
+import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.exceptions.SignatureVerificationException;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.exception.GenericJDBCException;
@@ -10,6 +12,7 @@ import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.server.ResponseStatusException;
@@ -49,6 +52,24 @@ public class BasicExceptionHandler {
         log.error("Exception: ", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ExceptionResponse(GenericMessages.INTERNAL_SERVER_ERROR, ExceptionCodes.INTERNAL_SERVER_ERROR));
+    }
+
+    @ExceptionHandler(MissingRequestHeaderException.class)
+    ResponseEntity<ExceptionResponse> handleMissingRequestHeaderException(MissingRequestHeaderException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ExceptionResponse(e.getMessage(), ExceptionCodes.MISSING_REQUEST_HEADER));
+    }
+
+    @ExceptionHandler(JWTDecodeException.class)
+    ResponseEntity<ExceptionResponse> handleJWTDecodeException(JWTDecodeException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ExceptionResponse(GenericMessages.INVALID_TOKEN, ExceptionCodes.INVALID_TOKEN));
+    }
+
+    @ExceptionHandler(SignatureVerificationException.class)
+    ResponseEntity<ExceptionResponse> handleSignatureVerificationException(SignatureVerificationException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ExceptionResponse(GenericMessages.INVALID_TOKEN, ExceptionCodes.INVALID_TOKEN));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

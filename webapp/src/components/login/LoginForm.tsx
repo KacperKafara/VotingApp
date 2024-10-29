@@ -15,7 +15,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuthenticate } from '@/data/useAuthenticate';
 import { useTranslation } from 'react-i18next';
 import i18next, { TFunction } from 'i18next';
-import { useUserStore } from '@/store/userStore';
+import { roleMapping, useUserStore } from '@/store/userStore';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Button } from '../ui/button';
 import ResetPassword from './ForgotPassword';
@@ -41,7 +41,7 @@ interface LoginFormProps {
 const LoginForm: FC<LoginFormProps> = ({ className }) => {
   const { authenticate, isPending } = useAuthenticate();
   const { t } = useTranslation('loginPage');
-  const { setToken } = useUserStore();
+  const { setToken, activeRole } = useUserStore();
   const navigate = useNavigate();
   const [resetPasswordOpen, setResetPasswordOpen] = useState(false);
 
@@ -60,7 +60,7 @@ const LoginForm: FC<LoginFormProps> = ({ className }) => {
       language: i18next.language,
     });
     setToken(result.token);
-    navigate('/');
+    navigate(`/${roleMapping[activeRole!]}`);
   });
 
   return (

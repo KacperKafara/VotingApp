@@ -27,6 +27,9 @@ public class ExceptionCodes {
     public static final String WRONG_PASSWORD = "WRONG_PASSWORD_CHANGE_PASSWORD";
     public static final String NOT_AUTHORIZED_TO_PERFORM_THIS_ACTION = "NOT_AUTHORIZED_TO_PERFORM_THIS_ACTION";
     public static final String CANNOT_MODIFY_YOURSELF_ROLES = "CANNOT_MODIFY_YOURSELF_ROLES";
+    public static final String USER_OPTIMISTIC_LOCK = "USER_OPTIMISTIC_LOCK";
+    public static final String MISSING_REQUEST_HEADER = "MISSING_REQUEST_HEADER";
+    public static final String INVALID_TOKEN = "INVALID_TOKEN";
 
     private ExceptionCodes() {
     }

@@ -37,8 +37,8 @@ export const useUser = (id: string) => {
     queryKey: ['user'],
     queryFn: async () => {
       try {
-        const { data } = await api.get<User>(`/users/${id}`);
-        return data;
+        const { data, headers } = await api.get<User>(`/users/${id}`);
+        return { data, headers };
       } catch (e) {
         return Promise.reject(e);
       }

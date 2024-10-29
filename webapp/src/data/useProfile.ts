@@ -9,8 +9,8 @@ export const useProfile = () => {
     queryKey: ['profile'],
     queryFn: async () => {
       try {
-        const { data } = await api.get<User>('/me');
-        return data;
+        const { data, headers } = await api.get<User>('/me');
+        return { data, headers };
       } catch (e) {
         return Promise.reject(e);
       }

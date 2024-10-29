@@ -14,14 +14,23 @@ interface UpdatePersonalDataRequest {
   phoneNumber: string;
 }
 
+interface RequestData {
+  data: UpdatePersonalDataRequest;
+  if_match: string;
+}
+
 export const useUpdatePersonalData = () => {
   const { api } = useAxiosPrivate();
   const { t } = useTranslation(['errors', 'profile', 'common']);
   const queryClient = useQueryClient();
 
   const { mutateAsync } = useMutation({
-    mutationFn: async (data: UpdatePersonalDataRequest) => {
-      const response = await api.put<User>(`/me`, data);
+    mutationFn: async (data: RequestData) => {
+      const response = await api.put<User>(`/me`, data.data, {
+        headers: {
+          'If-Match': data.if_match,
+        },
+      });
       return response.data;
     },
     onError: (error: AxiosError) => {
@@ -45,10 +54,14 @@ export const useUpdatePersonalData = () => {
       data,
       userId,
     }: {
-      data: UpdatePersonalDataRequest;
+      data: RequestData;
       userId: string;
     }) => {
-      const response = await api.put<User>(`/users/${userId}`, data);
+      const response = await api.put<User>(`/users/${userId}`, data.data, {
+        headers: {
+          'If-Match': data.if_match,
+        },
+      });
       return response.data;
     },
     onError: (error: AxiosError) => {

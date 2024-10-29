@@ -16,9 +16,14 @@ import { useTranslation } from 'react-i18next';
 interface PersonalDataProps {
   user: User;
   className?: string;
+  tag_value: string;
 }
 
-const PersonalData: FC<PersonalDataProps> = ({ user, className }) => {
+const PersonalData: FC<PersonalDataProps> = ({
+  user,
+  className,
+  tag_value,
+}) => {
   const { t } = useTranslation('profile');
   const [editProfileOpen, setEditProfileOpen] = useState(false);
   const [changePasswordDialogOpen, setChangePasswordDialogOpen] =
@@ -97,6 +102,7 @@ const PersonalData: FC<PersonalDataProps> = ({ user, className }) => {
         onOpenChange={() => setEditProfileOpen(!editProfileOpen)}
         user={user}
         variant="personalData"
+        tag_value={tag_value}
       />
       <ChangePasswordDialog
         open={changePasswordDialogOpen}

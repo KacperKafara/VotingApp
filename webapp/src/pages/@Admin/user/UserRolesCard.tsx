@@ -20,6 +20,7 @@ import { z } from 'zod';
 
 interface UserRolesCardProps {
   user: User;
+  tag_value: string;
 }
 
 const rolesFormSchema = z.object({
@@ -28,7 +29,7 @@ const rolesFormSchema = z.object({
   moderator: z.boolean().optional(),
 });
 
-const UserRolesCard: FC<UserRolesCardProps> = ({ user }) => {
+const UserRolesCard: FC<UserRolesCardProps> = ({ user, tag_value }) => {
   const { t } = useTranslation(['user', 'common']);
   const { id } = useUserStore();
   const { modifyRoles } = useRole();
@@ -54,6 +55,7 @@ const UserRolesCard: FC<UserRolesCardProps> = ({ user }) => {
       await modifyRoles({
         roles,
         userId: user.id,
+        if_match: tag_value,
       });
     }
   );
