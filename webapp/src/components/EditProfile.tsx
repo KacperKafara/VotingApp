@@ -83,7 +83,7 @@ const EditProfile: FC<EditProfileProps> = ({
         data,
         userId: user.id,
       });
-      navigate(`/admin/users/${updatedData.username}`);
+      navigate(`/admin/users/${updatedData.username}`, { replace: true });
     }
     onOpenChange();
   });

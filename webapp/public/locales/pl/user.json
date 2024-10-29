@@ -32,6 +32,12 @@
     "blockTitle": "Zablokuj użytkownika",
     "blockDescriptionSuccess": "Użytkownik został zablokowany pomyślnie",
     "unBlockTitle": "Odblokuj użytkownika",
-    "unBlockDescriptionSuccess": "Użytkownik został odblokowany pomyślnie"
+    "unBlockDescriptionSuccess": "Użytkownik został odblokowany pomyślnie",
+    "block": "Zablokuj",
+    "unblock": "Odblokuj",
+    "unblockUser": "Odblokuj użytkownika",
+    "blockUser": "Zablokuj użytkownika",
+    "blockDescription": "Czy na pewno chcesz zablokować tego użytkownika?",
+    "unBlockDescription": "Czy na pewno chcesz odblokować tego użytkownika?"
   }
 }

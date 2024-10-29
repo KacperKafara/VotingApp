@@ -1,5 +1,8 @@
+import ConfirmDialog from '@/components/ConfirmDialog';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useBlockUser, useUnblockUser } from '@/data/useBlock';
 import { User } from '@/types/user';
+import { useQueryClient } from '@tanstack/react-query';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -9,9 +12,22 @@ interface UserBuisnessDataProps {
 
 const UserBuisnessData: FC<UserBuisnessDataProps> = ({ user }) => {
   const { t } = useTranslation(['user']);
+  const { blockUser } = useBlockUser();
+  const { unblockUser } = useUnblockUser();
+  const queryClient = useQueryClient();
+
+  const handleClick = async (blocked: boolean) => {
+    if (blocked) {
+      await blockUser(user.id);
+      queryClient.invalidateQueries({ queryKey: ['user'] });
+    } else {
+      await unblockUser(user.id);
+      queryClient.invalidateQueries({ queryKey: ['user'] });
+    }
+  };
 
   return (
-    <Card className="w-full">
+    <Card className="relative w-full">
       <CardHeader>
         <CardTitle>{t('otherData')}</CardTitle>
       </CardHeader>
@@ -51,6 +67,25 @@ const UserBuisnessData: FC<UserBuisnessDataProps> = ({ user }) => {
           </div>
         </div>
       </CardContent>
+      <div className="absolute right-0 top-0 m-1">
+        {user.blocked ? (
+          <ConfirmDialog
+            variant="ghost"
+            buttonText={t('block.unblock')}
+            dialogTitle={t('block.unblockUser')}
+            dialogDescription={t('block.unblockUserDescription')}
+            confirmAction={() => handleClick(false)}
+          />
+        ) : (
+          <ConfirmDialog
+            variant="ghost"
+            buttonText={t('block.block')}
+            dialogTitle={t('block.blockUser')}
+            dialogDescription={t('block.blockUserDescription')}
+            confirmAction={() => handleClick(true)}
+          />
+        )}
+      </div>
     </Card>
   );
 };

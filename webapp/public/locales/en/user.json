@@ -32,6 +32,12 @@
     "blockTitle": "Block user",
     "blockDescriptionSuccess": "User has been blocked successfully",
     "unBlockTitle": "Unblock user",
-    "unBlockDescriptionSuccess": "User has been unblocked successfully"
+    "unBlockDescriptionSuccess": "User has been unblocked successfully",
+    "block": "Block",
+    "unblock": "Unblock",
+    "unblockUser": "Unblock user",
+    "blockUser": "Block user",
+    "blockDescription": "Are you sure that you want to block user?",
+    "unBlockDescription": "Are you sure that you want to unblock user?"
   }
 }
