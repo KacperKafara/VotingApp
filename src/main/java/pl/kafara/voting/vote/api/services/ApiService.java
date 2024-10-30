@@ -19,8 +19,10 @@ import pl.kafara.voting.vote.api.mappers.EnvoyMapper;
 import pl.kafara.voting.vote.api.mappers.VoteMapper;
 import pl.kafara.voting.vote.api.mappers.VotingMapper;
 import pl.kafara.voting.vote.api.model.EnvoyAPI;
+import pl.kafara.voting.vote.api.model.LastVotingsUpdate;
 import pl.kafara.voting.vote.api.model.VoteAPI;
 import pl.kafara.voting.vote.api.model.VotingAPI;
+import pl.kafara.voting.vote.api.repositories.LastVotingsUpdateRepository;
 import pl.kafara.voting.vote.repositories.EnvoyRepository;
 import pl.kafara.voting.vote.repositories.ParliamentaryClubRepository;
 import pl.kafara.voting.vote.repositories.SittingRepository;
@@ -47,6 +49,7 @@ public class ApiService {
     private final ParliamentaryClubRepository parliamentaryClubRepository;
     private final VotingRepository votingRepository;
     private final RestClient restClient;
+    private final LastVotingsUpdateRepository lastVotingsUpdateRepository;
 
     @PostConstruct
     public void init() {
@@ -119,21 +122,26 @@ public class ApiService {
 
     @Scheduled(cron = "0 20 0 */2 * *")
     public void updateVotingList() {
-        List<Sitting> sittings = sittingRepository.findAll();
+        LastVotingsUpdate lastVotingsUpdate = lastVotingsUpdateRepository.findById(1L);
+        List<Sitting> sittings;
+        if(lastVotingsUpdate != null)
+            sittings = sittingRepository.findByNumber(lastVotingsUpdate.getLastSitting().getNumber());
+        else
+            sittings = sittingRepository.findAll();
 
         for (Sitting sitting : sittings) {
-            int iterator = 1;
+            int iterator = 0;
             boolean isEnd = false;
             while (true) {
                 ResponseEntity<VotingAPI> votingResult;
 
                 try {
+                    iterator++;
                     votingResult = restClient.get()
                             .uri(term + "/votings/" + sitting.getNumber() + "/" + iterator)
                             .retrieve()
                             .toEntity(VotingAPI.class);
                 } catch (HttpClientErrorException.NotFound e) {
-                    iterator++;
                     if (!isEnd) {
                         isEnd = true;
                         continue;
@@ -162,7 +170,9 @@ public class ApiService {
 
                 iterator++;
             }
+            lastVotingsUpdate.setLastSitting(sitting);
         }
+        lastVotingsUpdateRepository.save(lastVotingsUpdate);
     }
 
     private List<Vote> updateVotes(List<VoteAPI> votes, Voting voting) {
