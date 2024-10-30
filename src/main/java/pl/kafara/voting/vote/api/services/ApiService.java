@@ -126,8 +126,10 @@ public class ApiService {
         List<Sitting> sittings;
         if(lastVotingsUpdate != null)
             sittings = sittingRepository.findByNumber(lastVotingsUpdate.getLastSitting().getNumber());
-        else
+        else {
+            lastVotingsUpdate = new LastVotingsUpdate(1L, null);
             sittings = sittingRepository.findAll();
+        }
 
         for (Sitting sitting : sittings) {
             int iterator = 0;
