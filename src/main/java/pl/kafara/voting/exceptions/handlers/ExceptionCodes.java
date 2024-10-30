@@ -30,6 +30,7 @@ public class ExceptionCodes {
     public static final String USER_OPTIMISTIC_LOCK = "USER_OPTIMISTIC_LOCK";
     public static final String MISSING_REQUEST_HEADER = "MISSING_REQUEST_HEADER";
     public static final String INVALID_TOKEN = "INVALID_TOKEN";
+    public static final String INVALID_ARGUMENT_TYPE = "INVALID_ARGUMENT_TYPE";
 
     private ExceptionCodes() {
     }

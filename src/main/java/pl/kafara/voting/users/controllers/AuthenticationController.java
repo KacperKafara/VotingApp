@@ -33,12 +33,12 @@ public class AuthenticationController {
 
     @PreAuthorize("permitAll()")
     @PostMapping("/authenticate")
-    public ResponseEntity<LoginResponse> authenticate(@Validated @RequestBody LoginRequest loginRequest) throws NotFoundException {
+    public ResponseEntity<LoginResponse> authenticate(@Validated @RequestBody LoginRequest loginRequest) {
         try {
             return ResponseEntity.ok(new LoginResponse(authenticationService.authenticate(loginRequest).data()));
         } catch (AccountNotActiveException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
-        } catch (InvalidLoginDataException e) {
+        } catch (InvalidLoginDataException | NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage(), e);
         }
     }

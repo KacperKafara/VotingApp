@@ -15,6 +15,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 import pl.kafara.voting.exceptions.ApplicationBaseException;
@@ -45,6 +46,12 @@ public class BasicExceptionHandler {
         }
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(new ExceptionResponse(GenericMessages.CONSTRAINT_VIOLATION, ExceptionCodes.CONSTRAINT_VIOLATION));
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ExceptionResponse> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ExceptionResponse(GenericMessages.INVALID_ARGUMENT_TYPE, ExceptionCodes.INVALID_ARGUMENT_TYPE));
     }
 
     @ExceptionHandler(Exception.class)
