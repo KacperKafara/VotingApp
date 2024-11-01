@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.kafara.voting.exceptions.NotFoundException;
-import pl.kafara.voting.exceptions.handlers.ExceptionCodes;
+import pl.kafara.voting.exceptions.exceptionCodes.UserExceptionCodes;
 import pl.kafara.voting.exceptions.messages.GenericMessages;
 import pl.kafara.voting.exceptions.messages.UserMessages;
 import pl.kafara.voting.exceptions.user.AccountNotActiveException;
@@ -47,13 +47,13 @@ public class AuthenticationService {
     @PreAuthorize("permitAll()")
     public SensitiveData authenticate(LoginRequest loginRequest) throws NotFoundException, AccountNotActiveException, InvalidLoginDataException {
         User user = userRepository.findByUsername(loginRequest.username())
-                .orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.INVALID_CREDENTIALS));
+                .orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.INVALID_CREDENTIALS));
 
-        if(!user.isVerified()) throw new AccountNotActiveException(UserMessages.USER_NOT_VERIFIED, ExceptionCodes.USER_NOT_VERIFIED);
-        if(user.isBlocked()) throw new AccountNotActiveException(UserMessages.USER_BLOCKED, ExceptionCodes.USER_BLOCKED);
+        if(!user.isVerified()) throw new AccountNotActiveException(UserMessages.USER_NOT_VERIFIED, UserExceptionCodes.USER_NOT_VERIFIED);
+        if(user.isBlocked()) throw new AccountNotActiveException(UserMessages.USER_BLOCKED, UserExceptionCodes.USER_BLOCKED);
 
         if(user.getFailedLoginAttempts() >= maxFailedAttempts && Duration.between(user.getLastFailedLogin(), LocalDateTime.now()).toDays() <= 24)
-            throw new AccountNotActiveException(UserMessages.AUTHENTICATION_BLOCKED, ExceptionCodes.AUTHENTICATION_BLOCKED);
+            throw new AccountNotActiveException(UserMessages.AUTHENTICATION_BLOCKED, UserExceptionCodes.AUTHENTICATION_BLOCKED);
         else if(user.getFailedLoginAttempts() >= maxFailedAttempts)
             user.setFailedLoginAttempts(0);
 
@@ -61,7 +61,7 @@ public class AuthenticationService {
             user.setFailedLoginAttempts(user.getFailedLoginAttempts() + 1);
             user.setLastFailedLogin(LocalDateTime.now());
             userRepository.save(user);
-            throw new InvalidLoginDataException(UserMessages.INVALID_CREDENTIALS, ExceptionCodes.INVALID_CREDENTIALS);
+            throw new InvalidLoginDataException(UserMessages.INVALID_CREDENTIALS, UserExceptionCodes.INVALID_CREDENTIALS);
         }
 
         user.setFailedLoginAttempts(0);
@@ -75,9 +75,9 @@ public class AuthenticationService {
     @PreAuthorize("permitAll()")
     public SensitiveData register(RegistrationRequest registrationRequest) throws NotFoundException, NoSuchAlgorithmException {
         Role role = roleRepository.findByName(UserRoleEnum.USER)
-                .orElseThrow(() -> new NotFoundException(UserMessages.ROLE_NOT_FOUND, ExceptionCodes.ROLE_NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(UserMessages.ROLE_NOT_FOUND, UserExceptionCodes.ROLE_NOT_FOUND));
         Gender gender = genderRepository.findByName(GenderEnum.fromInt(registrationRequest.gender()))
-                .orElseThrow(() -> new NotFoundException(GenericMessages.NOT_FOUND, ExceptionCodes.NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(GenericMessages.NOT_FOUND, UserExceptionCodes.NOT_FOUND));
         User user = RegistrationMapper.mapToUser(registrationRequest);
         user.setPassword(passwordEncoder.encode(registrationRequest.password()));
         user.getRoles().add(role);

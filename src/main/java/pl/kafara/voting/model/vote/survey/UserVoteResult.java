@@ -1,7 +1,5 @@
 package pl.kafara.voting.model.vote.survey;
 
-import pl.kafara.voting.model.vote.VoteResult;
-
 public enum UserVoteResult {
     DEFINITELY_YES, YES, I_DONT_KNOW, NO, DEFINITELY_NO;
 
@@ -15,6 +13,6 @@ public enum UserVoteResult {
             }
         }
 
-        throw new IllegalArgumentException("No VoteResult with value: " + value);
+        throw new IllegalArgumentException("No UserVoteResult with value: " + value);
     }
 }

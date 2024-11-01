@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.kafara.voting.exceptions.ApplicationOptimisticLockException;
 import pl.kafara.voting.exceptions.NotFoundException;
-import pl.kafara.voting.exceptions.handlers.ExceptionCodes;
+import pl.kafara.voting.exceptions.exceptionCodes.UserExceptionCodes;
 import pl.kafara.voting.exceptions.messages.UserMessages;
 import pl.kafara.voting.exceptions.user.OwnRolesModificationException;
 import pl.kafara.voting.exceptions.user.UserBlockException;
@@ -55,7 +55,7 @@ public class UserController {
         DecodedJWT jwt = JWT.decode((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         if (jwt.getSubject().equals(userId.toString()))
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, UserMessages.CANNOT_MODIFY_YOURSELF_ROLES, new OwnRolesModificationException(UserMessages.CANNOT_MODIFY_YOURSELF_ROLES, ExceptionCodes.CANNOT_MODIFY_YOURSELF_ROLES));
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, UserMessages.CANNOT_MODIFY_YOURSELF_ROLES, new OwnRolesModificationException(UserMessages.CANNOT_MODIFY_YOURSELF_ROLES, UserExceptionCodes.CANNOT_MODIFY_YOURSELF_ROLES));
 
         try {
             userService.modifyUserRoles(userId, roleRequest.roles(), tagValue);
@@ -74,7 +74,7 @@ public class UserController {
         DecodedJWT jwt = JWT.decode((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         if (jwt.getSubject().equals(userId.toString()))
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, UserMessages.CANNOT_BLOCK_YOURSELF, new UserBlockException(UserMessages.CANNOT_BLOCK_YOURSELF, ExceptionCodes.CANNOT_BLOCK_YOURSELF));
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, UserMessages.CANNOT_BLOCK_YOURSELF, new UserBlockException(UserMessages.CANNOT_BLOCK_YOURSELF, UserExceptionCodes.CANNOT_BLOCK_YOURSELF));
 
         try {
             User user = userService.block(userId, tagValue);
@@ -92,7 +92,7 @@ public class UserController {
         DecodedJWT jwt = JWT.decode((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         if (jwt.getSubject().equals(userId.toString()))
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, UserMessages.CANNOT_UNBLOCK_YOURSELF, new UserBlockException(UserMessages.CANNOT_UNBLOCK_YOURSELF, ExceptionCodes.CANNOT_UNBLOCK_YOURSELF));
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, UserMessages.CANNOT_UNBLOCK_YOURSELF, new UserBlockException(UserMessages.CANNOT_UNBLOCK_YOURSELF, UserExceptionCodes.CANNOT_UNBLOCK_YOURSELF));
 
         try {
             User user = userService.unblock(userId, tagValue);

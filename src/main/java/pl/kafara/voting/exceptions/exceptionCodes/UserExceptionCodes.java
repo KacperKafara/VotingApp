@@ -1,6 +1,6 @@
-package pl.kafara.voting.exceptions.handlers;
+package pl.kafara.voting.exceptions.exceptionCodes;
 
-public class ExceptionCodes {
+public class UserExceptionCodes {
     public static final String USER_BLOCKED = "USER_BLOCKED";
     public static final String INTERNAL_SERVER_ERROR = "INTERNAL_SERVER_ERROR";
     public static final String NOT_FOUND = "NOT_FOUND";
@@ -32,6 +32,6 @@ public class ExceptionCodes {
     public static final String INVALID_TOKEN = "INVALID_TOKEN";
     public static final String INVALID_ARGUMENT_TYPE = "INVALID_ARGUMENT_TYPE";
 
-    private ExceptionCodes() {
+    private UserExceptionCodes() {
     }
 }

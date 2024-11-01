@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import pl.kafara.voting.exceptions.handlers.ExceptionCodes;
+import pl.kafara.voting.exceptions.exceptionCodes.UserExceptionCodes;
 import pl.kafara.voting.exceptions.messages.UserMessages;
 import pl.kafara.voting.exceptions.user.VerificationTokenExpiredException;
 import pl.kafara.voting.exceptions.user.VerificationTokenUsedException;
@@ -38,10 +38,10 @@ public class TokenService {
 
     public SafeToken validateAccountVerificationToken(String token) throws VerificationTokenUsedException, VerificationTokenExpiredException {
         SafeToken accountVerificationToken = accountVerificationTokenRepository.findByToken(token)
-                .orElseThrow(() -> new VerificationTokenUsedException(UserMessages.ACCOUNT_VERIFICATION_TOKEN_USED, ExceptionCodes.ACCOUNT_VERIFICATION_TOKEN_USED));
+                .orElseThrow(() -> new VerificationTokenUsedException(UserMessages.ACCOUNT_VERIFICATION_TOKEN_USED, UserExceptionCodes.ACCOUNT_VERIFICATION_TOKEN_USED));
 
         if (accountVerificationToken.getExpirationDate().isBefore(Instant.now()))
-            throw new VerificationTokenExpiredException(UserMessages.ACCOUNT_VERIFICATION_TOKEN_EXPIRED, ExceptionCodes.ACCOUNT_VERIFICATION_TOKEN_EXPIRED);
+            throw new VerificationTokenExpiredException(UserMessages.ACCOUNT_VERIFICATION_TOKEN_EXPIRED, UserExceptionCodes.ACCOUNT_VERIFICATION_TOKEN_EXPIRED);
 
         accountVerificationTokenRepository.deleteById(accountVerificationToken.getId());
         return accountVerificationToken;
@@ -56,10 +56,10 @@ public class TokenService {
 
     public SafeToken validateResetPasswordToken(String token) throws VerificationTokenUsedException, VerificationTokenExpiredException {
         SafeToken resetPasswordToken = resetPasswordTokenRepository.findByToken(token)
-                .orElseThrow(() -> new VerificationTokenUsedException(UserMessages.RESET_PASSWORD_TOKEN_USED, ExceptionCodes.RESET_PASSWORD_TOKEN_USED));
+                .orElseThrow(() -> new VerificationTokenUsedException(UserMessages.RESET_PASSWORD_TOKEN_USED, UserExceptionCodes.RESET_PASSWORD_TOKEN_USED));
 
         if (resetPasswordToken.getExpirationDate().isBefore(Instant.now()))
-            throw new VerificationTokenExpiredException(UserMessages.RESET_PASSWORD_TOKEN_EXPIRED, ExceptionCodes.RESET_PASSWORD_TOKEN_EXPIRED);
+            throw new VerificationTokenExpiredException(UserMessages.RESET_PASSWORD_TOKEN_EXPIRED, UserExceptionCodes.RESET_PASSWORD_TOKEN_EXPIRED);
 
         resetPasswordTokenRepository.deleteById(resetPasswordToken.getId());
         return resetPasswordToken;

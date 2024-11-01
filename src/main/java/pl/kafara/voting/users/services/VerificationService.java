@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.kafara.voting.exceptions.NotFoundException;
-import pl.kafara.voting.exceptions.handlers.ExceptionCodes;
+import pl.kafara.voting.exceptions.exceptionCodes.UserExceptionCodes;
 import pl.kafara.voting.exceptions.messages.UserMessages;
 import pl.kafara.voting.exceptions.user.VerificationTokenExpiredException;
 import pl.kafara.voting.exceptions.user.VerificationTokenUsedException;
@@ -29,7 +29,7 @@ public class VerificationService {
         SafeToken accountVerificationToken = tokenService.validateAccountVerificationToken(token.data());
         User user = userRepository
                 .findById(accountVerificationToken.getUser().getId())
-                .orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.USER_NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.USER_NOT_FOUND));
         user.setVerified(true);
         userRepository.save(user);
     }

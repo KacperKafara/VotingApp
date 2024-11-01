@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.kafara.voting.exceptions.ApplicationOptimisticLockException;
 import pl.kafara.voting.exceptions.NotFoundException;
-import pl.kafara.voting.exceptions.handlers.ExceptionCodes;
+import pl.kafara.voting.exceptions.exceptionCodes.UserExceptionCodes;
 import pl.kafara.voting.exceptions.messages.GenericMessages;
 import pl.kafara.voting.exceptions.messages.UserMessages;
 import pl.kafara.voting.exceptions.user.*;
@@ -40,14 +40,14 @@ public class UserService {
 
     public SensitiveData resetPassword(String email) throws NotFoundException, AccountNotActiveException, NoSuchAlgorithmException {
         User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.USER_WITH_EMAIL_NOT_FOUND)
+                () -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.USER_WITH_EMAIL_NOT_FOUND)
         );
 
         if(user.isBlocked())
-            throw new AccountNotActiveException(UserMessages.USER_BLOCKED, ExceptionCodes.USER_BLOCKED);
+            throw new AccountNotActiveException(UserMessages.USER_BLOCKED, UserExceptionCodes.USER_BLOCKED);
 
         if(!user.isVerified())
-            throw new AccountNotActiveException(UserMessages.USER_NOT_VERIFIED, ExceptionCodes.USER_NOT_VERIFIED);
+            throw new AccountNotActiveException(UserMessages.USER_NOT_VERIFIED, UserExceptionCodes.USER_NOT_VERIFIED);
 
         return tokenService.generateResetPasswordToken(user);
     }
@@ -57,30 +57,30 @@ public class UserService {
         SafeToken resetPasswordToken = tokenService.validateResetPasswordToken(token);
         User user = userRepository
                 .findById(resetPasswordToken.getUser().getId())
-                .orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.USER_NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.USER_NOT_FOUND));
         user.setPassword(passwordEncoder.encode(password.password()));
     }
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void modifyUserRoles(UUID id, Set<UserRoleEnum> roles, String tagValue) throws NotFoundException, UserMustHaveAtLeastOneRoleException, ApplicationOptimisticLockException {
 
-        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.USER_NOT_FOUND));
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.USER_NOT_FOUND));
 
         if(jwsService.verifySignature(tagValue, user.getId(), user.getVersion())) {
-            throw new ApplicationOptimisticLockException(UserMessages.OPTIMISTIC_LOCK, ExceptionCodes.USER_OPTIMISTIC_LOCK);
+            throw new ApplicationOptimisticLockException(UserMessages.OPTIMISTIC_LOCK, UserExceptionCodes.USER_OPTIMISTIC_LOCK);
         }
         Set<Role> rolesEntities = new HashSet<>();
 
         for (UserRoleEnum role : roles) {
-            Role roleEntity = roleRepository.findByName(role).orElseThrow(() -> new NotFoundException(UserMessages.ROLE_NOT_FOUND, ExceptionCodes.ROLE_NOT_FOUND));
+            Role roleEntity = roleRepository.findByName(role).orElseThrow(() -> new NotFoundException(UserMessages.ROLE_NOT_FOUND, UserExceptionCodes.ROLE_NOT_FOUND));
             rolesEntities.add(roleEntity);
         }
 
         if(rolesEntities.isEmpty())
-            throw new UserMustHaveAtLeastOneRoleException(UserMessages.USER_MUST_HAVE_AT_LEAST_ONE_ROLE, ExceptionCodes.USER_MUST_HAVE_AT_LEAST_ONE_ROLE);
+            throw new UserMustHaveAtLeastOneRoleException(UserMessages.USER_MUST_HAVE_AT_LEAST_ONE_ROLE, UserExceptionCodes.USER_MUST_HAVE_AT_LEAST_ONE_ROLE);
 
-        Role voterRole = roleRepository.findByName(UserRoleEnum.VOTER).orElseThrow(() -> new NotFoundException(UserMessages.ROLE_NOT_FOUND, ExceptionCodes.ROLE_NOT_FOUND));
-        Role userRole = roleRepository.findByName(UserRoleEnum.USER).orElseThrow(() -> new NotFoundException(UserMessages.ROLE_NOT_FOUND, ExceptionCodes.ROLE_NOT_FOUND));
+        Role voterRole = roleRepository.findByName(UserRoleEnum.VOTER).orElseThrow(() -> new NotFoundException(UserMessages.ROLE_NOT_FOUND, UserExceptionCodes.ROLE_NOT_FOUND));
+        Role userRole = roleRepository.findByName(UserRoleEnum.USER).orElseThrow(() -> new NotFoundException(UserMessages.ROLE_NOT_FOUND, UserExceptionCodes.ROLE_NOT_FOUND));
 
         boolean hasVoterRole = user.getRoles().contains(voterRole);
         user.setRoles(rolesEntities);
@@ -91,9 +91,9 @@ public class UserService {
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public User block(UUID id, String tagValue) throws NotFoundException, ApplicationOptimisticLockException {
-        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.USER_NOT_FOUND));
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.USER_NOT_FOUND));
         if(jwsService.verifySignature(tagValue, user.getId(), user.getVersion())) {
-            throw new ApplicationOptimisticLockException(UserMessages.OPTIMISTIC_LOCK, ExceptionCodes.USER_OPTIMISTIC_LOCK);
+            throw new ApplicationOptimisticLockException(UserMessages.OPTIMISTIC_LOCK, UserExceptionCodes.USER_OPTIMISTIC_LOCK);
         }
         user.setBlocked(true);
         return userRepository.save(user);
@@ -101,9 +101,9 @@ public class UserService {
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public User unblock(UUID id, String tagValue) throws NotFoundException, ApplicationOptimisticLockException {
-        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.USER_NOT_FOUND));
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.USER_NOT_FOUND));
         if(jwsService.verifySignature(tagValue, user.getId(), user.getVersion())) {
-            throw new ApplicationOptimisticLockException(UserMessages.OPTIMISTIC_LOCK, ExceptionCodes.USER_OPTIMISTIC_LOCK);
+            throw new ApplicationOptimisticLockException(UserMessages.OPTIMISTIC_LOCK, UserExceptionCodes.USER_OPTIMISTIC_LOCK);
         }
         user.setBlocked(false);
         return userRepository.save(user);
@@ -111,9 +111,9 @@ public class UserService {
 
     @PreAuthorize("isAuthenticated()")
     public User changePassword(ChangePasswordRequest password, UUID userId) throws NotFoundException, WrongPasswordException {
-        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.USER_NOT_FOUND));
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.USER_NOT_FOUND));
         if(!passwordEncoder.matches(password.oldPassword(), user.getPassword()))
-            throw new WrongPasswordException(UserMessages.WRONG_PASSWORD, ExceptionCodes.WRONG_PASSWORD);
+            throw new WrongPasswordException(UserMessages.WRONG_PASSWORD, UserExceptionCodes.WRONG_PASSWORD);
 
         user.setPassword(passwordEncoder.encode(password.newPassword()));
         return userRepository.save(user);
@@ -122,13 +122,13 @@ public class UserService {
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public User getUser(String username) throws NotFoundException {
-        return userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.USER_NOT_FOUND));
+        return userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.USER_NOT_FOUND));
     }
 
     @PreAuthorize("isAuthenticated()")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public User getUserById(UUID id) throws NotFoundException {
-        return userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.USER_NOT_FOUND));
+        return userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.USER_NOT_FOUND));
     }
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
@@ -155,11 +155,11 @@ public class UserService {
 
     @PreAuthorize("isAuthenticated()")
     public User updateUser(UpdateUserDataRequest userData, UUID id, String tagValue) throws NotFoundException, ApplicationOptimisticLockException {
-        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, ExceptionCodes.USER_NOT_FOUND));
-        Gender gender = genderRepository.findByName(GenderEnum.valueOf(userData.gender())).orElseThrow(() -> new NotFoundException(GenericMessages.NOT_FOUND, ExceptionCodes.NOT_FOUND));
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.USER_NOT_FOUND));
+        Gender gender = genderRepository.findByName(GenderEnum.valueOf(userData.gender())).orElseThrow(() -> new NotFoundException(GenericMessages.NOT_FOUND, UserExceptionCodes.NOT_FOUND));
 
         if(jwsService.verifySignature(tagValue, user.getId(), user.getVersion())) {
-            throw new ApplicationOptimisticLockException(UserMessages.OPTIMISTIC_LOCK, ExceptionCodes.USER_OPTIMISTIC_LOCK);
+            throw new ApplicationOptimisticLockException(UserMessages.OPTIMISTIC_LOCK, UserExceptionCodes.USER_OPTIMISTIC_LOCK);
         }
 
         user.setUsername(userData.username());
