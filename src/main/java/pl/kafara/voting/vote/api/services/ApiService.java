@@ -23,10 +23,10 @@ import pl.kafara.voting.vote.api.model.LastVotingsUpdate;
 import pl.kafara.voting.vote.api.model.VoteAPI;
 import pl.kafara.voting.vote.api.model.VotingAPI;
 import pl.kafara.voting.vote.api.repositories.LastVotingsUpdateRepository;
-import pl.kafara.voting.vote.repositories.EnvoyRepository;
-import pl.kafara.voting.vote.repositories.ParliamentaryClubRepository;
-import pl.kafara.voting.vote.repositories.SittingRepository;
-import pl.kafara.voting.vote.repositories.VotingRepository;
+import pl.kafara.voting.vote.api.repositories.EnvoyRepository;
+import pl.kafara.voting.vote.api.repositories.ParliamentaryClubRepository;
+import pl.kafara.voting.vote.api.repositories.SittingRepository;
+import pl.kafara.voting.vote.api.repositories.VotingRepository;
 
 import java.util.ArrayList;
 import java.util.List;
