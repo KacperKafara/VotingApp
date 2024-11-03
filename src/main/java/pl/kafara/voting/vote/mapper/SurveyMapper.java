@@ -16,7 +16,12 @@ public class SurveyMapper {
     }
 
     public static SurveyResponse surveyToSurveyResponse(Survey survey) {
-        return null;
+        return new SurveyResponse(
+                survey.getId(),
+                survey.getTitle(),
+                survey.getDescription(),
+                survey.getEndDate()
+        );
     }
 
     private SurveyMapper() {

@@ -20,9 +20,10 @@ import pl.kafara.voting.users.mapper.UserMapper;
 import pl.kafara.voting.users.repositories.GenderRepository;
 import pl.kafara.voting.users.repositories.RoleRepository;
 import pl.kafara.voting.users.repositories.UserRepository;
-import pl.kafara.voting.util.FilteringCriteria;
+import pl.kafara.voting.util.filteringCriterias.FilteringCriteria;
 import pl.kafara.voting.util.JwsService;
 import pl.kafara.voting.util.SensitiveData;
+import pl.kafara.voting.util.filteringCriterias.UsersFilteringCriteria;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
@@ -133,7 +134,7 @@ public class UserService {
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-    public UsersResponse getUsers(FilteringCriteria filteringCriteria) {
+    public UsersResponse getUsers(UsersFilteringCriteria filteringCriteria) {
         Role role = roleRepository.findByName(UserRoleEnum.fromString(filteringCriteria.getRole())).orElse(null);
         Page<User> users;
         if (role != null)

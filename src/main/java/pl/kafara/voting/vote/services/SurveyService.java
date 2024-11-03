@@ -1,6 +1,7 @@
 package pl.kafara.voting.vote.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -9,8 +10,14 @@ import pl.kafara.voting.exceptions.NotFoundException;
 import pl.kafara.voting.exceptions.exceptionCodes.SurveyExceptionCodes;
 import pl.kafara.voting.exceptions.messages.SurveyMessages;
 import pl.kafara.voting.model.vote.survey.Survey;
+import pl.kafara.voting.model.vote.survey.SurveyKind;
+import pl.kafara.voting.util.filteringCriterias.SurveysFilteringCriteria;
+import pl.kafara.voting.vote.dto.SurveyResponse;
+import pl.kafara.voting.vote.dto.SurveysResponse;
+import pl.kafara.voting.vote.mapper.SurveyMapper;
 import pl.kafara.voting.vote.repositories.SurveyRepository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -37,6 +44,34 @@ public class SurveyService {
     public Survey getLatestSurvey() throws NotFoundException {
         return surveyRepository.findLatest().orElseThrow(
                 () -> new NotFoundException(SurveyMessages.SURVEY_NOT_FOUND, SurveyExceptionCodes.SURVEY_NOT_FOUND)
+        );
+    }
+
+    @PreAuthorize("hasRole('MODERATOR') || hasRole('USER')")
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
+    public SurveysResponse getSurveysFiltered(SurveysFilteringCriteria filteringCriteria) {
+        Page<Survey> surveysPage;
+        if(filteringCriteria.getKind() == null || filteringCriteria.getKind().isEmpty())
+            surveysPage = surveyRepository.findAllByTitleContains(
+                    filteringCriteria.getPageable(),
+                    filteringCriteria.getTitle()
+            );
+        else
+            surveysPage = surveyRepository.findAllByTitleContainsAndSurveyKind(
+                    filteringCriteria.getPageable(),
+                    filteringCriteria.getTitle(),
+                    SurveyKind.fromString(filteringCriteria.getKind())
+            );
+
+        List<SurveyResponse> surveyResponses = surveysPage.getContent().stream()
+                .map(SurveyMapper::surveyToSurveyResponse)
+                .toList();
+
+        return new SurveysResponse(
+                surveyResponses,
+                surveysPage.getTotalPages(),
+                surveysPage.getNumber(),
+                surveysPage.getSize()
         );
     }
 }

@@ -32,8 +32,9 @@ import pl.kafara.voting.users.dto.UsersResponse;
 import pl.kafara.voting.users.mapper.UserMapper;
 import pl.kafara.voting.users.services.EmailService;
 import pl.kafara.voting.users.services.UserService;
-import pl.kafara.voting.util.FilteringCriteria;
+import pl.kafara.voting.util.filteringCriterias.FilteringCriteria;
 import pl.kafara.voting.util.JwsService;
+import pl.kafara.voting.util.filteringCriterias.UsersFilteringCriteria;
 
 import java.util.UUID;
 
@@ -122,7 +123,7 @@ public class UserController {
 
         Sort sortBy = Sort.by(Sort.Direction.fromString(sort), "username");
         Pageable pageable = PageRequest.of(page, size, sortBy);
-        FilteringCriteria filteringCriteria = FilteringCriteria.builder()
+        UsersFilteringCriteria filteringCriteria = UsersFilteringCriteria.builder()
                 .pageable(pageable)
                 .username(username)
                 .role(role.toUpperCase())

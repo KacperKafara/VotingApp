@@ -26,7 +26,6 @@ interface Props
 }
 const ConfirmDialog: FC<Props> = ({
   buttonText,
-  variant,
   dialogTitle,
   dialogDescription,
   confirmAction,
@@ -42,7 +41,6 @@ const ConfirmDialog: FC<Props> = ({
           isLoading={isLoading || false}
           text={buttonText}
           {...props}
-          variant={variant}
         />
       </AlertDialogTrigger>
       <AlertDialogContent>
