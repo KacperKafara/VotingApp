@@ -12,6 +12,7 @@ const UsersPage = loadable(() => import('./pages/@Admin/users'));
 const UserPage = loadable(() => import('./pages/@Admin/user'));
 
 const ModeratorTestPage = loadable(() => import('./pages/@Moderator/test'));
+const SurveysListPage = loadable(() => import('./pages/@Moderator/survey'));
 
 const UserTestPage = loadable(() => import('./pages/@User/test'));
 
@@ -34,6 +35,7 @@ const AdminRoutes: RouteObject[] = [
 ];
 const ModeratorRoutes: RouteObject[] = [
   { index: true, Component: ModeratorTestPage },
+  { path: 'surveys', Component: SurveysListPage },
 ];
 const UserRoutes: RouteObject[] = [{ index: true, Component: UserTestPage }];
 

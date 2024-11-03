@@ -16,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
+@Table(name = "surveys")
 public class Survey extends AbstractEntity {
 
     @Column(name = "title",nullable = false, unique = true)

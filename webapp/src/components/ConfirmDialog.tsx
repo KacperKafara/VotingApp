@@ -13,6 +13,7 @@ import {
 import { VariantProps } from 'class-variance-authority';
 import { Button, buttonVariants } from './ui/button';
 import { useTranslation } from 'react-i18next';
+import LoadingButton from './LoadingButton';
 interface Props
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
@@ -21,6 +22,7 @@ interface Props
   dialogDescription?: string;
   confirmAction?: () => void;
   cancelAction?: () => void;
+  isLoading?: boolean;
 }
 const ConfirmDialog: FC<Props> = ({
   buttonText,
@@ -29,15 +31,19 @@ const ConfirmDialog: FC<Props> = ({
   dialogDescription,
   confirmAction,
   cancelAction,
+  isLoading,
   ...props
 }) => {
   const { t } = useTranslation('common');
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button {...props} variant={variant}>
-          {buttonText}
-        </Button>
+        <LoadingButton
+          isLoading={isLoading || false}
+          text={buttonText}
+          {...props}
+          variant={variant}
+        />
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

@@ -1,0 +1,26 @@
+{
+  "create": {
+    "successTitle": "Sondaż został utworzony",
+    "successMessage": "Sondaż został utworzony pomyślnie i jest dostępny dla użytkowników.",
+    "errorTitle": "Błąd podczas tworzenia sondażu",
+    "conflictMessage": "Sondaż o podanej nazwie już istnieje."
+  },
+  "form": {
+    "title": "Tytuł",
+    "description": "Opis",
+    "endDate": "Data zakończenia",
+    "type": "Typ",
+    "titleToShort": "Tytuł jest za krótki",
+    "titleToLong": "Tytuł jest za długi",
+    "descriptionToShort": "Opis jest za krótki",
+    "descriptionToLong": "Opis jest za długi",
+    "endDateInPast": "Data zakończenia nie może być w przeszłości",
+    "pickDate": "Wybierz datę",
+    "pickKind": "Wybierz rodzaj",
+    "parliamentaryClub": "Kluby parlamentarne",
+    "other": "Inny sondaż",
+    "submit": "Utwórz",
+    "createSurvey": "Utwórz sondaż",
+    "createSurveyDescription": "Czy jesteś pewien, że chcesz utworzyć nowy sondaż?"
+  }
+}

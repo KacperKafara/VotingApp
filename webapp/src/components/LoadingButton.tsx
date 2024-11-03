@@ -1,8 +1,11 @@
 import { FC } from 'react';
-import { Button } from './ui/button';
+import { Button, buttonVariants } from './ui/button';
 import { Loader2 } from 'lucide-react';
+import { VariantProps } from 'class-variance-authority';
 
-interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface Props
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
   isLoading: boolean;
   disableButton?: boolean;
   text: string;

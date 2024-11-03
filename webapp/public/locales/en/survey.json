@@ -1,0 +1,26 @@
+{
+  "create": {
+    "successTitle": "Survey has been created",
+    "successMessage": "Survey has been created successfully and is available for users.",
+    "errorTitle": "Error while creating survey",
+    "conflictMessage": "Survey with the given name already exists."
+  },
+  "form": {
+    "title": "Title",
+    "description": "Description",
+    "endDate": "End date",
+    "type": "Type",
+    "titleToShort": "Title is too short",
+    "titleToLong": "Title is too long",
+    "descriptionToShort": "Description is too short",
+    "descriptionToLong": "Description is too long",
+    "endDateInPast": "End date cannot be in the past",
+    "pickDate": "Pick date",
+    "pickKind": "Pick kind",
+    "parliamentaryClub": "Parliamentary clubs",
+    "other": "Other survey",
+    "submit": "Create",
+    "createSurvey": "Create survey",
+    "createSurveyDescription": "Are you sure you want to create a new survey?"
+  }
+}
