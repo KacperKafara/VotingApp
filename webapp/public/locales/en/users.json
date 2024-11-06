@@ -7,11 +7,6 @@
   "users": "Users",
   "role": "Roles",
   "userPage": "User Page",
-  "pageChanger": {
-    "numberOfElements": "Number of users",
-    "page": "Page",
-    "of": "of"
-  },
   "filter": {
     "ADMINISTRATOR": "Administrator",
     "MODERATOR": "Moderator",

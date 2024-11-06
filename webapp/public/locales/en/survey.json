@@ -22,5 +22,15 @@
     "submit": "Create",
     "createSurvey": "Create survey",
     "createSurveyDescription": "Are you sure you want to create a new survey?"
-  }
+  },
+  "kinds": {
+    "PARLIAMENTARY_CLUB": "Parliamentary clubs",
+    "OTHER": "Other survey"
+  },
+  "surveys": "Surveys",
+  "title": "Title",
+  "endDate": "End date",
+  "createdAt": "Created at",
+  "kind": "Kind",
+  "all": "All"
 }

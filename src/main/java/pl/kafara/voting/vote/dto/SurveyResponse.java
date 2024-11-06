@@ -7,6 +7,8 @@ public record SurveyResponse(
         UUID id,
         String title,
         String description,
-        LocalDateTime endDate
+        LocalDateTime endDate,
+        LocalDateTime createdAt,
+        String surveyKind
 ) {
 }

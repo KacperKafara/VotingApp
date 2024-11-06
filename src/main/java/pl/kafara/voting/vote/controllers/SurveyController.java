@@ -48,7 +48,7 @@ public class SurveyController {
             @RequestParam(name = "size", defaultValue = "10") int size,
             @RequestParam(name = "sort", defaultValue = "asc") @Pattern(regexp = "asc|desc") String sort,
             @RequestParam(name = "title", defaultValue = "") String title,
-            @RequestParam(name = "kind", defaultValue = "") @Pattern(regexp = "PARLIAMENTARY_CLUB|OTHER") String kind
+            @RequestParam(name = "kind", defaultValue = "") String kind
     ) {
         Sort sortBy = Sort.by(Sort.Direction.fromString(sort), "createdAt");
         Pageable pageable = PageRequest.of(page, size, sortBy);

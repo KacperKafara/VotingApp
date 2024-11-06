@@ -9,7 +9,7 @@ import {
 import { useUsers } from '@/data/useUsers';
 import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import PageChanger from './PageChanger';
+import PageChanger from '../../../components/PageChanger';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,7 +39,7 @@ import { useNavigate } from 'react-router-dom';
 
 const UsersPage: FC = () => {
   const { isError, isLoading, error, data } = useUsers();
-  const { t } = useTranslation(['users', 'errors']);
+  const { t } = useTranslation(['users', 'errors', 'pageChanger']);
   const { username, role, sort, setFilters } = useUsersFilters();
   const [debouncedUsername, setDebouncedUsername] = useState<string>(username!);
   const [value] = useDebounce(debouncedUsername, 500);
@@ -170,7 +170,11 @@ const UsersPage: FC = () => {
           </Table>
         </div>
         <div className="mt-1 flex justify-end">
-          <PageChanger totalPages={data?.totalPages} />
+          <PageChanger
+            t={t}
+            totalPages={data?.totalPages}
+            useFilters={useUsersFilters}
+          />
         </div>
       </div>
     </div>

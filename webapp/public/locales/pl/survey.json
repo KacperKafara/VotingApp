@@ -22,5 +22,15 @@
     "submit": "Utwórz",
     "createSurvey": "Utwórz sondaż",
     "createSurveyDescription": "Czy jesteś pewien, że chcesz utworzyć nowy sondaż?"
-  }
+  },
+  "kinds": {
+    "PARLIAMENTARY_CLUB": "Kluby parlamentarne",
+    "OTHER": "Inny sondaż"
+  },
+  "surveys": "Sondaże",
+  "title": "Tytuł",
+  "endDate": "Data zakończenia",
+  "createdAt": "Utworzono",
+  "kind": "Rodzaj",
+  "all": "Wszystkie"
 }

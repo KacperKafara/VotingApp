@@ -13,16 +13,26 @@ import {
 } from 'react-icons/fa';
 import { FC } from 'react';
 import { RiExpandUpDownLine } from 'react-icons/ri';
+import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
-import { useUsersFilters } from '@/hooks/useUsersFilters';
 
 interface PageChangerProps {
   totalPages?: number;
+  useFilters: () => {
+    pageNumber: number | undefined;
+    pageSize: number | undefined;
+    setFilters: (filters: { pageNumber?: number; pageSize?: number }) => void;
+  };
+  t: TFunction<'pageChanger'>;
 }
 
-const PageChanger: FC<PageChangerProps> = ({ totalPages = 0 }) => {
-  const { t } = useTranslation('users');
-  const { pageNumber, pageSize, setFilters } = useUsersFilters();
+const PageChanger: FC<PageChangerProps> = ({
+  totalPages = 0,
+  useFilters,
+  t,
+}) => {
+  const { pageNumber, pageSize, setFilters } = useFilters();
+  t = useTranslation('pageChanger').t;
 
   if (pageNumber === undefined || pageSize === undefined) {
     return;
@@ -51,7 +61,7 @@ const PageChanger: FC<PageChangerProps> = ({ totalPages = 0 }) => {
   return (
     <div className="flex items-center gap-7">
       <div className="flex items-center gap-2">
-        <p className="mr-1">{t('pageChanger.numberOfElements')}</p>
+        <p className="mr-1">{t('numberOfElements')}</p>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -86,8 +96,7 @@ const PageChanger: FC<PageChangerProps> = ({ totalPages = 0 }) => {
         </DropdownMenu>
       </div>
       <p>
-        {t('pageChanger.page')} {pageNumber + 1} {t('pageChanger.of')}{' '}
-        {totalPages}
+        {t('page')} {pageNumber + 1} {t('of')} {totalPages}
       </p>
       <div className="flex gap-1">
         <Button
