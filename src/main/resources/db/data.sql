@@ -36,7 +36,7 @@ INSERT INTO public.users (id, username, password, created_at, updated_at, verifi
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1039', 'jdoe', '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en');
 
 INSERT INTO public.personal_data (first_name, last_name, phone_number, birth_date, user_id, email, gender_id)
-VALUES ('John', 'Doe', '+48123456780', '2002-02-02', '5e642d0a-94d4-4a4f-8760-cd6d63cd1039', 'jdoe@localhost.com', '10f41829-09d2-48d0-af87-761fe5e9e6d2');
+VALUES ('John', 'Doe', '+48123456780', '2002-02-02', '5e642d0a-94d4-4a4f-8760-cd6d63cd1039', 'jdoe@localhost.com', 'cc8e8196-1bd8-4be6-a8b4-a1dc1973a7eb');
 
 INSERT INTO public.users_roles (user_id, roles_id)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1039', 'b91d7195-69a1-4073-9c95-52ceefd93cb7');
@@ -46,7 +46,7 @@ INSERT INTO public.users (id, username, password, created_at, updated_at, verifi
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1040', 'asmith', '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en');
 
 INSERT INTO public.personal_data (first_name, last_name, phone_number, birth_date, user_id, email, gender_id)
-VALUES ('Anna', 'Smith', '+48123456781', '2003-03-03', '5e642d0a-94d4-4a4f-8760-cd6d63cd1040', 'asmith@localhost.com', '10f41829-09d2-48d0-af87-761fe5e9e6d2');
+VALUES ('Anna', 'Smith', '+48123456781', '2003-03-03', '5e642d0a-94d4-4a4f-8760-cd6d63cd1040', 'asmith@localhost.com', 'cc8e8196-1bd8-4be6-a8b4-a1dc1973a7eb');
 
 INSERT INTO public.users_roles (user_id, roles_id)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1040', 'b7a8dedb-bccc-4461-9b28-b60b5bf83e7f');
@@ -56,7 +56,7 @@ INSERT INTO public.users (id, username, password, created_at, updated_at, verifi
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1041', 'rbrown', '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en');
 
 INSERT INTO public.personal_data (first_name, last_name, phone_number, birth_date, user_id, email, gender_id)
-VALUES ('Robert', 'Brown', '+48123456782', '2004-04-04', '5e642d0a-94d4-4a4f-8760-cd6d63cd1041', 'rbrown@localhost.com', '10f41829-09d2-48d0-af87-761fe5e9e6d2');
+VALUES ('Robert', 'Brown', '+48123456782', '2004-04-04', '5e642d0a-94d4-4a4f-8760-cd6d63cd1041', 'rbrown@localhost.com', 'cc8e8196-1bd8-4be6-a8b4-a1dc1973a7eb');
 
 INSERT INTO public.users_roles (user_id, roles_id)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1041', '4d877c20-ebe9-4a7b-92e5-785873f277fe');
@@ -76,7 +76,7 @@ INSERT INTO public.users (id, username, password, created_at, updated_at, verifi
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1043', 'tjohnson', '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en');
 
 INSERT INTO public.personal_data (first_name, last_name, phone_number, birth_date, user_id, email, gender_id)
-VALUES ('Tom', 'Johnson', '+48123456784', '2006-06-06', '5e642d0a-94d4-4a4f-8760-cd6d63cd1043', 'tjohnson@localhost.com', '10f41829-09d2-48d0-af87-761fe5e9e6d2');
+VALUES ('Tom', 'Johnson', '+48123456784', '2006-06-06', '5e642d0a-94d4-4a4f-8760-cd6d63cd1043', 'tjohnson@localhost.com', 'aeead59f-a7c5-4570-bbc7-bd9eae859c20');
 
 INSERT INTO public.users_roles (user_id, roles_id)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1043', 'b91d7195-69a1-4073-9c95-52ceefd93cb7');
@@ -86,7 +86,7 @@ INSERT INTO public.users (id, username, password, created_at, updated_at, verifi
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1044', 'mgonzalez', '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en');
 
 INSERT INTO public.personal_data (first_name, last_name, phone_number, birth_date, user_id, email, gender_id)
-VALUES ('Maria', 'Gonzalez', '+48123456785', '2007-07-07', '5e642d0a-94d4-4a4f-8760-cd6d63cd1044', 'mgonzalez@localhost.com', '10f41829-09d2-48d0-af87-761fe5e9e6d2');
+VALUES ('Maria', 'Gonzalez', '+48123456785', '2007-07-07', '5e642d0a-94d4-4a4f-8760-cd6d63cd1044', 'mgonzalez@localhost.com', 'aeead59f-a7c5-4570-bbc7-bd9eae859c20');
 
 INSERT INTO public.users_roles (user_id, roles_id)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1044', '4d877c20-ebe9-4a7b-92e5-785873f277fe');
@@ -224,4 +224,40 @@ VALUES ('Rebecca', 'Walker', '+48123456798', '2020-08-08', '5e642d0a-94d4-4a4f-8
 INSERT INTO public.users_roles (user_id, roles_id)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1057', 'b7a8dedb-bccc-4461-9b28-b60b5bf83e7f');
 
+-- Surveys
 
+INSERT INTO public.surveys (id, title, description, created_at, updated_at, version, end_date, survey_kind)
+VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1058', 'Survey 1', 'Survey 1 description', now() - interval '3 day', now() - interval '3 day', 1, now() + interval '7 day', 'OTHER'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1059', 'Praca inżynierska', 'Czy uważasz że ta praca inżynierska jest bardzo dobra?', now(), now(), 1, now() + interval '7 day', 'OTHER'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1060', 'Survey 3', 'Survey 3 description', now() - interval '1 day', now() - interval '1 day', 1, now() + interval '5 day', 'OTHER'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1061', 'Survey 4', 'Survey 4 description', now() - interval '1 day', now() - interval '1 day', 1, now() + interval '13 day', 'PARLIAMENTARY_CLUB'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1062', 'Survey 5', 'Survey 5 description', now() - interval '5 day', now() - interval '5 day', 1, now() + interval '3 day', 'PARLIAMENTARY_CLUB'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1063', 'Survey 6', 'Survey 6 description', now() - interval '8 day', now() - interval '8 day', 1, now() - interval '1 day', 'OTHER');
+
+-- Survey votes
+
+INSERT INTO public.user_vote (id, survey_id, user_id, created_at, updated_at, version, vote_type)
+VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1064', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059', '5e642d0a-94d4-4a4f-8760-cd6d63cd1038', now(), now(), 1, 'other_survey'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1065', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059', '5e642d0a-94d4-4a4f-8760-cd6d63cd1039', now(), now(), 1, 'other_survey'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1066', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059', '5e642d0a-94d4-4a4f-8760-cd6d63cd1040', now(), now(), 1, 'other_survey'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1067', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059', '5e642d0a-94d4-4a4f-8760-cd6d63cd1041', now(), now(), 1, 'other_survey'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1068', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059', '5e642d0a-94d4-4a4f-8760-cd6d63cd1042', now(), now(), 1, 'other_survey'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1069', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059', '5e642d0a-94d4-4a4f-8760-cd6d63cd1043', now(), now(), 1, 'other_survey'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1070', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059', '5e642d0a-94d4-4a4f-8760-cd6d63cd1044', now(), now(), 1, 'other_survey'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1071', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059', '5e642d0a-94d4-4a4f-8760-cd6d63cd1045', now(), now(), 1, 'other_survey'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1072', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059', '5e642d0a-94d4-4a4f-8760-cd6d63cd1046', now(), now(), 1, 'other_survey'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1073', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059', '5e642d0a-94d4-4a4f-8760-cd6d63cd1047', now(), now(), 1, 'other_survey'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1074', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059', '5e642d0a-94d4-4a4f-8760-cd6d63cd1048', now(), now(), 1, 'other_survey');
+
+INSERT INTO public.user_vote_other_survey (id, result)
+VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1064', 'DEFINITELY_YES'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1065', 'DEFINITELY_YES'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1066', 'DEFINITELY_YES'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1067', 'DEFINITELY_YES'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1068', 'DEFINITELY_YES'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1069', 'DEFINITELY_YES'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1070', 'YES'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1071', 'YES'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1072', 'I_DONT_KNOW'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1073', 'NO'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1074', 'DEFINITELY_NO');

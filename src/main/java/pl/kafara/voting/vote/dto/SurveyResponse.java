@@ -1,6 +1,7 @@
 package pl.kafara.voting.vote.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 public record SurveyResponse(
@@ -9,6 +10,7 @@ public record SurveyResponse(
         String description,
         LocalDateTime endDate,
         LocalDateTime createdAt,
-        String surveyKind
+        String surveyKind,
+        List<UserVoteResponse> results
 ) {
 }

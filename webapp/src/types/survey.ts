@@ -12,6 +12,12 @@ export interface CreateSurveyRequest {
   surveyKind: SurveyKind;
 }
 
+export interface UserVote {
+  gender: 'MALE' | 'FEMALE' | 'OTHER';
+  birthDate: Date;
+  voteResult: string;
+}
+
 export interface SurveyResponse {
   id: string;
   title: string;
@@ -19,6 +25,7 @@ export interface SurveyResponse {
   endDate: Date;
   createdAt: Date;
   surveyKind: SurveyKind;
+  results: UserVote[];
 }
 
 export interface SurveyListResponse {

@@ -1,16 +1,23 @@
-import { FC } from "react";
-import { Navigate, Outlet } from "react-router-dom";
-import { roleMapping, useUserStore } from "../../store/userStore";
+import { FC } from 'react';
+import { Navigate, Outlet } from 'react-router-dom';
+import {
+  getActiveRole,
+  roleMapping,
+  useUserStore,
+} from '../../store/userStore';
 
 const UnprotectedAuthGuard: FC = () => {
-  const { token, activeRole } = useUserStore();
+  const { token, roles } = useUserStore();
 
   const isLoggedIn = token !== undefined;
 
   return (
     <>
       {isLoggedIn ? (
-        <Navigate to={`/${roleMapping[activeRole!]}`} replace={true} />
+        <Navigate
+          to={`/${roleMapping[getActiveRole(roles!)]}`}
+          replace={true}
+        />
       ) : (
         <Outlet />
       )}

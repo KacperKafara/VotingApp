@@ -27,10 +27,24 @@
     "PARLIAMENTARY_CLUB": "Parliamentary clubs",
     "OTHER": "Other survey"
   },
+  "headers": {
+    "result": "Result",
+    "resultByGender": "Votes by gender",
+    "resultByAge": "Votes by age"
+  },
+  "noData": "No data available",
   "surveys": "Surveys",
   "title": "Title",
   "endDate": "End date",
   "createdAt": "Created at",
   "kind": "Kind",
-  "all": "All"
+  "all": "All",
+  "DEFINITELY_YES": "Definitely yes",
+  "YES": "Yes",
+  "I_DONT_KNOW": "I don't know",
+  "NO": "No",
+  "DEFINITELY_NO": "Definitely no",
+  "MALE": "Male",
+  "FEMALE": "Female",
+  "OTHER": "Other"
 }

@@ -1,14 +1,16 @@
 import LoadingIcon from '@/components/loading';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useLatestSurvey } from '@/data/useSurvey';
-import { FC } from 'react';
 import SurveyResultChart from '@/components/survey/SurveyResultChart';
-import SurveyResultChartByGender from '@/components/survey/SurveyResultChartByGender';
-import { useTranslation } from 'react-i18next';
 import SurveyResultChartByAge from '@/components/survey/SurveyResultChartByAge';
+import SurveyResultChartByGender from '@/components/survey/SurveyResultChartByGender';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useSurvey } from '@/data/useSurvey';
+import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
-const MainPage: FC = () => {
-  const { data, isLoading, isError } = useLatestSurvey();
+const SurveyPage: FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const { data, isLoading, isError } = useSurvey(id!);
   const { t } = useTranslation('survey');
 
   if (isLoading || isError || data === undefined) {
@@ -59,4 +61,4 @@ const MainPage: FC = () => {
   );
 };
 
-export default MainPage;
+export default SurveyPage;

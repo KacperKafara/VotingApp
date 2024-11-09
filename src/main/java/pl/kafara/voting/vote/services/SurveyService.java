@@ -42,7 +42,7 @@ public class SurveyService {
     @PreAuthorize("permitAll()")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public Survey getLatestSurvey() throws NotFoundException {
-        return surveyRepository.findLatest().orElseThrow(
+        return surveyRepository.findFirstByOrderByCreatedAtDesc().orElseThrow(
                 () -> new NotFoundException(SurveyMessages.SURVEY_NOT_FOUND, SurveyExceptionCodes.SURVEY_NOT_FOUND)
         );
     }

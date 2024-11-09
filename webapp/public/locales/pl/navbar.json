@@ -1,5 +1,10 @@
 {
   "home": "Strona główna",
   "changePassword": "Zmień hasło",
-  "profile": "Mój profil"
+  "profile": "Mój profil",
+  "ROLE_USER": "Użytkownik",
+  "ROLE_ADMINISTRATOR": "Administrator",
+  "ROLE_MODERATOR": "Moderator",
+  "surveys": "Sondaże",
+  "users": "Użytkownicy"
 }

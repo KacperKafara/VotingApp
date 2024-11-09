@@ -77,3 +77,39 @@ export const useSurveys = () => {
 
   return { isError, isLoading, error, data };
 };
+
+export const useSurvey = (id: string) => {
+  const { api } = useAxiosPrivate();
+
+  const { isError, isLoading, error, data } = useQuery({
+    queryKey: ['survey', id],
+    queryFn: async () => {
+      try {
+        const { data } = await api.get<SurveyResponse>(`/surveys/${id}`);
+        return data;
+      } catch (e) {
+        return Promise.reject(e);
+      }
+    },
+  });
+
+  return { isError, isLoading, error, data };
+};
+
+export const useLatestSurvey = () => {
+  const { api } = useAxiosPrivate();
+
+  const { isError, isLoading, error, data } = useQuery({
+    queryKey: ['latest'],
+    queryFn: async () => {
+      try {
+        const { data } = await api.get<SurveyResponse>('/surveys/latest');
+        return data;
+      } catch (e) {
+        return Promise.reject(e);
+      }
+    },
+  });
+
+  return { isError, isLoading, error, data };
+};

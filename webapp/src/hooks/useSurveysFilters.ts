@@ -22,7 +22,7 @@ export const useSurveysFilters = () => {
   const title = (searchParams.get('title') || '') as SurveysFilters['title'];
   const kind = (searchParams.get('kind') || '') as SurveysFilters['kind'];
   const sort =
-    ((searchParams.get('sort') || '') as SurveysFilters['sort']) || 'asc';
+    ((searchParams.get('sort') || '') as SurveysFilters['sort']) || 'desc';
 
   const setFilters = useCallback(
     (filters: SurveysFilters) => {

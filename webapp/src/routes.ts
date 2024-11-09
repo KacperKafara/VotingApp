@@ -7,15 +7,16 @@ const RegisterPage = loadable(() => import('./pages/Register'));
 const ResetPasswordPage = loadable(() => import('./pages/ResetPassword'));
 const MainPage = loadable(() => import('./pages/Main'));
 
-const AdminTestPage = loadable(() => import('./pages/@Admin/test'));
 const UsersPage = loadable(() => import('./pages/@Admin/users'));
 const UserPage = loadable(() => import('./pages/@Admin/user'));
 
-const ModeratorTestPage = loadable(() => import('./pages/@Moderator/test'));
-const SurveysListPage = loadable(() => import('./pages/@Moderator/surveys'));
+const ModeratorSurveysListPage = loadable(
+  () => import('./pages/@Moderator/surveys')
+);
+const ModeratorSurveyPage = loadable(() => import('./pages/@Moderator/survey'));
 
-const UserTestPage = loadable(() => import('./pages/@User/test'));
 const UserSurveysListPage = loadable(() => import('./pages/@User/surveys'));
+const UserSurveyPage = loadable(() => import('./pages/@User/survey'));
 
 const ProfilePage = loadable(() => import('./pages/Profile'));
 
@@ -30,17 +31,19 @@ const Routes: RouteObject[] = [
 ];
 
 const AdminRoutes: RouteObject[] = [
-  { index: true, Component: AdminTestPage },
+  { index: true, Component: MainPage },
   { path: 'users', Component: UsersPage },
   { path: 'users/:username', Component: UserPage },
 ];
 const ModeratorRoutes: RouteObject[] = [
-  { index: true, Component: ModeratorTestPage },
-  { path: 'surveys', Component: SurveysListPage },
+  { index: true, Component: MainPage },
+  { path: 'surveys', Component: ModeratorSurveysListPage },
+  { path: 'surveys/:id', Component: ModeratorSurveyPage },
 ];
 const UserRoutes: RouteObject[] = [
-  { index: true, Component: UserTestPage },
+  { index: true, Component: MainPage },
   { path: 'surveys', Component: UserSurveysListPage },
+  { path: 'surveys/:id', Component: UserSurveyPage },
 ];
 
 export const AdminProtectedRoutes: RouteObject[] = [

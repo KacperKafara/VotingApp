@@ -1,5 +1,10 @@
 {
   "home": "Home",
   "changePassword": "Change Password",
-  "profile": "Profile"
+  "profile": "Profile",
+  "ROLE_USER": "User",
+  "ROLE_ADMINISTRATOR": "Admin",
+  "ROLE_MODERATOR": "Moderator",
+  "surveys": "Surveys",
+  "users": "Users"
 }

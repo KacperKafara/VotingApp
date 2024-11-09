@@ -27,10 +27,24 @@
     "PARLIAMENTARY_CLUB": "Kluby parlamentarne",
     "OTHER": "Inny sondaż"
   },
+  "headers": {
+    "result": "Wynik",
+    "resultByGender": "Głosy według płci",
+    "resultByAge": "Głosy według wieku"
+  },
+  "noData": "Brak danych",
   "surveys": "Sondaże",
   "title": "Tytuł",
   "endDate": "Data zakończenia",
   "createdAt": "Utworzono",
   "kind": "Rodzaj",
-  "all": "Wszystkie"
+  "all": "Wszystkie",
+  "DEFINITELY_YES": "Zdecydowanie tak",
+  "YES": "Tak",
+  "I_DONT_KNOW": "Nie wiem",
+  "NO": "Nie",
+  "DEFINITELY_NO": "Zdecydowanie nie",
+  "MALE": "Mężczyzna",
+  "FEMALE": "Kobieta",
+  "OTHER": "Inna"
 }

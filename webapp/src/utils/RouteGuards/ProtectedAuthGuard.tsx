@@ -1,13 +1,17 @@
 import { FC } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import { roleMapping, useUserStore } from '../../store/userStore';
+import {
+  getActiveRole,
+  roleMapping,
+  useUserStore,
+} from '../../store/userStore';
 
 interface AuthGuardProps {
   role?: string;
 }
 
 const ProtectedAuthGuard: FC<AuthGuardProps> = ({ role }) => {
-  const { token, roles, activeRole } = useUserStore();
+  const { token, roles } = useUserStore();
   let isLoggedIn = false;
 
   if (role === undefined) {
@@ -20,7 +24,10 @@ const ProtectedAuthGuard: FC<AuthGuardProps> = ({ role }) => {
   return (
     <>
       {!isLoggedIn ? (
-        <Navigate to={`/${roleMapping[activeRole!]}`} replace={true} />
+        <Navigate
+          to={`/${roleMapping[getActiveRole(roles!)]}`}
+          replace={true}
+        />
       ) : (
         <Outlet />
       )}

@@ -28,6 +28,8 @@ import {
   SelectValue,
 } from './ui/select';
 import { SurveyKind, SurveyKinds } from '@/types/survey';
+import { Button } from './ui/button';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface SurveyListProps {
   children?: React.ReactNode;
@@ -39,6 +41,8 @@ const SurveyList: FC<SurveyListProps> = ({ children }) => {
   const { isError, isLoading, error, data } = useSurveys();
   const [debouncedTitle, setDebouncedTitle] = useState<string>(title!);
   const [value] = useDebounce(debouncedTitle, 500);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     setFilters({ title: value });
@@ -153,6 +157,16 @@ const SurveyList: FC<SurveyListProps> = ({ children }) => {
                       {new Date(survey.createdAt).toLocaleDateString(
                         navigator.language || 'pl-PL'
                       )}
+                    </TableCell>
+                    <TableCell className="p-0">
+                      <Button
+                        variant="ghost"
+                        onClick={() => {
+                          navigate(`${location.pathname}/${survey.id}`);
+                        }}
+                      >
+                        ...
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
