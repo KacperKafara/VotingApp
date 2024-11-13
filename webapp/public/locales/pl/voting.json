@@ -1,0 +1,12 @@
+{
+  "YES": "Za",
+  "NO": "Przeciw",
+  "ABSTAIN": "Wstrzymał się",
+  "ABSENT": "Nieobecny",
+  "headers": {
+    "result": "Wynik",
+    "resultByClub": "Głosy wg klubów",
+    "resultByEnvoys": "Jak głosowali posłowie"
+  },
+  "envoyName": "Poseł"
+}

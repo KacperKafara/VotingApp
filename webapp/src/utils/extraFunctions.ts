@@ -1,5 +1,7 @@
 import { ChartConfig } from '@/components/ui/chart';
 import { UserVote } from '@/types/survey';
+import { VoteResponse, VotingResponse } from '@/types/voting';
+import { TFunction } from 'i18next';
 import uniqolor from 'uniqolor';
 
 export const calculateAge = (birthDate: Date) => {
@@ -36,4 +38,104 @@ export const generateChartConfig = (votes: UserVote[]): ChartConfig => {
   });
 
   return chartConfig;
+};
+
+interface ChartDataItem {
+  name: string;
+  value: number;
+  fill: string;
+}
+
+export const generateChartDataForVoting = (
+  data: VotingResponse,
+  t: TFunction
+) => {
+  const voteCounts: Record<string, number> = {};
+  data.votes.forEach((vote) => {
+    let value;
+
+    if (data.kind === 'ON_LIST') {
+      if (vote.votingOption === null && vote.vote === 'VOTE_VALID') {
+        value = t('ABSTAIN');
+      } else if (vote.vote !== 'VOTE_VALID') {
+        value = t(vote.vote);
+      } else {
+        value = vote.votingOption;
+      }
+    } else {
+      value = vote.vote;
+    }
+
+    voteCounts[value] = (voteCounts[value] || 0) + 1;
+  });
+
+  const chartData: ChartDataItem[] = Object.keys(voteCounts).map(
+    (key, index) => ({
+      name: data.kind !== 'ON_LIST' ? t(key) : key,
+      value: voteCounts[key],
+      fill: uniqolor(index * 10, { format: 'hsl' }).color,
+    })
+  );
+
+  const chartConfig: ChartConfig = {};
+
+  chartData.forEach((key) => {
+    chartConfig[key.name] = {
+      label: key.name,
+      color: key.fill,
+    };
+  });
+
+  return { chartData, chartConfig };
+};
+
+export const generateChartDataForVotingByClub = (
+  data: VotingResponse,
+  t: TFunction
+) => {
+  const voteCounts: Record<string, Record<string, number>> = {};
+
+  const getVoteValue = (vote: VoteResponse): string => {
+    if (data.kind === 'ON_LIST') {
+      if (vote.votingOption === null && vote.vote === 'VOTE_VALID') {
+        return t('ABSTAIN');
+      } else if (vote.vote !== 'VOTE_VALID') {
+        return t(vote.vote);
+      }
+      return vote.votingOption;
+    }
+    return t(vote.vote);
+  };
+
+  data.votes.forEach((vote) => {
+    const value = getVoteValue(vote);
+    voteCounts[vote.club] = voteCounts[vote.club] || {};
+    voteCounts[vote.club][value] = (voteCounts[vote.club][value] || 0) + 1;
+  });
+
+  const chartData = Object.entries(voteCounts).map(([key, value]) => ({
+    name: key,
+    ...value,
+  }));
+
+  const uniqueLabels = Array.from(
+    new Set(
+      chartData.flatMap((item) =>
+        Object.keys(item).filter((key) => key !== 'name')
+      )
+    )
+  );
+
+  const chartConfig: ChartConfig = uniqueLabels.reduce(
+    (result, label, index) => {
+      result[label] = {
+        label,
+        color: uniqolor(index * 10, { format: 'hsl' }).color,
+      };
+      return result;
+    },
+    {} as ChartConfig
+  );
+
+  return { chartData, chartConfig };
 };

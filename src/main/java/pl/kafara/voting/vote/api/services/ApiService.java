@@ -26,7 +26,7 @@ import pl.kafara.voting.vote.api.repositories.LastVotingsUpdateRepository;
 import pl.kafara.voting.vote.api.repositories.EnvoyRepository;
 import pl.kafara.voting.vote.api.repositories.ParliamentaryClubRepository;
 import pl.kafara.voting.vote.api.repositories.SittingRepository;
-import pl.kafara.voting.vote.api.repositories.VotingRepository;
+import pl.kafara.voting.vote.repositories.VotingRepository;
 
 import java.util.ArrayList;
 import java.util.List;
