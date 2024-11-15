@@ -1,4 +1,4 @@
-import SurveyList from '@/components/SurveysList';
+import SurveyList from '@/components/survey/SurveysList';
 import { FC } from 'react';
 
 const SurveysList: FC = () => {

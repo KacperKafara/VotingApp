@@ -13,13 +13,7 @@ public class VotingMapper {
         Voting votingToUpdate = new Voting();
         votingToUpdate.setVotingNumber(votingAPI.getVotingNumber());
         votingToUpdate.setSitting(sitting);
-        votingToUpdate.setTerm(votingAPI.getTerm());
         votingToUpdate.setSittingDay(votingAPI.getSittingDay());
-        votingToUpdate.setYes(votingAPI.getYes());
-        votingToUpdate.setNo(votingAPI.getNo());
-        votingToUpdate.setAbstain(votingAPI.getAbstain());
-        votingToUpdate.setNotParticipating(votingAPI.getNotParticipating());
-        votingToUpdate.setTotalVoted(votingAPI.getTotalVoted());
         votingToUpdate.setDate(votingAPI.getDate());
         votingToUpdate.setTitle(votingAPI.getTitle());
         votingToUpdate.setDescription(votingAPI.getDescription());

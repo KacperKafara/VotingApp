@@ -53,10 +53,10 @@ public class ApiService {
 
     @PostConstruct
     public void init() {
-//        updateParliamentaryClubList();
-//        updateEnvoyList();
-//        updateSittingList();
-//        updateVotingList();
+        updateParliamentaryClubList();
+        updateEnvoyList();
+        updateSittingList();
+        updateVotingList();
     }
 
     @Scheduled(cron = "0 5 0 */2 * *")

@@ -8,5 +8,12 @@
     "resultByClub": "Result by clubs",
     "resultByEnvoys": "How envoys voted"
   },
-  "envoyName": "Envoy"
+  "envoyName": "Envoy",
+  "title": "Title",
+  "topic": "Topic",
+  "date": "Voting Date",
+  "votings": "Votings",
+  "sitting": "Sitting",
+  "all": "All",
+  "results": "Results"
 }

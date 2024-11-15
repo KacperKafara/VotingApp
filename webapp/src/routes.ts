@@ -14,10 +14,14 @@ const ModeratorSurveysListPage = loadable(
   () => import('./pages/@Moderator/surveys')
 );
 const ModeratorSurveyPage = loadable(() => import('./pages/@Moderator/survey'));
+const ModeratorVotingListPage = loadable(
+  () => import('./pages/@Moderator/votingList')
+);
 
 const UserSurveysListPage = loadable(() => import('./pages/@User/surveys'));
 const UserSurveyPage = loadable(() => import('./pages/@User/survey'));
 const UserVotingPage = loadable(() => import('./pages/@User/voting'));
+const UserVotingListPage = loadable(() => import('./pages/@User/votingList'));
 
 const ProfilePage = loadable(() => import('./pages/Profile'));
 
@@ -40,11 +44,13 @@ const ModeratorRoutes: RouteObject[] = [
   { index: true, Component: MainPage },
   { path: 'surveys', Component: ModeratorSurveysListPage },
   { path: 'surveys/:id', Component: ModeratorSurveyPage },
+  { path: 'votings', Component: ModeratorVotingListPage },
 ];
 const UserRoutes: RouteObject[] = [
   { index: true, Component: MainPage },
   { path: 'surveys', Component: UserSurveysListPage },
   { path: 'surveys/:id', Component: UserSurveyPage },
+  { path: 'votings', Component: UserVotingListPage },
   { path: 'votings/:id', Component: UserVotingPage },
 ];
 

@@ -3,6 +3,7 @@ package pl.kafara.voting.vote.mapper;
 import pl.kafara.voting.model.vote.Voting;
 import pl.kafara.voting.vote.dto.VoteResponse;
 import pl.kafara.voting.vote.dto.VotingResponse;
+import pl.kafara.voting.vote.dto.VotingWithoutVotesResponse;
 
 import java.util.List;
 
@@ -18,13 +19,20 @@ public class VotingMapper {
                 voting.getTitle(),
                 voting.getDescription(),
                 voting.getTopic(),
-                voting.getYes(),
-                voting.getNo(),
-                voting.getAbstain(),
-                voting.getNotParticipating(),
                 voting.getDate(),
                 voting.getKind(),
                 votes
+        );
+    }
+
+    public static VotingWithoutVotesResponse votingToVotingWithoutVotesResponse(Voting voting) {
+        return new VotingWithoutVotesResponse(
+                voting.getId(),
+                voting.getTitle(),
+                voting.getDescription(),
+                voting.getTopic(),
+                voting.getDate(),
+                voting.getKind()
         );
     }
 

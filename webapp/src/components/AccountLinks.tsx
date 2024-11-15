@@ -70,7 +70,14 @@ const AccountsLinks: FC<AccountsLinksProps> = ({ className }) => {
             >
               {t('surveys')}
             </Button>
-            <Button variant="link">sdfsd</Button>
+            <Button
+              variant="link"
+              onClick={() => {
+                navigate('/moderator/votings');
+              }}
+            >
+              {t('votingList')}
+            </Button>
           </CollapsibleContent>
         </Collapsible>
       )}
@@ -88,7 +95,14 @@ const AccountsLinks: FC<AccountsLinksProps> = ({ className }) => {
             >
               {t('surveys')}
             </Button>
-            <Button variant="link">sdfsd</Button>
+            <Button
+              variant="link"
+              onClick={() => {
+                navigate('/user/votings');
+              }}
+            >
+              {t('votingList')}
+            </Button>
           </CollapsibleContent>
         </Collapsible>
       )}

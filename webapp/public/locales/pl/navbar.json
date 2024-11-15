@@ -6,5 +6,6 @@
   "ROLE_ADMINISTRATOR": "Administrator",
   "ROLE_MODERATOR": "Moderator",
   "surveys": "Sondaże",
-  "users": "Użytkownicy"
+  "users": "Użytkownicy",
+  "votingList": "Lista głosowań"
 }

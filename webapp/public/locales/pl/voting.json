@@ -8,5 +8,12 @@
     "resultByClub": "Głosy wg klubów",
     "resultByEnvoys": "Jak głosowali posłowie"
   },
-  "envoyName": "Poseł"
+  "envoyName": "Poseł",
+  "title": "Tytuł",
+  "topic": "Temat",
+  "date": "Data głosowania",
+  "votings": "Głosowania",
+  "sitting": "Posiedzenie",
+  "all": "Wszystkie",
+  "results": "Wyniki"
 }

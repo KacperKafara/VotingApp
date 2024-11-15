@@ -1,5 +1,5 @@
 import CreateSurvey from '@/components/CreateSurvey';
-import SurveyList from '@/components/SurveysList';
+import SurveyList from '@/components/survey/SurveysList';
 import { Button } from '@/components/ui/button';
 import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';

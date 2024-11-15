@@ -18,11 +18,16 @@ export interface VotingResponse {
   title: string;
   description: string;
   topic: string;
-  yes: number;
-  no: number;
-  abstain: number;
-  notParticipating: number;
   date: Date;
   kind: 'ELECTRONIC' | 'TRADITIONAL' | 'ON_LIST';
   votes: VoteResponse[];
+}
+
+export interface VotingWithoutVotesResponse {
+  id: string;
+  title: string;
+  description: string;
+  topic: string;
+  date: Date;
+  kind: 'ELECTRONIC' | 'TRADITIONAL' | 'ON_LIST';
 }

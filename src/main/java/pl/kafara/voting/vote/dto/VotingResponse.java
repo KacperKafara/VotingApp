@@ -11,10 +11,6 @@ public record VotingResponse(
         String title,
         String description,
         String topic,
-        int yes,
-        int no,
-        int abstain,
-        int notParticipating,
         LocalDateTime date,
         VotingKind kind,
         List<VoteResponse> votes

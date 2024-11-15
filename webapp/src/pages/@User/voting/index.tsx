@@ -42,6 +42,15 @@ const VotingPage: FC = () => {
           vote !== 'VOTE_VALID' ? t(vote) : (votingOption ?? t('ABSTAIN')),
       });
     });
+  } else {
+    data.votes.forEach(({ envoy, vote }) => {
+      votes.push({
+        name: envoy.name,
+        surname: envoy.surname,
+        club: envoy.club,
+        result: t(vote),
+      });
+    });
   }
 
   return (

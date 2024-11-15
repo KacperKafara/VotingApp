@@ -18,23 +18,16 @@ import java.util.List;
 @Entity
 @Table(name = "votings")
 public class Voting extends AbstractEntity {
-
     private int votingNumber;
     @ManyToOne
     @JoinColumn(name = "sitting_number")
     private Sitting sitting;
-    private int term;
     private int sittingDay;
-    private int yes;
-    private int no;
-    private int abstain;
-    private int notParticipating;
-    private int totalVoted;
+
     private LocalDateTime date;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "voting")
     private List<VotingOption> votingOptions = new ArrayList<>();
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "voting")
     private List<Vote> votes = new ArrayList<>();
 
