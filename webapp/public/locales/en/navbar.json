@@ -7,5 +7,6 @@
   "ROLE_MODERATOR": "Moderator",
   "surveys": "Surveys",
   "users": "Users",
-  "votingList": "Voting List"
+  "votingList": "Voting List",
+  "activeSurveysAndVotings": "Active Surveys and Votings"
 }

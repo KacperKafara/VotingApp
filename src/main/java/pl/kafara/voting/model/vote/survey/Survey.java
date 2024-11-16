@@ -32,5 +32,5 @@ public class Survey extends AbstractEntity {
     private SurveyKind surveyKind;
 
     @OneToMany(mappedBy = "survey")
-    private List<UserVote> userVotes = new ArrayList<>();
+    private List<UserVoteSurvey> userVotes = new ArrayList<>();
 }

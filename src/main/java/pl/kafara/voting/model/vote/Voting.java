@@ -34,6 +34,8 @@ public class Voting extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private VotingKind kind;
 
+    private LocalDateTime endDate;
+
     @Column(length = 1000)
     private String title;
     @Column(length = 1000)

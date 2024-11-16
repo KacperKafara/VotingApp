@@ -12,7 +12,7 @@ import pl.kafara.voting.exceptions.messages.SurveyMessages;
 import pl.kafara.voting.model.vote.survey.Survey;
 import pl.kafara.voting.model.vote.survey.SurveyKind;
 import pl.kafara.voting.util.filteringCriterias.SurveysFilteringCriteria;
-import pl.kafara.voting.vote.dto.SurveyResponse;
+import pl.kafara.voting.vote.dto.SurveyWithoutVotesResponse;
 import pl.kafara.voting.vote.dto.SurveysResponse;
 import pl.kafara.voting.vote.mapper.SurveyMapper;
 import pl.kafara.voting.vote.repositories.SurveyRepository;
@@ -63,8 +63,8 @@ public class SurveyService {
                     SurveyKind.fromString(filteringCriteria.getKind())
             );
 
-        List<SurveyResponse> surveyResponses = surveysPage.getContent().stream()
-                .map(SurveyMapper::surveyToSurveyResponse)
+        List<SurveyWithoutVotesResponse> surveyResponses = surveysPage.getContent().stream()
+                .map(SurveyMapper::surveyToSurveyWithoutVotesResponse)
                 .toList();
 
         return new SurveysResponse(
@@ -73,5 +73,11 @@ public class SurveyService {
                 surveysPage.getNumber(),
                 surveysPage.getSize()
         );
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
+    public List<Survey> getActiveSurveys() {
+        return surveyRepository.findAllByEndDateBeforeNow();
     }
 }

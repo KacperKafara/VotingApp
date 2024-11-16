@@ -70,4 +70,10 @@ public class VotingService {
         );
     }
 
+    @PreAuthorize("hasRole('USER')")
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
+    public List<Voting> getActiveVotings() {
+        return votingRepository.getAllByEndDateAfterNow();
+    }
+
 }

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.kafara.voting.model.vote.Sitting;
 import pl.kafara.voting.model.vote.Voting;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,7 +19,7 @@ import java.util.UUID;
 public interface VotingRepository extends JpaRepository<Voting, UUID> {
 
     @Query("SELECT v FROM Voting v WHERE v.sittingDay = :sittingDay AND v.votingNumber = :votingNumber AND v.sitting = :sitting")
-    @Transactional(propagation = Propagation.MANDATORY, readOnly = true)
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     Optional<Voting> getVotingFiltered(int sittingDay, int votingNumber, Sitting sitting);
 
     @Transactional(propagation = Propagation.MANDATORY, readOnly = true)
@@ -26,4 +27,8 @@ public interface VotingRepository extends JpaRepository<Voting, UUID> {
 
     @Transactional(propagation = Propagation.MANDATORY, readOnly = true)
     Page<Voting> getVotingByTitleContainsAndSitting(Pageable pageable, String title, Sitting sitting);
+
+    @Transactional(propagation = Propagation.MANDATORY, readOnly = true)
+    @Query("SELECT v FROM Voting v WHERE v.endDate > CURRENT_TIMESTAMP")
+    List<Voting> getAllByEndDateAfterNow();
 }

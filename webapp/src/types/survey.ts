@@ -28,8 +28,17 @@ export interface SurveyResponse {
   results: UserVote[];
 }
 
+export interface SurveyWithoutVotesResponse {
+  id: string;
+  title: string;
+  description: string;
+  endDate: Date;
+  createdAt: Date;
+  surveyKind: SurveyKind;
+}
+
 export interface SurveyListResponse {
-  surveys: SurveyResponse[];
+  surveys: SurveyWithoutVotesResponse[];
   totalPages: number;
   pageNumber: number;
   pageSize: number;

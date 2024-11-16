@@ -36,9 +36,9 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@Transactional(propagation = Propagation.REQUIRES_NEW)
+@Transactional(propagation = Propagation.NEVER)
 @ConditionalOnProperty(name = "spring.tests", havingValue = "false", matchIfMissing = true)
-@DependsOn("flywayConfig")
+@DependsOn(value = {"flywayConfig", "loggingAspect"})
 public class ApiService {
 
     @Value("${sejm.term}")

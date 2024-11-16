@@ -35,7 +35,7 @@ const VotingResultChartByClub: FC<VotingResultByClubProps> = ({
           axisLine={false}
           tickFormatter={(value) => value.slice(0, 3)}
         />
-        <ChartTooltip content={<ChartTooltipContent />} />
+        <ChartTooltip content={<ChartTooltipContent indicator="dashed" />} />
         <ChartLegend content={<ChartLegendContent />} />
         {Object.entries(chartConfig).map(([key, config]) => (
           <Bar key={key} dataKey={key} stackId="a" fill={config.color} />

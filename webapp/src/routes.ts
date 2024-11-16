@@ -22,6 +22,9 @@ const UserSurveysListPage = loadable(() => import('./pages/@User/surveys'));
 const UserSurveyPage = loadable(() => import('./pages/@User/survey'));
 const UserVotingPage = loadable(() => import('./pages/@User/voting'));
 const UserVotingListPage = loadable(() => import('./pages/@User/votingList'));
+const UserVotingAndSurveysYouCanVotePage = loadable(
+  () => import('./pages/@User/votingAndSurveysYouCanVote')
+);
 
 const ProfilePage = loadable(() => import('./pages/Profile'));
 
@@ -52,6 +55,10 @@ const UserRoutes: RouteObject[] = [
   { path: 'surveys/:id', Component: UserSurveyPage },
   { path: 'votings', Component: UserVotingListPage },
   { path: 'votings/:id', Component: UserVotingPage },
+  {
+    path: 'active-surveys-and-votings',
+    Component: UserVotingAndSurveysYouCanVotePage,
+  },
 ];
 
 export const AdminProtectedRoutes: RouteObject[] = [

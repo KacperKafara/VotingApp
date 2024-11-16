@@ -45,6 +45,7 @@ const AccountsLinks: FC<AccountsLinksProps> = ({ className }) => {
           <CollapsibleContent className="flex flex-col">
             <Button
               variant="link"
+              className="text-wrap"
               onClick={() => {
                 navigate('/admin/users');
               }}
@@ -64,6 +65,7 @@ const AccountsLinks: FC<AccountsLinksProps> = ({ className }) => {
           <CollapsibleContent className="flex flex-col">
             <Button
               variant="link"
+              className="text-wrap"
               onClick={() => {
                 navigate('/moderator/surveys');
               }}
@@ -72,6 +74,7 @@ const AccountsLinks: FC<AccountsLinksProps> = ({ className }) => {
             </Button>
             <Button
               variant="link"
+              className="text-wrap"
               onClick={() => {
                 navigate('/moderator/votings');
               }}
@@ -89,6 +92,7 @@ const AccountsLinks: FC<AccountsLinksProps> = ({ className }) => {
           <CollapsibleContent className="flex flex-col">
             <Button
               variant="link"
+              className="text-wrap"
               onClick={() => {
                 navigate('/user/surveys');
               }}
@@ -97,11 +101,21 @@ const AccountsLinks: FC<AccountsLinksProps> = ({ className }) => {
             </Button>
             <Button
               variant="link"
+              className="text-wrap"
               onClick={() => {
                 navigate('/user/votings');
               }}
             >
               {t('votingList')}
+            </Button>
+            <Button
+              variant="link"
+              className="text-wrap"
+              onClick={() => {
+                navigate('/user/active-surveys-and-votings');
+              }}
+            >
+              {t('activeSurveysAndVotings')}
             </Button>
           </CollapsibleContent>
         </Collapsible>
