@@ -26,9 +26,17 @@
   "CANNOT_BLOCK_YOURSELF": "You cannot block yourself",
   "CANNOT_UNBLOCK_YOURSELF": "You cannot unblock yourself",
   "WRONG_PASSWORD": "Old password is incorrect",
+  "WRONG_PASSWORD_CHANGE_PASSWORD": "Old password is incorrect",
   "NOT_AUTHORIZED_TO_PERFORM_THIS_ACTION": "You are not authorized to perform this action",
   "CANNOT_MODIFY_YOURSELF_ROLES": "You cannot modify your own roles",
   "USER_OPTIMISTIC_LOCK": "You are not working on the latest data. Refresh the page and try again",
   "MISSING_REQUEST_HEADER" : "Missing request header",
-  "INVALID_TOKEN": "Invalid token"
+  "INVALID_TOKEN": "Invalid token",
+  "ROLE_REQUEST_NOT_FOUND": "Role request not found",
+  "ACCEPT_OWN_REQUEST_ROLE": "You cannot accept your own role request",
+  "REJECT_OWN_REQUEST_ROLE": "You cannot reject your own role request",
+  "USER_ALREADY_HAS_VOTER_ROLE": "User already has voter role",
+  "VOTING_NOT_FOUND": "Voting not found",
+  "SITTING_NOT_FOUND": "Sitting not found",
+  "SURVEY_NOT_FOUND": "Survey not found"
 }

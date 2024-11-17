@@ -44,8 +44,6 @@ const QRCodeDialog: FC<QRCodeDialogProps> = ({
     }
   }, [api, open]);
 
-  console.log(qrCodeSrc);
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>

@@ -4,4 +4,4 @@ export const UserRoles = {
   moderator: 'MODERATOR',
 } as const;
 
-export type UserRole = 'ADMINISTRATOR' | 'MODERATOR' | 'USER';
+export type UserRole = 'ADMINISTRATOR' | 'MODERATOR' | 'USER' | 'VOTER';

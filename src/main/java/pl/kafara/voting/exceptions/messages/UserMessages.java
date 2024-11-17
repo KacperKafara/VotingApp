@@ -19,6 +19,10 @@ public class UserMessages {
     public static final String WRONG_PASSWORD = "Wrong password";
     public static final String CANNOT_MODIFY_YOURSELF_ROLES = "Cannot modify yourself roles";
     public static final String OPTIMISTIC_LOCK = "You are not working at the latest version of the data.";
+    public static final String ROLE_REQUEST_NOT_FOUND = "Role request not found";
+    public static final String ACCEPT_OWN_REQUEST_ROLE = "You cannot accept your own request";
+    public static final String REJECT_OWN_REQUEST_ROLE = "You cannot reject your own request";
+    public static final String USER_ALREADY_HAS_VOTER_ROLE = "User already has voter role";
 
     private UserMessages() {
     }

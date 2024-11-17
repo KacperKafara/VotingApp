@@ -32,5 +32,8 @@
   "emailInvalid": "Email is invalid",
   "selectGender:": "Select gender",
   "displayQRCode": "Display QR code",
-  "scanThisCode": "Scan this code in the authentication app to confirm your vote."
+  "scanThisCode": "Scan this code in the authentication app to confirm your vote.",
+  "createRoleRequest": "Request for voter role",
+  "send": "Send",
+  "sendDescription": "Are you sure you want to create a request for voter role?"
 }

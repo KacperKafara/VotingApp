@@ -37,6 +37,7 @@ const getResetPasswordSchema = (t: TFunction<['resetPassword', 'common']>) =>
     })
     .refine((data) => data.password === data.confirmPassword, {
       message: t('resetPassword:errors.passwordsNotMatch'),
+      path: ['confirmPassword'],
     });
 
 type ResetPasswordSchema = z.infer<ReturnType<typeof getResetPasswordSchema>>;

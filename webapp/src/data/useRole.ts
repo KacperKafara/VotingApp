@@ -35,7 +35,6 @@ export const useRole = () => {
     },
     onError: (error: AxiosError) => {
       toast({
-        variant: 'destructive',
         title: t('errors:defaultTitle'),
         description: t(
           'errors:' + (error.response?.data as ApplicationError).code

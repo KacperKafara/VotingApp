@@ -32,5 +32,8 @@
   "emailInvalid": "Email jest nieprawidłowy",
   "selectGender": "Wybierz płeć",
   "displayQRCode": "Wyświetl kod QR",
-  "scanThisCode": "Zeskanuj ten kody w aplikacji do uwierzytelniania aby móc potwierdzić swój głos."
+  "scanThisCode": "Zeskanuj ten kody w aplikacji do uwierzytelniania aby móc potwierdzić swój głos.",
+  "createRoleRequest": "Zgłoszenie prośby o rolę wyborcy",
+  "send": "Wyślij",
+  "sendDescription": "Czy na pewno chcesz utworzyć prośbę o rolę wyborcy?"
 }

@@ -30,7 +30,8 @@ public class UserMapper {
                 user.isBlocked(),
                 user.isVerified(),
                 user.getLastLogin(),
-                user.getLastFailedLogin()
+                user.getLastFailedLogin(),
+                user.getVoterRoleRequest() != null
         );
     }
 }

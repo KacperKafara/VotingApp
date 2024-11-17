@@ -71,4 +71,20 @@ public class EmailService {
         String subject = mailMessageSource.getMessage("accountUnblocked.subject", null, Locale.of(language));
         htmlEmailService.createHtmlEmail(email, subject, "accountUnblocked", templateModel, language);
     }
+
+    public void sendVoterRoleRequestAcceptedEmail(String email, String username, String language) {
+        Map<String, Object> templateModel = Map.of(
+                "name", username
+        );
+        String subject = mailMessageSource.getMessage("voterRoleRequestAccepted.subject", null, Locale.of(language));
+        htmlEmailService.createHtmlEmail(email, subject, "voterRoleRequestAccepted", templateModel, language);
+    }
+
+    public void sendVoterRoleRequestRejectedEmail(String email, String username, String language) {
+        Map<String, Object> templateModel = Map.of(
+                "name", username
+        );
+        String subject = mailMessageSource.getMessage("voterRoleRequestRejected.subject", null, Locale.of(language));
+        htmlEmailService.createHtmlEmail(email, subject, "voterRoleRequestRejected", templateModel, language);
+    }
 }

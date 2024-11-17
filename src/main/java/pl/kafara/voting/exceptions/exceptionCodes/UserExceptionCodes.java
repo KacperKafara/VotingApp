@@ -31,6 +31,10 @@ public class UserExceptionCodes {
     public static final String MISSING_REQUEST_HEADER = "MISSING_REQUEST_HEADER";
     public static final String INVALID_TOKEN = "INVALID_TOKEN";
     public static final String INVALID_ARGUMENT_TYPE = "INVALID_ARGUMENT_TYPE";
+    public static final String ROLE_REQUEST_NOT_FOUND = "ROLE_REQUEST_NOT_FOUND";
+    public static final String ACCEPT_OWN_REQUEST_ROLE = "ACCEPT_OWN_REQUEST_ROLE";
+    public static final String REJECT_OWN_REQUEST_ROLE = "REJECT_OWN_REQUEST_ROLE";
+    public static final String USER_ALREADY_HAS_VOTER_ROLE = "USER_ALREADY_HAS_VOTER_ROLE";
 
     private UserExceptionCodes() {
     }

@@ -48,6 +48,9 @@ public class User extends AbstractEntity {
     @Column(name = "totp_secret", nullable = true, unique = true)
     private String totpSecret;
 
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    private VoterRoleRequest voterRoleRequest;
+
     @Column(name = "verified", nullable = false)
     private boolean verified = false;
     @Column(name = "blocked", nullable = false)

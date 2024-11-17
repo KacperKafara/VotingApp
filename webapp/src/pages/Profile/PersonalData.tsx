@@ -1,4 +1,5 @@
 import ChangePasswordDialog from '@/components/ChangePasswordDialog';
+import ConfirmDialog from '@/components/ConfirmDialog';
 import EditProfile from '@/components/EditProfile';
 import QRCodeDialog from '@/components/QRCodeDialog';
 import { Button } from '@/components/ui/button';
@@ -9,8 +10,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useCreateRoleRequest } from '@/data/useRoleRequest';
 import { cn } from '@/lib/utils';
-import { useUserStore } from '@/store/userStore';
 import { User } from '@/types/user';
 import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -31,7 +32,7 @@ const PersonalData: FC<PersonalDataProps> = ({
   const [changePasswordDialogOpen, setChangePasswordDialogOpen] =
     useState(false);
   const [displayQRCodeOpen, setDisplayQRCodeOpen] = useState(false);
-  const { roles } = useUserStore();
+  const { createRoleRequest, isPending } = useCreateRoleRequest();
 
   return (
     <Card className={cn(className, 'relative')}>
@@ -99,7 +100,7 @@ const PersonalData: FC<PersonalDataProps> = ({
           >
             {t('changePassword')}
           </DropdownMenuItem>
-          {roles?.includes('ROLE_VOTER') && (
+          {user.roles.includes('VOTER') ? (
             <DropdownMenuItem
               onClick={() => {
                 setDisplayQRCodeOpen(!displayQRCodeOpen);
@@ -107,6 +108,22 @@ const PersonalData: FC<PersonalDataProps> = ({
             >
               {t('displayQRCode')}
             </DropdownMenuItem>
+          ) : user.roles.includes('USER') &&
+            !user.roles.includes('VOTER') &&
+            !user.activeRoleRequest ? (
+            <DropdownMenuItem asChild>
+              <ConfirmDialog
+                className="w-full px-2 py-1.5 text-sm outline-none"
+                variant="ghost"
+                isLoading={isPending}
+                buttonText={t('createRoleRequest')}
+                dialogTitle={t('send')}
+                dialogDescription={t('sendDescription')}
+                confirmAction={createRoleRequest}
+              />
+            </DropdownMenuItem>
+          ) : (
+            <></>
           )}
         </DropdownMenuContent>
       </DropdownMenu>

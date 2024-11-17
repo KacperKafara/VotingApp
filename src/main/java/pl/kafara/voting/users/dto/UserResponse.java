@@ -19,6 +19,7 @@ public record UserResponse(
         boolean blocked,
         boolean verified,
         LocalDateTime lastLogin,
-        LocalDateTime lastFailedLogin
+        LocalDateTime lastFailedLogin,
+        boolean activeRoleRequest
 ) {
 }
