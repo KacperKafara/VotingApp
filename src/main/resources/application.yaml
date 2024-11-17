@@ -44,10 +44,13 @@ security:
     token:
       secret-key: secret-key
       expiration-time: 86400000
+  max-failed-attempts: 3
   jws:
     token:
       secret-key: jws-secret-key
-  max-failed-attempts: 3
+  encryption:
+    secret-key: PdRgUkXp2s5v8y/B
+
 
 sejm:
   api:

@@ -1,5 +1,6 @@
 import ChangePasswordDialog from '@/components/ChangePasswordDialog';
 import EditProfile from '@/components/EditProfile';
+import QRCodeDialog from '@/components/QRCodeDialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -9,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
+import { useUserStore } from '@/store/userStore';
 import { User } from '@/types/user';
 import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -28,6 +30,8 @@ const PersonalData: FC<PersonalDataProps> = ({
   const [editProfileOpen, setEditProfileOpen] = useState(false);
   const [changePasswordDialogOpen, setChangePasswordDialogOpen] =
     useState(false);
+  const [displayQRCodeOpen, setDisplayQRCodeOpen] = useState(false);
+  const { roles } = useUserStore();
 
   return (
     <Card className={cn(className, 'relative')}>
@@ -95,6 +99,15 @@ const PersonalData: FC<PersonalDataProps> = ({
           >
             {t('changePassword')}
           </DropdownMenuItem>
+          {roles?.includes('ROLE_VOTER') && (
+            <DropdownMenuItem
+              onClick={() => {
+                setDisplayQRCodeOpen(!displayQRCodeOpen);
+              }}
+            >
+              {t('displayQRCode')}
+            </DropdownMenuItem>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
       <EditProfile
@@ -109,6 +122,11 @@ const PersonalData: FC<PersonalDataProps> = ({
         onOpenChange={() =>
           setChangePasswordDialogOpen(!changePasswordDialogOpen)
         }
+      />
+      <QRCodeDialog
+        open={displayQRCodeOpen}
+        onOpenChange={() => setDisplayQRCodeOpen(!displayQRCodeOpen)}
+        tFunction={t}
       />
     </Card>
   );

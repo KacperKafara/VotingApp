@@ -30,5 +30,7 @@
   "genderInvalid": "Gender is invalid",
   "personalDataUpdated": "Personal data updated",
   "emailInvalid": "Email is invalid",
-  "selectGender:": "Select gender"
+  "selectGender:": "Select gender",
+  "displayQRCode": "Display QR code",
+  "scanThisCode": "Scan this code in the authentication app to confirm your vote."
 }

@@ -45,6 +45,8 @@ public class User extends AbstractEntity {
     private Gender gender;
     @Column(name = "language", nullable = false)
     private String language;
+    @Column(name = "totp_secret", nullable = true, unique = true)
+    private String totpSecret;
 
     @Column(name = "verified", nullable = false)
     private boolean verified = false;

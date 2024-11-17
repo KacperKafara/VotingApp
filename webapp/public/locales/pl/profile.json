@@ -30,5 +30,7 @@
   "genderInvalid": "Płeć jest nieprawidłowa",
   "personalDataUpdated": "Dane osobowe zaktualizowane",
   "emailInvalid": "Email jest nieprawidłowy",
-  "selectGender": "Wybierz płeć"
+  "selectGender": "Wybierz płeć",
+  "displayQRCode": "Wyświetl kod QR",
+  "scanThisCode": "Zeskanuj ten kody w aplikacji do uwierzytelniania aby móc potwierdzić swój głos."
 }
