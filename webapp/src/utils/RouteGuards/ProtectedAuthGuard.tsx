@@ -14,6 +14,10 @@ const ProtectedAuthGuard: FC<AuthGuardProps> = ({ role }) => {
   const { token, roles } = useUserStore();
   let isLoggedIn = false;
 
+  if (token === undefined) {
+    return <Navigate to="/" replace={true} />;
+  }
+
   if (role === undefined) {
     isLoggedIn = token !== undefined;
   } else {

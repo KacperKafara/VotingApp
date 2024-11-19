@@ -55,14 +55,14 @@ const VotingPage: FC = () => {
 
   return (
     <div className="flex min-h-full w-full flex-col items-center justify-center p-3">
-      <div className="w-3/4">
+      <div className="w-full md:w-3/4">
         <Card>
           <CardHeader>
             <CardTitle>{data.title}</CardTitle>
           </CardHeader>
           <CardContent>{data.description}</CardContent>
         </Card>
-        <div className="mt-3 grid grid-cols-2 gap-3">
+        <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-2">
           <Card className="flex flex-col justify-between">
             <CardHeader>
               <CardTitle>{t('headers.result')}</CardTitle>
@@ -100,7 +100,7 @@ const VotingPage: FC = () => {
               </ScrollArea>
             </CardContent>
           </Card>
-          <Card className="col-span-2">
+          <Card className="col-span-1 md:col-span-2">
             <CardHeader>
               <CardTitle>{t('headers.resultByClub')}</CardTitle>
             </CardHeader>

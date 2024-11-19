@@ -8,5 +8,7 @@
   "surveys": "Surveys",
   "users": "Users",
   "votingList": "Voting List",
-  "activeSurveysAndVotings": "Active Surveys and Votings"
+  "activeSurveysAndVotings": "Active Surveys and Votings",
+  "error": "Error",
+  "logInAgain": "Log in again"
 }

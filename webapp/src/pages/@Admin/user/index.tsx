@@ -43,12 +43,12 @@ const UserPage: FC = () => {
 
   return (
     <div className="flex h-full w-full items-center justify-center">
-      <div className="flex h-4/5 w-11/12 flex-wrap gap-3 p-10">
+      <div className="flex h-full w-full flex-wrap gap-3 p-2 md:h-4/5 md:w-11/12 md:p-10">
         <UserDataCard
           user={user.data}
           tag_value={etag.substring(1, etag.length - 1)}
         />
-        <div className="flex w-full gap-3">
+        <div className="flex w-full flex-wrap gap-3 md:flex-nowrap">
           <UserBuisnessData
             user={user.data}
             tag_value={etag.substring(1, etag.length - 1)}

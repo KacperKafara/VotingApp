@@ -81,9 +81,9 @@ const UsersPage: FC = () => {
 
   return (
     <div className="flex min-h-full w-full flex-col items-center justify-center p-3">
-      <div className="w-4/5">
+      <div className="w-full md:w-4/5">
         <h1 className="text-2xl font-bold">{t('users')}</h1>
-        <span className="my-3 flex w-1/2 gap-4">
+        <span className="my-3 flex w-full gap-2 md:w-1/2 md:gap-4">
           <Select
             onValueChange={(e) => {
               setFilters({

@@ -9,8 +9,10 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from './ui/collapsible';
-import { useUserStore } from '@/store/userStore';
 import { UserRoles } from '@/types/roles';
+import { useCreateRoleRequest } from '@/data/useRoleRequest';
+import ConfirmDialog from './ConfirmDialog';
+import { useUserStore } from '@/store/userStore';
 
 interface AccountsLinksProps {
   className?: string;
@@ -20,8 +22,9 @@ const AccountsLinks: FC<AccountsLinksProps> = ({ className }) => {
   const navigate = useNavigate();
   const [changePasswordDialogOpen, setChangePasswordDialogOpen] =
     useState(false);
-  const { t } = useTranslation('navbar');
+  const { t } = useTranslation(['navbar', 'roleRequest']);
   const { roles } = useUserStore();
+  const { createRoleRequest, isPending } = useCreateRoleRequest();
 
   return (
     <div className={cn(className, 'flex flex-col items-center gap-2')}>
@@ -120,6 +123,17 @@ const AccountsLinks: FC<AccountsLinksProps> = ({ className }) => {
           </CollapsibleContent>
         </Collapsible>
       )}
+      {roles?.includes(`ROLE_${UserRoles.user}`) &&
+        !roles?.includes('ROLE_VOTER') && (
+          <ConfirmDialog
+            className="w-3/4 text-wrap"
+            isLoading={isPending}
+            buttonText={t('roleRequest:createRoleRequest')}
+            dialogTitle={t('roleRequest:send')}
+            dialogDescription={t('roleRequest:sendDescription')}
+            confirmAction={createRoleRequest}
+          />
+        )}
 
       <ChangePasswordDialog
         open={changePasswordDialogOpen}

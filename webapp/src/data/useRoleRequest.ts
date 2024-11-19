@@ -16,11 +16,19 @@ export const useCreateRoleRequest = () => {
       return response.data;
     },
     onError: (error: AxiosError) => {
-      toast({
-        variant: 'destructive',
-        title: t('defaultTitle'),
-        description: `${t((error.response?.data as ApplicationError).code)}`,
-      });
+      if (error.status === 409) {
+        toast({
+          variant: 'destructive',
+          title: t('defaultTitle'),
+          description: t('roleRequest:errors.roleRequestAlreadyExists'),
+        });
+      } else {
+        toast({
+          variant: 'destructive',
+          title: t('defaultTitle'),
+          description: `${t((error.response?.data as ApplicationError).code)}`,
+        });
+      }
     },
     onSuccess: () => {
       toast({

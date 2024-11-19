@@ -20,8 +20,8 @@ const VotingAndSurveysYouCanVote: FC = () => {
 
   return (
     <div className="flex min-h-full w-full flex-col items-center justify-center p-3">
-      <div className="flex min-h-[600px] w-4/5 gap-2">
-        <div className="flex min-h-full w-1/2 flex-col gap-3 rounded-md border border-gray-400 p-3">
+      <div className="flex min-h-[600px] w-full flex-wrap gap-2 md:w-4/5 md:flex-nowrap">
+        <div className="flex min-h-full w-full flex-col gap-3 rounded-md border border-gray-400 p-3 md:w-1/2">
           <p className="text-center font-bold">{t('activeSurveys')}</p>
           {data.surveys.length === 0 ? (
             <p className="my-auto text-center">{t('noActiveSurveys')}</p>
@@ -44,7 +44,7 @@ const VotingAndSurveysYouCanVote: FC = () => {
             ))
           )}
         </div>
-        <div className="flex min-h-full w-1/2 flex-col gap-3 rounded-md border border-gray-400 p-3">
+        <div className="flex min-h-full w-full flex-col gap-3 rounded-md border border-gray-400 p-3 md:w-1/2">
           <p className="text-center font-bold">{t('activeVotings')}</p>
           {data.votingList.length === 0 ? (
             <p className="my-auto text-center">{t('noActiveVotings')}</p>

@@ -2,5 +2,11 @@
   "create": {
     "title": "Utwórzono prośbę o rolę",
     "description": "Utworzyłeś prośbę o rolę. Poczekaj na zatwierdzenie przez administratora."
-  }
+  },
+  "errors": {
+    "roleRequestAlreadyExists": "Już utworzyłeś prośbę o rolę dla tej roli."
+  },
+  "createRoleRequest": "Zgłoszenie prośby o rolę wyborcy",
+  "send": "Wyślij",
+  "sendDescription": "Czy na pewno chcesz utworzyć prośbę o rolę wyborcy?"
 }

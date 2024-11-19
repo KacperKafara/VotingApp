@@ -59,8 +59,8 @@ const PageChanger: FC<PageChangerProps> = ({
   };
 
   return (
-    <div className="flex items-center gap-7">
-      <div className="flex items-center gap-2">
+    <div className="flex flex-wrap items-center gap-7">
+      <div className="flex w-full items-center justify-between gap-2 md:w-fit">
         <p className="mr-1">{t('numberOfElements')}</p>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -95,42 +95,44 @@ const PageChanger: FC<PageChangerProps> = ({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <p>
-        {t('page')} {pageNumber + 1} {t('of')} {totalPages}
-      </p>
-      <div className="flex gap-1">
-        <Button
-          className="h-8 px-2"
-          onClick={() => setFilters({ pageNumber: 0 })}
-          variant="outline"
-          disabled={pageNumber === 0}
-        >
-          <FaAngleDoubleLeft />
-        </Button>
-        <Button
-          className="h-8 px-2"
-          onClick={() => prevPage()}
-          variant="outline"
-          disabled={pageNumber === 0}
-        >
-          <FaAngleLeft />
-        </Button>
-        <Button
-          className="h-8 px-2"
-          onClick={() => nextPage()}
-          variant="outline"
-          disabled={pageNumber === totalPages - 1}
-        >
-          <FaAngleRight />
-        </Button>
-        <Button
-          className="h-8 px-2"
-          onClick={() => setFilters({ pageNumber: totalPages - 1 })}
-          variant="outline"
-          disabled={pageNumber === totalPages - 1}
-        >
-          <FaAngleDoubleRight />
-        </Button>
+      <div className="flex w-full items-center justify-between gap-2 md:w-fit">
+        <p>
+          {t('page')} {pageNumber + 1} {t('of')} {totalPages}
+        </p>
+        <div className="flex gap-1">
+          <Button
+            className="h-8 px-2"
+            onClick={() => setFilters({ pageNumber: 0 })}
+            variant="outline"
+            disabled={pageNumber === 0}
+          >
+            <FaAngleDoubleLeft />
+          </Button>
+          <Button
+            className="h-8 px-2"
+            onClick={() => prevPage()}
+            variant="outline"
+            disabled={pageNumber === 0}
+          >
+            <FaAngleLeft />
+          </Button>
+          <Button
+            className="h-8 px-2"
+            onClick={() => nextPage()}
+            variant="outline"
+            disabled={pageNumber === totalPages - 1}
+          >
+            <FaAngleRight />
+          </Button>
+          <Button
+            className="h-8 px-2"
+            onClick={() => setFilters({ pageNumber: totalPages - 1 })}
+            variant="outline"
+            disabled={pageNumber === totalPages - 1}
+          >
+            <FaAngleDoubleRight />
+          </Button>
+        </div>
       </div>
     </div>
   );

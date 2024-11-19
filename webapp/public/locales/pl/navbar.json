@@ -8,5 +8,7 @@
   "surveys": "Sondaże",
   "users": "Użytkownicy",
   "votingList": "Lista głosowań",
-  "activeSurveysAndVotings": "Aktywne sondaże i głosowania"
+  "activeSurveysAndVotings": "Aktywne sondaże i głosowania",
+  "error": "Błąd",
+  "logInAgain": "Zaloguj się ponownie"
 }

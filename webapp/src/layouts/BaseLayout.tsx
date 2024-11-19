@@ -3,19 +3,34 @@ import { LanguageToogle } from '@/components/language-toogle';
 import LoginForm from '@/components/login/LoginForm';
 import LogoutButton from '@/components/LogoutButton';
 import { ModeToggle } from '@/components/mode-toogle';
+import { Button } from '@/components/ui/button';
 import { useUserStore } from '@/store/userStore';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import { Outlet } from 'react-router-dom';
 
 const BaseLayout: FC = () => {
+  const [isHeaderOpen, setIsHeaderOpen] = useState(false);
   const { token } = useUserStore();
   const isLogged = token !== undefined;
   const { t } = useTranslation('message');
 
   return (
     <div className="flex h-screen w-screen">
-      <header className="flex w-72 flex-col items-center pt-6">
+      <Button
+        variant="ghost"
+        className="absolute right-0 z-50 m-4 rounded p-2 shadow-lg md:hidden"
+        onClick={() => setIsHeaderOpen(!isHeaderOpen)}
+      >
+        {isHeaderOpen ? <FaAngleLeft /> : <FaAngleRight />}
+      </Button>
+
+      <header
+        className={`fixed inset-0 z-40 transform transition-transform duration-300 ease-in-out md:static md:translate-x-0 ${
+          isHeaderOpen ? 'translate-x-0' : '-translate-x-full'
+        } flex h-full w-full flex-col items-center bg-background pt-6 shadow-md md:h-screen md:w-72 md:shadow-none`}
+      >
         <h1 className="font-ec text-3xl">Voting App</h1>
         <div className="mt-14 w-10/12">
           {!isLogged ? <LoginForm /> : <AccountsLinks />}
@@ -28,12 +43,18 @@ const BaseLayout: FC = () => {
           </div>
         </div>
       </header>
-      <main className="flex w-full flex-col overflow-y-auto bg-main-background shadow-lg scrollbar scrollbar-thumb-primary scrollbar-thumb-rounded-full scrollbar-w-1">
-        <div className="flex-grow">
+
+      <main className="flex w-full flex-col bg-main-background shadow-lg">
+        <div
+          className="flex-grow overflow-y-auto scrollbar scrollbar-thumb-primary scrollbar-thumb-rounded-full scrollbar-w-1"
+          style={{ minHeight: '0' }}
+        >
           <Outlet />
         </div>
         {import.meta.env.VITE_APP_ENVIROMENT === 'development' && (
-          <footer className="text-center">{t('development')}</footer>
+          <footer className="py-2 text-center text-xs">
+            {t('development')}
+          </footer>
         )}
       </main>
     </div>

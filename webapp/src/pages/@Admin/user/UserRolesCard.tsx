@@ -66,7 +66,7 @@ const UserRolesCard: FC<UserRolesCardProps> = ({ user, tag_value }) => {
   const isSubmitDisabled = isCurrentUser || selectRolesCount === 0;
 
   return (
-    <Card className="w-fit min-w-72">
+    <Card className="w-full min-w-72 md:w-fit">
       <CardHeader>
         <CardTitle>{t('userRoles')}</CardTitle>
       </CardHeader>

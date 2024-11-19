@@ -2,5 +2,11 @@
   "create": {
     "title": "Role Request Created",
     "description": "You have created a role request. Wait for the admin to approve it."
-  }
+  },
+  "errors": {
+    "roleRequestAlreadyExists": "You have already created a role request for this role."
+  },
+  "createRoleRequest": "Zgłoszenie prośby o rolę wyborcy",
+  "send": "Wyślij",
+  "sendDescription": "Czy na pewno chcesz utworzyć prośbę o rolę wyborcy?"
 }

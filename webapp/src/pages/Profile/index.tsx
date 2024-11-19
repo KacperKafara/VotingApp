@@ -41,8 +41,8 @@ const ProfilePage: FC = () => {
 
   return (
     <div className="flex h-full justify-center">
-      <div className="flex h-full w-4/5 flex-col gap-y-4">
-        <span className="pb-5 pt-20 text-center font-raleway text-4xl">
+      <div className="flex h-full w-full flex-col gap-y-4 px-2 md:w-4/5 md:px-0">
+        <span className="pb-2 pt-10 text-center font-raleway text-4xl md:pb-5 md:pt-20">
           {t('hello') + user.data.username}
         </span>
         <PersonalData

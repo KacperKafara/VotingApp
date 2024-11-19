@@ -2,6 +2,7 @@ package pl.kafara.voting.users.services;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import dev.samstevens.totp.secret.SecretGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +18,7 @@ import pl.kafara.voting.model.users.*;
 import pl.kafara.voting.users.repositories.RoleRepository;
 import pl.kafara.voting.users.repositories.UserRepository;
 import pl.kafara.voting.users.repositories.VoterRoleRequestRepository;
+import pl.kafara.voting.util.AESUtils;
 
 import java.util.UUID;
 
@@ -27,6 +29,8 @@ public class VoterRoleRequestService {
     private final VoterRoleRequestRepository roleRequestRepository;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final AESUtils aesUtils;
+    private final SecretGenerator secretGenerator;
 
     @PreAuthorize("hasRole('USER')")
     public void createRequest(UUID id) throws NotFoundException, YouAreVoterException {
@@ -58,6 +62,7 @@ public class VoterRoleRequestService {
 
         roleRequest.setResolution(RoleRequestResolution.ACCEPTED);
         user.getRoles().add(role);
+        user.setTotpSecret(aesUtils.encrypt(secretGenerator.generate()));
         roleRequestRepository.save(roleRequest);
         return userRepository.save(user);
     }

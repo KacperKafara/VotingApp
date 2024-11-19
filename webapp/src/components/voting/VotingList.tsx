@@ -83,9 +83,9 @@ const VotingListComponent: FC<VotingListProps> = ({ type }) => {
 
   return (
     <div className="flex min-h-full w-full flex-col items-center justify-center p-3">
-      <div className="w-4/5">
+      <div className="w-full md:w-4/5">
         <div className="my-3 flex items-end justify-between">
-          <div className="w-1/2">
+          <div className="w-full md:w-1/2">
             <h1 className="text-2xl font-bold">{t('votings')}</h1>
             <span className="mt-3 flex w-full gap-4">
               <Input
