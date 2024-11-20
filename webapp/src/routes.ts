@@ -6,6 +6,9 @@ const BaseLayout = loadable(() => import('./layouts/BaseLayout'));
 const RegisterPage = loadable(() => import('./pages/Register'));
 const ResetPasswordPage = loadable(() => import('./pages/ResetPassword'));
 const MainPage = loadable(() => import('./pages/Main'));
+const VerifyAccountPage = loadable(
+  () => import('./pages/Register/verifyAccount')
+);
 
 const AdminUsersPage = loadable(() => import('./pages/@Admin/users'));
 const AdminUserPage = loadable(() => import('./pages/@Admin/user'));
@@ -39,6 +42,7 @@ const Routes: RouteObject[] = [
   { index: true, Component: MainPage },
   { path: '/register', Component: RegisterPage },
   { path: '/resetPassword/:token', Component: ResetPasswordPage },
+  { path: '/verify/:token', Component: VerifyAccountPage },
 ];
 
 const AdminRoutes: RouteObject[] = [

@@ -26,5 +26,9 @@
   "genderMale": "Male",
   "genderFemale": "Female",
   "genderOther": "Other",
-  "register": "Register"
+  "register": "Register",
+  "verification": {
+    "accountVerified": "Account has been verified",
+    "accountVerifiedMessage": "Your account has been verified. You can now log in"
+  }
 }

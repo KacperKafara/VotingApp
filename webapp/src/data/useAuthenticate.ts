@@ -1,9 +1,11 @@
-import { useMutation } from "@tanstack/react-query";
-import { api } from "./api";
-import { AxiosError } from "axios";
-import { useToast } from "@/hooks/use-toast";
-import { useTranslation } from "react-i18next";
-import { ApplicationError } from "@/types/applicationError";
+import { useMutation } from '@tanstack/react-query';
+import { api } from './api';
+import { AxiosError } from 'axios';
+import { useToast } from '@/hooks/use-toast';
+import { useTranslation } from 'react-i18next';
+import { ApplicationError } from '@/types/applicationError';
+import { RegistrationData } from '@/types/registrationData';
+import { useNavigate } from 'react-router-dom';
 
 interface LoginRequest {
   username: string;
@@ -17,21 +19,77 @@ interface LoginResponse {
 
 export const useAuthenticate = () => {
   const { toast } = useToast();
-  const { t } = useTranslation("errors");
+  const { t } = useTranslation('errors');
 
   const { mutateAsync, isSuccess, isPending } = useMutation({
     mutationFn: async (data: LoginRequest) => {
-      const response = await api.post<LoginResponse>("/authenticate", data);
+      const response = await api.post<LoginResponse>('/authenticate', data);
       return response.data;
     },
     onError: (error: AxiosError) => {
       toast({
-        variant: "destructive",
-        title: "Authentication failed",
+        variant: 'destructive',
+        title: 'Authentication failed',
         description: t((error.response?.data as ApplicationError).code),
       });
     },
   });
 
   return { authenticate: mutateAsync, isSuccess, isPending };
+};
+
+export const useRegister = () => {
+  const { toast } = useToast();
+  const { t } = useTranslation(['errors', 'common']);
+  const navigate = useNavigate();
+
+  const { mutateAsync, isSuccess, isPending } = useMutation({
+    mutationFn: async (data: RegistrationData) => {
+      const response = await api.post('/register', data);
+      return response.data;
+    },
+    onError: (error: AxiosError) => {
+      toast({
+        variant: 'destructive',
+        title: t('defaultTitle'),
+        description: t((error.response?.data as ApplicationError).code),
+      });
+    },
+    onSuccess: () => {
+      toast({
+        title: t('common:registration.sucessTitle'),
+        description: t('common:registration.sucessMessage'),
+      });
+      navigate('/');
+    },
+  });
+
+  return { register: mutateAsync, isSuccess, isPending };
+};
+
+export const useVerifyAccount = () => {
+  const { toast } = useToast();
+  const { t } = useTranslation(['errors', 'registerPage']);
+
+  const { mutateAsync } = useMutation({
+    mutationFn: async (token: string) => {
+      const response = await api.post(`/verify/${token}`);
+      return response.data;
+    },
+    onError: (error: AxiosError) => {
+      toast({
+        variant: 'destructive',
+        title: t('defaultTitle'),
+        description: t((error.response?.data as ApplicationError).code),
+      });
+    },
+    onSuccess: () => {
+      toast({
+        title: t('registerPage:verification.accountVerified'),
+        description: t('registerPage:verification.accountVerifiedMessage'),
+      });
+    },
+  });
+
+  return { verifyAccount: mutateAsync };
 };

@@ -8,5 +8,9 @@
   "submit": "Wyślij",
   "cancel": "Anuluj",
   "confirm": "Potwierdź",
-  "defaultTitleSuccess": "Sukces"
+  "defaultTitleSuccess": "Sukces",
+  "registration": {
+    "sucessTitle": "Rejestracja zakończona sukcesem",
+    "sucessMessage": "Pomyślnie zarejestrowałeś się. Sprawdź swoją skrzynkę e-mail, aby zweryfikować swoje konto."
+  }
 }

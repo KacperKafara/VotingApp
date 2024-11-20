@@ -31,6 +31,8 @@ import { isValidPhoneNumber } from 'react-phone-number-input';
 import { PhoneInput } from '@/components/ui/phone-input';
 import { RegistrationData } from '@/types/registrationData';
 import LoadingButton from '@/components/LoadingButton';
+import { pl, enUS } from 'date-fns/locale';
+import { useRegister } from '@/data/useAuthenticate';
 
 const getRegistrationSchema = (t: TFunction<'registerPage'>) =>
   z
@@ -80,6 +82,7 @@ type RegistrationSchema = z.infer<ReturnType<typeof getRegistrationSchema>>;
 
 const RegisterPage: FC = () => {
   const { t } = useTranslation('registerPage');
+  const { register, isPending } = useRegister();
   const form = useForm<RegistrationSchema>({
     resolver: zodResolver(getRegistrationSchema(t)),
     defaultValues: {
@@ -105,7 +108,7 @@ const RegisterPage: FC = () => {
       gender: parseInt(data.gender),
       language: i18next.language,
     };
-    console.log(registrationData);
+    await register(registrationData);
   });
 
   return (
@@ -113,13 +116,13 @@ const RegisterPage: FC = () => {
       <Form {...form}>
         <form
           onSubmit={onSubmit}
-          className="border-1 flex h-4/6 w-4/5 flex-wrap rounded-md bg-background p-9 shadow-2xl shadow-slate-900"
+          className="border-1 flex h-full flex-wrap rounded-md bg-background p-2 shadow-2xl shadow-slate-900 md:h-4/6 md:w-4/5 md:p-9"
         >
           <FormField
             control={form.control}
             name="username"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormControl>
                   <Input
                     {...field}
@@ -135,7 +138,7 @@ const RegisterPage: FC = () => {
             control={form.control}
             name="password"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormControl>
                   <Input
                     {...field}
@@ -151,7 +154,7 @@ const RegisterPage: FC = () => {
             control={form.control}
             name="confirmPassword"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormControl>
                   <Input
                     {...field}
@@ -167,7 +170,7 @@ const RegisterPage: FC = () => {
             control={form.control}
             name="email"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormControl>
                   <Input {...field} type="email" placeholder={t('email')} />
                 </FormControl>
@@ -179,7 +182,7 @@ const RegisterPage: FC = () => {
             control={form.control}
             name="firstName"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormControl>
                   <Input {...field} placeholder={t('firstName')} />
                 </FormControl>
@@ -191,7 +194,7 @@ const RegisterPage: FC = () => {
             control={form.control}
             name="lastName"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormControl>
                   <Input {...field} placeholder={t('lastName')} />
                 </FormControl>
@@ -203,7 +206,7 @@ const RegisterPage: FC = () => {
             control={form.control}
             name="phoneNumber"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormControl>
                   <PhoneInput
                     defaultCountry="PL"
@@ -219,11 +222,11 @@ const RegisterPage: FC = () => {
             control={form.control}
             name="birthDate"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
-                      <Button variant={'outline'}>
+                      <Button variant="outline" className="w-full">
                         {field.value ? (
                           new Date(field.value).toLocaleDateString(
                             navigator.language || 'pl-PL'
@@ -245,7 +248,11 @@ const RegisterPage: FC = () => {
                           date > new Date() || date < new Date('1900-01-01')
                         );
                       }}
+                      locale={i18next.language === 'pl' ? pl : enUS}
                       initialFocus
+                      captionLayout="dropdown-buttons"
+                      fromYear={1960}
+                      toYear={new Date().getFullYear() - 18}
                     />
                   </PopoverContent>
                 </Popover>
@@ -257,7 +264,7 @@ const RegisterPage: FC = () => {
             control={form.control}
             name="gender"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -277,7 +284,12 @@ const RegisterPage: FC = () => {
               </FormItem>
             )}
           />
-          <LoadingButton type="submit" isLoading={false} text={t('register')} />
+          <LoadingButton
+            className="w-full"
+            type="submit"
+            isLoading={isPending}
+            text={t('register')}
+          />
         </form>
       </Form>
     </div>

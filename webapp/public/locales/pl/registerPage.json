@@ -26,5 +26,9 @@
   "genderMale": "Mężczyzna",
   "genderFemale": "Kobieta",
   "genderOther": "Inna",
-  "register": "Zarejestruj się"
+  "register": "Zarejestruj się",
+  "verification": {
+    "accountVerified": "Konto zostało zweryfikowane",
+    "accountVerifiedMessage": "Twoje konto zostało zweryfikowane. Możesz się teraz zalogować"
+  }
 }

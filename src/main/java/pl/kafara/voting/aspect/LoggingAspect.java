@@ -27,7 +27,15 @@ import java.util.UUID;
 @Aspect
 @Component
 public class LoggingAspect {
-    @Pointcut("@within(org.springframework.transaction.annotation.Transactional) || @annotation(org.springframework.transaction.annotation.Transactional)")
+    @Pointcut("@annotation(org.springframework.transaction.annotation.Transactional)")
+    private void transactionalMethod() {
+    }
+
+    @Pointcut("@within(org.springframework.transaction.annotation.Transactional) && !@annotation(org.springframework.transaction.annotation.Transactional)")
+    private void transactionalClassOnly() {
+    }
+
+    @Pointcut("transactionalMethod() || transactionalClassOnly()")
     private void transactionalLog() {
     }
 
@@ -36,9 +44,9 @@ public class LoggingAspect {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = "<anonymous>";
 
-        if(authentication != null) {
+        if (authentication != null) {
             try {
-                DecodedJWT jwt =  JWT.decode((String) authentication.getPrincipal());
+                DecodedJWT jwt = JWT.decode((String) authentication.getPrincipal());
                 username = jwt.getClaim("username").toString();
             } catch (Exception e) {
                 username = "<anonymous>";
@@ -66,12 +74,12 @@ public class LoggingAspect {
 
         Transactional transactional = method.getAnnotation(Transactional.class);
 
-        if(transactional == null) {
+        if (transactional == null) {
             transactional = jp.getTarget().getClass().getAnnotation(Transactional.class);
         }
 
         Object obj;
-        if(TransactionSynchronizationManager.isActualTransactionActive()) {
+        if (TransactionSynchronizationManager.isActualTransactionActive()) {
             try {
                 txId = String.valueOf(UUID.fromString(Objects.requireNonNull(TransactionSynchronizationManager.getCurrentTransactionName())));
                 log.info("Continuing existing transaction {} with propagation {} in method {}.{}", txId, transactional.propagation(), callerClass, callerMethod);
@@ -79,6 +87,9 @@ public class LoggingAspect {
                 TransactionSynchronizationManager.setCurrentTransactionName(txId);
                 TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationLogger(txId));
                 log.info("Transaction {} started by {} in {}.{}", txId, username, callerClass, callerMethod);
+            } catch (NullPointerException ignored) {
+                obj = jp.proceed();
+                return obj;
             }
             log.info("Transaction {} info: propagation={}, isolation={}, readOnly={}", txId, transactional.propagation(), transactional.isolation(), transactional.readOnly());
 
@@ -88,7 +99,7 @@ public class LoggingAspect {
             } else {
                 log.info("Method {}.{} called by {} called in transaction {}", callerClass, callerMethod, username, txId);
             }
-            try{
+            try {
                 obj = jp.proceed();
             } catch (Throwable e) {
                 log.error("Method {}.{} called by {} failed in transaction {} due {} with message {}", callerClass, callerMethod, username, txId, e.getClass().getName(), e.getMessage());
@@ -107,7 +118,7 @@ public class LoggingAspect {
             } else {
                 log.info("Method {}.{} called by {}", callerClass, callerMethod, username);
             }
-            try{
+            try {
                 obj = jp.proceed();
             } catch (Throwable e) {
                 throw e;
@@ -133,11 +144,11 @@ public class LoggingAspect {
         for (int j = 0; j < args.length; j++) {
             String parameterName = parameters[j].getName();
             sb.append(parameterName).append(": ");
-            if (parameterName.equals("password") || parameterName.equals("token")) {
+            if (parameterName.equals("password") || parameterName.equals("token") || parameterName.equals("model")) {
                 sb.append("**********");
                 continue;
             }
-            if(args[j] == null) {
+            if (args[j] == null) {
                 continue;
             }
             sb.append(args[j].toString());

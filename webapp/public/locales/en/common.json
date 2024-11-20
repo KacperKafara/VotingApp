@@ -6,5 +6,9 @@
   "submit": "Submit",
   "cancel": "Cancel",
   "confirm": "Confirm",
-  "defaultTitleSuccess": "Success"
+  "defaultTitleSuccess": "Success",
+  "registration": {
+    "sucessTitle": "Registration successful",
+    "sucessMessage": "You have successfully registered. Please check your email to verify your account."
+  }
 }

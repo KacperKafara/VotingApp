@@ -20,7 +20,6 @@ public record RegistrationRequest(
         @NotBlank
         String lastName,
         @NotBlank
-        @Length(min = 9, max = 9)
         String phoneNumber,
         @NotNull
         LocalDateTime birthDate,
