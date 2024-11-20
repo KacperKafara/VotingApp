@@ -10,5 +10,6 @@
   "votingList": "Voting List",
   "activeSurveysAndVotings": "Active Surveys and Votings",
   "error": "Error",
-  "logInAgain": "Log in again"
+  "logInAgain": "Log in again",
+  "roleRequests": "Voter Role Requests"
 }

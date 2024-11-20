@@ -6,7 +6,22 @@
   "errors": {
     "roleRequestAlreadyExists": "You have already created a role request for this role."
   },
-  "createRoleRequest": "Zgłoszenie prośby o rolę wyborcy",
-  "send": "Wyślij",
-  "sendDescription": "Czy na pewno chcesz utworzyć prośbę o rolę wyborcy?"
+  "accept": {
+    "title": "Role Request Accepted",
+    "description": "You have successfully accepted the role request. The user has been granted the ability to vote.",
+    "acceptButton": "Accept"
+  },
+  "reject": {
+    "title": "Role Request Rejected",
+    "description": "You have successfully rejected the role request. The user has not been granted the ability to vote.",
+    "rejectButton": "Reject"
+  },
+  "createRoleRequest": "Create Voter Role Request",
+  "send": "Send",
+  "sendDescription": "Are you sure you want to create a voter role request?",
+  "roleRequests": "Voter Role Requests",
+  "username": "Username",
+  "requestDate": "Request Date",
+  "viewProfileButton": "View Profile",
+  "noRoleRequests": "No voter role requests"
 }

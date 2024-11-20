@@ -261,3 +261,7 @@ VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1064', 'DEFINITELY_YES'),
        ('5e642d0a-94d4-4a4f-8760-cd6d63cd1072', 'I_DONT_KNOW'),
        ('5e642d0a-94d4-4a4f-8760-cd6d63cd1073', 'NO'),
        ('5e642d0a-94d4-4a4f-8760-cd6d63cd1074', 'DEFINITELY_NO');
+
+
+INSERT INTO public.voter_role_request (id, user_id, request_date, state, created_at, updated_at, version)
+VALUES ('b2d44bb0-1665-437d-98ec-ee8061aab53b', '5e642d0a-94d4-4a4f-8760-cd6d63cd1039', now() - interval '1 day', 'PENDING', now() - interval '1 day', now() - interval '1 day', 1);

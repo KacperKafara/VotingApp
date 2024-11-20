@@ -1,6 +1,7 @@
 package pl.kafara.voting.users.mapper;
 
 import pl.kafara.voting.model.users.Role;
+import pl.kafara.voting.model.users.RoleRequestResolution;
 import pl.kafara.voting.model.users.User;
 import pl.kafara.voting.model.users.UserRoleEnum;
 import pl.kafara.voting.users.dto.UserResponse;
@@ -17,6 +18,8 @@ public class UserMapper {
                 .map(Role::getName)
                 .collect(Collectors.toSet());
 
+        boolean activeRoleRequest = user.getVoterRoleRequest() != null && (user.getVoterRoleRequest().getResolution().equals(RoleRequestResolution.PENDING) || user.getVoterRoleRequest().getResolution().equals(RoleRequestResolution.ACCEPTED));
+
         return new UserResponse(
                 user.getId(),
                 user.getFirstName(),
@@ -31,7 +34,7 @@ public class UserMapper {
                 user.isVerified(),
                 user.getLastLogin(),
                 user.getLastFailedLogin(),
-                user.getVoterRoleRequest() != null
+                activeRoleRequest
         );
     }
 }

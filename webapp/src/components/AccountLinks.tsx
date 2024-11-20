@@ -55,6 +55,15 @@ const AccountsLinks: FC<AccountsLinksProps> = ({ className }) => {
             >
               {t('users')}
             </Button>
+            <Button
+              variant="link"
+              className="text-wrap"
+              onClick={() => {
+                navigate('/admin/role-requests');
+              }}
+            >
+              {t('roleRequests')}
+            </Button>
           </CollapsibleContent>
         </Collapsible>
       )}

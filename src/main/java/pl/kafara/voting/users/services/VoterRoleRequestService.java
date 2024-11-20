@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import dev.samstevens.totp.secret.SecretGenerator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -15,11 +16,18 @@ import pl.kafara.voting.exceptions.messages.UserMessages;
 import pl.kafara.voting.exceptions.user.ResolveOwnRequestException;
 import pl.kafara.voting.exceptions.user.YouAreVoterException;
 import pl.kafara.voting.model.users.*;
+import pl.kafara.voting.users.dto.VoterRoleRequestListResponse;
+import pl.kafara.voting.users.dto.VoterRoleRequestResponse;
+import pl.kafara.voting.users.mapper.RoleRequestMapper;
 import pl.kafara.voting.users.repositories.RoleRepository;
 import pl.kafara.voting.users.repositories.UserRepository;
 import pl.kafara.voting.users.repositories.VoterRoleRequestRepository;
 import pl.kafara.voting.util.AESUtils;
+import pl.kafara.voting.util.filteringCriterias.RoleRequestFilteringCriteria;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -41,6 +49,18 @@ public class VoterRoleRequestService {
 
         if (user.getRoles().contains(voter))
             throw new YouAreVoterException(UserMessages.USER_ALREADY_HAS_VOTER_ROLE, UserExceptionCodes.USER_ALREADY_HAS_VOTER_ROLE);
+
+        Optional<VoterRoleRequest> roleRequestOptional = roleRequestRepository.getVoterRoleRequestByUser_Id(id);
+
+        if(roleRequestOptional.isPresent()){
+            VoterRoleRequest voterRoleRequest = roleRequestOptional.get();
+            if(voterRoleRequest.getResolution().equals(RoleRequestResolution.REJECTED)) {
+                voterRoleRequest.setResolution(RoleRequestResolution.PENDING);
+                voterRoleRequest.setRequestDate(LocalDateTime.now());
+                roleRequestRepository.save(voterRoleRequest);
+                return;
+            }
+        }
 
         VoterRoleRequest roleRequest = new VoterRoleRequest(user);
         roleRequestRepository.save(roleRequest);
@@ -80,5 +100,22 @@ public class VoterRoleRequestService {
         roleRequest.setResolution(RoleRequestResolution.REJECTED);
         roleRequestRepository.save(roleRequest);
         return roleRequest.getUser();
+    }
+
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
+    public VoterRoleRequestListResponse getRoleRequests(RoleRequestFilteringCriteria filteringCriteria) {
+        Page<VoterRoleRequest> roleRequests = roleRequestRepository.getAllByUser_UsernameContainsAndResolutionEquals(filteringCriteria.getPageable(), filteringCriteria.getUsername(), RoleRequestResolution.PENDING);
+
+        List<VoterRoleRequestResponse> responses = roleRequests.getContent().stream()
+                .map(RoleRequestMapper::toVoterRoleRequestResponse)
+                .toList();
+
+        return new VoterRoleRequestListResponse(
+                responses,
+                roleRequests.getTotalPages(),
+                roleRequests.getNumber(),
+                roleRequests.getSize()
+        );
     }
 }

@@ -6,7 +6,26 @@
   "errors": {
     "roleRequestAlreadyExists": "Już utworzyłeś prośbę o rolę dla tej roli."
   },
+  "accept": {
+    "title": "Zaakceptowano prośbę o rolę",
+    "description": "Pomyślnie zaakceptowałeś prośbę o rolę. Użytkownik otrzymał możliwość głosowania.",
+    "acceptButton": "Zaakceptuj",
+    "dialogTitle": "Zaakceptuj prośbę o rolę",
+    "dialogDescription": "Czy na pewno chcesz zaakceptować prośbę o rolę?"
+  },
+  "reject": {
+    "title": "Odrzucono prośbę o rolę",
+    "description": "Pomyślnie odrzuciłeś prośbę o rolę. Użytkownik nie otrzymał możliwości głosowania.",
+    "rejectButton": "Odrzuć",
+    "dialogTitle": "Odrzuć prośbę o rolę",
+    "dialogDescription": "Czy na pewno chcesz odrzucić prośbę o rolę?"
+  },
   "createRoleRequest": "Zgłoszenie prośby o rolę wyborcy",
   "send": "Wyślij",
-  "sendDescription": "Czy na pewno chcesz utworzyć prośbę o rolę wyborcy?"
+  "sendDescription": "Czy na pewno chcesz utworzyć prośbę o rolę wyborcy?",
+  "roleRequests": "Aplikacje o rolę wyborcy",
+  "username": "Nazwa użytkownika",
+  "requestDate": "Data zgłoszenia",
+  "viewProfileButton": "Zobacz profil",
+  "noRoleRequests": "Brak aplikacji o rolę wyborcy"
 }

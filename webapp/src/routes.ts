@@ -7,8 +7,11 @@ const RegisterPage = loadable(() => import('./pages/Register'));
 const ResetPasswordPage = loadable(() => import('./pages/ResetPassword'));
 const MainPage = loadable(() => import('./pages/Main'));
 
-const UsersPage = loadable(() => import('./pages/@Admin/users'));
-const UserPage = loadable(() => import('./pages/@Admin/user'));
+const AdminUsersPage = loadable(() => import('./pages/@Admin/users'));
+const AdminUserPage = loadable(() => import('./pages/@Admin/user'));
+const AdminRoleRequestsPage = loadable(
+  () => import('./pages/@Admin/roleRequests')
+);
 
 const ModeratorSurveysListPage = loadable(
   () => import('./pages/@Moderator/surveys')
@@ -40,8 +43,9 @@ const Routes: RouteObject[] = [
 
 const AdminRoutes: RouteObject[] = [
   { index: true, Component: MainPage },
-  { path: 'users', Component: UsersPage },
-  { path: 'users/:username', Component: UserPage },
+  { path: 'users', Component: AdminUsersPage },
+  { path: 'users/:username', Component: AdminUserPage },
+  { path: 'role-requests', Component: AdminRoleRequestsPage },
 ];
 const ModeratorRoutes: RouteObject[] = [
   { index: true, Component: MainPage },

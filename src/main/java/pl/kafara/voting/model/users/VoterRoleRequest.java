@@ -13,7 +13,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class VoterRoleRequest extends AbstractEntity {
 
-    @Column(name = "request_date", nullable = false, updatable = false)
+    @Column(name = "request_date", nullable = false)
+    @Setter
     LocalDateTime requestDate = LocalDateTime.now();
 
     @OneToOne
