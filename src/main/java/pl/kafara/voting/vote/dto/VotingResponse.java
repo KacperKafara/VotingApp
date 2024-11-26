@@ -1,5 +1,6 @@
 package pl.kafara.voting.vote.dto;
 
+import pl.kafara.voting.model.vote.Print;
 import pl.kafara.voting.model.vote.VotingKind;
 
 import java.time.LocalDateTime;
@@ -13,6 +14,7 @@ public record VotingResponse(
         String topic,
         LocalDateTime date,
         VotingKind kind,
-        List<VoteResponse> votes
+        List<VoteResponse> votes,
+        List<Print> prints
 ) {
 }

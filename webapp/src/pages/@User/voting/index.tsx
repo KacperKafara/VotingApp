@@ -56,12 +56,34 @@ const VotingPage: FC = () => {
   return (
     <div className="flex min-h-full w-full flex-col items-center justify-center p-3">
       <div className="w-full md:w-3/4">
-        <Card>
-          <CardHeader>
-            <CardTitle>{data.title}</CardTitle>
-          </CardHeader>
-          <CardContent>{data.description}</CardContent>
-        </Card>
+        <div className="flex flex-col gap-3">
+          <Card>
+            <CardHeader>
+              <CardTitle>{data.title}</CardTitle>
+            </CardHeader>
+            <CardContent>{data.description}</CardContent>
+          </Card>
+          {data.prints.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>{t('prints')}</CardTitle>
+                <CardContent className="flex flex-col pt-3">
+                  {data.prints.map((print, index) => (
+                    <a
+                      key={index}
+                      href={print.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-blue-500"
+                    >
+                      {print.title}
+                    </a>
+                  ))}
+                </CardContent>
+              </CardHeader>
+            </Card>
+          )}
+        </div>
         <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-2">
           <Card className="flex flex-col justify-between">
             <CardHeader>

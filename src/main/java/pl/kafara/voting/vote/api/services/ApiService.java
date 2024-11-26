@@ -18,14 +18,12 @@ import pl.kafara.voting.model.vote.*;
 import pl.kafara.voting.vote.api.mappers.EnvoyMapper;
 import pl.kafara.voting.vote.api.mappers.VoteMapper;
 import pl.kafara.voting.vote.api.mappers.VotingMapper;
-import pl.kafara.voting.vote.api.model.EnvoyAPI;
-import pl.kafara.voting.vote.api.model.LastVotingsUpdate;
-import pl.kafara.voting.vote.api.model.VoteAPI;
-import pl.kafara.voting.vote.api.model.VotingAPI;
+import pl.kafara.voting.vote.api.model.*;
 import pl.kafara.voting.vote.api.repositories.LastVotingsUpdateRepository;
 import pl.kafara.voting.vote.api.repositories.EnvoyRepository;
 import pl.kafara.voting.vote.repositories.ParliamentaryClubRepository;
 import pl.kafara.voting.vote.api.repositories.SittingRepository;
+import pl.kafara.voting.vote.repositories.PrintRepository;
 import pl.kafara.voting.vote.repositories.VotingRepository;
 
 import java.util.ArrayList;
@@ -44,12 +42,16 @@ public class ApiService {
     @Value("${sejm.term}")
     private String term;
 
+    @Value("${sejm.api.url}")
+    private String sejmApiUrl;
+
     private final EnvoyRepository envoyRepository;
     private final SittingRepository sittingRepository;
     private final ParliamentaryClubRepository parliamentaryClubRepository;
     private final VotingRepository votingRepository;
     private final RestClient restClient;
     private final LastVotingsUpdateRepository lastVotingsUpdateRepository;
+    private final PrintRepository printRepository;
 
     @PostConstruct
     public void init() {
@@ -172,6 +174,7 @@ public class ApiService {
                     votingEntity = VotingMapper.update(voting, sitting, voting.getVotingOptions());
                 else
                     votingEntity = VotingMapper.update(voting, sitting);
+                votingEntity.setPrints(updatePrints(voting.getTitle()));
                 votingEntity.setVotes(updateVotes(voting.getVotes(), votingEntity));
                 votingRepository.saveAndFlush(votingEntity);
                 count--;
@@ -180,6 +183,28 @@ public class ApiService {
             lastVotingsUpdate.setLastSitting(sitting);
         }
         lastVotingsUpdateRepository.save(lastVotingsUpdate);
+    }
+
+    protected List<Print> updatePrints(String title) {
+        List<String> prints = ApiUtils.extractPrints(title);
+        List<Print> printsList = new ArrayList<>();
+        for(String print : prints) {
+            PrintAPI printApi = restClient.get()
+                    .uri(term + "/prints/" + print)
+                    .retrieve()
+                    .body(PrintAPI.class);
+            if(printApi == null)
+                continue;
+            String url = sejmApiUrl + term + "/prints/" + print + "/" + print + ".pdf";
+            Optional<Print> printOptional = printRepository.findById(print);
+            if (printOptional.isEmpty()) {
+                Print savedPrint = printRepository.save(new Print(printApi.getNumber(), printApi.getTitle(), url));
+                printsList.add(savedPrint);
+            } else {
+                printsList.add(printOptional.get());
+            }
+        }
+        return printsList;
     }
 
     protected List<Vote> updateVotes(List<VoteAPI> votes, Voting voting) {

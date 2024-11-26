@@ -21,7 +21,8 @@ public class VotingMapper {
                 voting.getTopic(),
                 voting.getDate(),
                 voting.getKind(),
-                votes
+                votes,
+                voting.getPrints()
         );
     }
 

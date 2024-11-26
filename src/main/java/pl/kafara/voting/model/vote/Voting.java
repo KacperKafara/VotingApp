@@ -41,4 +41,7 @@ public class Voting extends AbstractEntity {
     private String description;
     @Column(length = 1000)
     private String topic;
+
+    @ManyToMany
+    private List<Print> prints;
 }

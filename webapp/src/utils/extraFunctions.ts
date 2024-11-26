@@ -131,6 +131,12 @@ export const generateChartDataForVotingByClub = (
     )
   );
 
+  const index = uniqueLabels.indexOf(t('ABSENT'));
+  if (index !== -1) {
+    uniqueLabels.splice(index, 1);
+    uniqueLabels.push(t('ABSENT'));
+  }
+
   const chartConfig: ChartConfig = uniqueLabels.reduce(
     (result, label, index) => {
       result[label] = {

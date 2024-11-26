@@ -13,6 +13,12 @@ export interface VoteResponse {
   votingOption: string;
 }
 
+export interface Print {
+  number: string;
+  title: string;
+  url: string;
+}
+
 export interface VotingResponse {
   id: string;
   title: string;
@@ -21,6 +27,7 @@ export interface VotingResponse {
   date: Date;
   kind: 'ELECTRONIC' | 'TRADITIONAL' | 'ON_LIST';
   votes: VoteResponse[];
+  prints: Print[];
 }
 
 export interface VotingWithoutVotesResponse {
