@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-@Transactional(propagation = Propagation.MANDATORY)
+@Transactional(propagation = Propagation.REQUIRED)
 public interface VotingRepository extends JpaRepository<Voting, UUID> {
 
     @Query("SELECT v FROM Voting v WHERE v.sittingDay = :sittingDay AND v.votingNumber = :votingNumber AND v.sitting = :sitting")

@@ -124,7 +124,7 @@ public class ApiService {
     public void updateVotingList() {
         LastVotingsUpdate lastVotingsUpdate = lastVotingsUpdateRepository.findById(1L);
         List<Sitting> sittings;
-        if(lastVotingsUpdate != null)
+        if (lastVotingsUpdate != null)
             sittings = sittingRepository.findByNumber(lastVotingsUpdate.getLastSitting().getNumber());
         else {
             lastVotingsUpdate = new LastVotingsUpdate(1L, null);
@@ -134,22 +134,26 @@ public class ApiService {
         for (Sitting sitting : sittings) {
             int iterator = 0;
             boolean isEnd = false;
-            while (true) {
+            List<Object> objects = restClient.get()
+                    .uri(term + "/votings/" + sitting.getNumber())
+                    .retrieve()
+                    .body(new ParameterizedTypeReference<>() {
+                    });
+
+            if (objects == null)
+                throw new NullPointerException("objects is null");
+
+            int count = objects.size();
+            while (count > 0) {
                 ResponseEntity<VotingAPI> votingResult;
 
                 try {
-                    iterator++;
                     votingResult = restClient.get()
-                            .uri(term + "/votings/" + sitting.getNumber() + "/" + iterator)
+                            .uri(term + "/votings/" + sitting.getNumber() + "/" + ++iterator)
                             .retrieve()
                             .toEntity(VotingAPI.class);
                 } catch (HttpClientErrorException.NotFound e) {
-                    if (!isEnd) {
-                        isEnd = true;
-                        continue;
-                    } else {
-                        break;
-                    }
+                    continue;
                 }
 
                 VotingAPI voting = votingResult.getBody();
@@ -158,35 +162,36 @@ public class ApiService {
                     break;
 
                 Optional<Voting> isVoting = votingRepository.getVotingFiltered(voting.getSittingDay(), voting.getVotingNumber(), sitting);
-                if (isVoting.isPresent())
+                if (isVoting.isPresent()) {
+                    count--;
                     continue;
+                }
 
                 Voting votingEntity;
-                if(voting.getVotingOptions() != null)
+                if (voting.getVotingOptions() != null)
                     votingEntity = VotingMapper.update(voting, sitting, voting.getVotingOptions());
                 else
                     votingEntity = VotingMapper.update(voting, sitting);
-
                 votingEntity.setVotes(updateVotes(voting.getVotes(), votingEntity));
-                votingRepository.save(votingEntity);
+                votingRepository.saveAndFlush(votingEntity);
+                count--;
 
-                iterator++;
             }
             lastVotingsUpdate.setLastSitting(sitting);
         }
         lastVotingsUpdateRepository.save(lastVotingsUpdate);
     }
 
-    private List<Vote> updateVotes(List<VoteAPI> votes, Voting voting) {
+    protected List<Vote> updateVotes(List<VoteAPI> votes, Voting voting) {
         List<Vote> votesList = new ArrayList<>();
-        for(VoteAPI voteAPI : votes) {
+        for (VoteAPI voteAPI : votes) {
             Optional<Envoy> envoyOptional = envoyRepository.findById(voteAPI.getMP());
             if (envoyOptional.isEmpty())
                 continue;
 
             Envoy envoy = envoyOptional.get();
 
-            if(!voting.getKind().equals(VotingKind.ON_LIST))
+            if (!voting.getKind().equals(VotingKind.ON_LIST))
                 votesList.add(VoteMapper.update(voteAPI, voting, envoy));
             else {
                 Optional<String> keyForYes = voteAPI.getListVotes()
