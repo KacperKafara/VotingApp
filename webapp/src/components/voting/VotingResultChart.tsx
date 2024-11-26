@@ -2,7 +2,7 @@ import { VotingResponse } from '@/types/voting';
 import { TFunction } from 'i18next';
 import { FC } from 'react';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '../ui/chart';
-import { Customized, Legend, Pie, PieChart, Text } from 'recharts';
+import { Customized, Label, Legend, Pie, PieChart, Text } from 'recharts';
 import { generateChartDataForVoting } from '@/utils/extraFunctions';
 
 interface VotingResultChartProps {
@@ -14,6 +14,8 @@ const VotingResultChart: FC<VotingResultChartProps> = ({ data, tFunction }) => {
   const t = tFunction;
 
   const { chartData, chartConfig } = generateChartDataForVoting(data, t);
+
+  const totalValue = chartData.reduce((sum, item) => sum + item.value, 0);
 
   return (
     <ChartContainer
@@ -45,7 +47,39 @@ const VotingResultChart: FC<VotingResultChartProps> = ({ data, tFunction }) => {
           dataKey="value"
           labelLine={false}
           nameKey="name"
-        />
+          innerRadius={80}
+          strokeWidth={5}
+        >
+          <Label
+            content={({ viewBox }) => {
+              if (viewBox && 'cx' in viewBox && 'cy' in viewBox) {
+                return (
+                  <text
+                    x={viewBox.cx}
+                    y={viewBox.cy}
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                  >
+                    <tspan
+                      x={viewBox.cx}
+                      y={viewBox.cy}
+                      className="fill-foreground text-3xl font-bold"
+                    >
+                      {totalValue.toLocaleString()}
+                    </tspan>
+                    <tspan
+                      x={viewBox.cx}
+                      y={(viewBox.cy || 0) + 24}
+                      className="fill-muted-foreground"
+                    >
+                      {t('totalVotes')}
+                    </tspan>
+                  </text>
+                );
+              }
+            }}
+          />
+        </Pie>
         <Legend
           iconType="square"
           iconSize={8}

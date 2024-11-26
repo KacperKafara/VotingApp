@@ -15,5 +15,6 @@
   "votings": "Głosowania",
   "sitting": "Posiedzenie",
   "all": "Wszystkie",
-  "results": "Wyniki"
+  "results": "Wyniki",
+  "totalVotes": "Wszystkich głosów"
 }

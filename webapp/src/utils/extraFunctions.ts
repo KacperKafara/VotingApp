@@ -69,6 +69,11 @@ export const generateChartDataForVoting = (
     voteCounts[value] = (voteCounts[value] || 0) + 1;
   });
 
+  console.log(voteCounts);
+
+  delete voteCounts['ABSENT'];
+  delete voteCounts[t('ABSENT')];
+
   const chartData: ChartDataItem[] = Object.keys(voteCounts).map(
     (key, index) => ({
       name: data.kind !== 'ON_LIST' ? t(key) : key,

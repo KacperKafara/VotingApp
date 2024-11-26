@@ -15,5 +15,6 @@
   "votings": "Votings",
   "sitting": "Sitting",
   "all": "All",
-  "results": "Results"
+  "results": "Results",
+  "totalVotes": "Total votes"
 }

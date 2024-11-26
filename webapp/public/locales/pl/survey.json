@@ -57,5 +57,6 @@
   "MALE": "Mężczyzna",
   "FEMALE": "Kobieta",
   "OTHER": "Inna",
-  "vote": "Zagłosuj"
+  "vote": "Zagłosuj",
+  "totalVotes": "Liczba głosów"
 }

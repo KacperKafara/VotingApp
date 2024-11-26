@@ -23,7 +23,6 @@ public class Voting extends AbstractEntity {
     @JoinColumn(name = "sitting_number")
     private Sitting sitting;
     private int sittingDay;
-
     private LocalDateTime date;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "voting")

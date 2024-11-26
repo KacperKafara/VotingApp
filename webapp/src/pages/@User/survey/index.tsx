@@ -36,17 +36,18 @@ const SurveyPage: FC = () => {
           </CardHeader>
           <CardContent className="flex items-center justify-between">
             <p>{data.description}</p>
-            {roles?.includes(UsetRolesWithPrefix.voter) && (
-              <Button
-                variant="secondary"
-                disabled={data.userVoted}
-                onClick={() => {
-                  setSheetOpen(!sheetOpen);
-                }}
-              >
-                {t('vote')}
-              </Button>
-            )}
+            {roles?.includes(UsetRolesWithPrefix.voter) &&
+              new Date() > new Date(data.endDate) && (
+                <Button
+                  variant="secondary"
+                  disabled={data.userVoted}
+                  onClick={() => {
+                    setSheetOpen(!sheetOpen);
+                  }}
+                >
+                  {t('vote')}
+                </Button>
+              )}
           </CardContent>
         </Card>
         <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-2">
@@ -76,13 +77,16 @@ const SurveyPage: FC = () => {
           </Card>
         </div>
       </div>
-      <VoteSheet
-        id={data.id}
-        description={data.title}
-        kind={data.surveyKind}
-        open={sheetOpen}
-        onOpenChange={setSheetOpen}
-      />
+      {roles?.includes(UsetRolesWithPrefix.voter) &&
+        new Date() > new Date(data.endDate) && (
+          <VoteSheet
+            id={data.id}
+            description={data.title}
+            kind={data.surveyKind}
+            open={sheetOpen}
+            onOpenChange={setSheetOpen}
+          />
+        )}
     </div>
   );
 };

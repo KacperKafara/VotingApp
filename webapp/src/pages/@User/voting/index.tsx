@@ -86,7 +86,9 @@ const VotingPage: FC = () => {
                 {votes
                   .filter((vote) =>
                     (
-                      vote.name.toLowerCase() + vote.surname.toLowerCase()
+                      vote.name.toLowerCase() +
+                      vote.surname.toLowerCase() +
+                      vote.club.toLowerCase()
                     ).includes(envoyName.toLowerCase())
                   )
                   .map((vote, index) => (
