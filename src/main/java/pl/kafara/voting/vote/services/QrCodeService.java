@@ -5,6 +5,11 @@ import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+import dev.samstevens.totp.code.HashingAlgorithm;
+import dev.samstevens.totp.exceptions.QrGenerationException;
+import dev.samstevens.totp.qr.QrData;
+import dev.samstevens.totp.qr.QrGenerator;
+import dev.samstevens.totp.qr.ZxingPngQrGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -29,14 +34,16 @@ public class QrCodeService {
     private final AESUtils aesUtils;
 
     @PreAuthorize("hasRole('VOTER')")
-    public byte[] generateQrCode(UUID id) throws NotFoundException, WriterException, IOException {
+    public byte[] generateQrCode(UUID id) throws NotFoundException, QrGenerationException {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.USER_NOT_FOUND));
-        QRCodeWriter qrCodeWriter = new QRCodeWriter();
-        String secret = aesUtils.decrypt(user.getTotpSecret());
-        String otpAuthURL = String.format("otpauth://totp/%s:%s?secret=%s&issuer=%s", "Voting", user.getUsername(), secret, "Voting");
-        BitMatrix bitMatrix = qrCodeWriter.encode(otpAuthURL, BarcodeFormat.QR_CODE, 400, 400);
-        ByteArrayOutputStream pngOutputStream = new ByteArrayOutputStream();
-        MatrixToImageWriter.writeToStream(bitMatrix, "PNG", pngOutputStream);
-        return pngOutputStream.toByteArray();
+        QrData qrData = new QrData.Builder()
+                .label("Voting:" + user.getUsername())
+                .secret(aesUtils.decrypt(user.getTotpSecret()))
+                .issuer("Voting")
+                .digits(6)
+                .period(30)
+                .build();
+        QrGenerator qrGenerator = new ZxingPngQrGenerator();
+        return qrGenerator.generate(qrData);
     }
 }

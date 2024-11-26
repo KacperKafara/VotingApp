@@ -13,13 +13,19 @@ import pl.kafara.voting.model.users.User;
 @AllArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING, name = "vote_type")
+@Table(
+        name = "user_vote_survey",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"user_id", "survey_id"})
+        }
+)
 public abstract class UserVoteSurvey extends AbstractEntity {
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "survey_id", nullable = false)
+    @JoinColumn(name = "survey_id", nullable = false, updatable = false)
     private Survey survey;
 }

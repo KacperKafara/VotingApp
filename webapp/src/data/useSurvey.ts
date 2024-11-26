@@ -5,6 +5,7 @@ import { AxiosError } from 'axios';
 import { ApplicationError } from '@/types/applicationError';
 import {
   CreateSurveyRequest,
+  CreateVoteRequest,
   SurveyListResponse,
   SurveyResponse,
 } from '@/types/survey';
@@ -112,4 +113,42 @@ export const useLatestSurvey = () => {
   });
 
   return { isError, isLoading, error, data };
+};
+
+export const useCreateVote = () => {
+  const { api } = useAxiosPrivate();
+  const { toast } = useToast();
+  const { t } = useTranslation(['errors', 'survey']);
+  const queryClient = useQueryClient();
+
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: async (voteRequest: CreateVoteRequest) => {
+      const response = await api.post<SurveyResponse>(
+        `/surveys/${voteRequest.surveyId}/vote`,
+        {
+          voteResult: voteRequest.voteResult,
+          totp: voteRequest.totp,
+        }
+      );
+      return response.data;
+    },
+    onError: (error: AxiosError) => {
+      toast({
+        variant: 'destructive',
+        title: t('survey:sheet.errorTitle'),
+        description: t(
+          'errors:' + (error.response?.data as ApplicationError).code
+        ),
+      });
+    },
+    onSuccess: () => {
+      toast({
+        title: t('survey:sheet.successTitle'),
+        description: t('survey:sheet.successMessage'),
+      });
+      queryClient.invalidateQueries({ queryKey: ['survey'] });
+    },
+  });
+
+  return { createVote: mutateAsync, isLoading: isPending };
 };

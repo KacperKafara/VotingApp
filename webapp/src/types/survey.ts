@@ -26,6 +26,7 @@ export interface SurveyResponse {
   createdAt: Date;
   surveyKind: SurveyKind;
   results: UserVote[];
+  userVoted: boolean;
 }
 
 export interface SurveyWithoutVotesResponse {
@@ -42,4 +43,10 @@ export interface SurveyListResponse {
   totalPages: number;
   pageNumber: number;
   pageSize: number;
+}
+
+export interface CreateVoteRequest {
+  totp: string;
+  surveyId: string;
+  voteResult: string;
 }

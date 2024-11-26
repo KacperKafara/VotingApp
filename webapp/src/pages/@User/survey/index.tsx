@@ -2,9 +2,13 @@ import LoadingIcon from '@/components/loading';
 import SurveyResultChart from '@/components/survey/SurveyResultChart';
 import SurveyResultChartByAge from '@/components/survey/SurveyResultChartByAge';
 import SurveyResultChartByGender from '@/components/survey/SurveyResultChartByGender';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import VoteSheet from '@/components/VoteSheet';
 import { useSurvey } from '@/data/useSurvey';
-import { FC } from 'react';
+import { useUserStore } from '@/store/userStore';
+import { UsetRolesWithPrefix } from '@/types/roles';
+import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
@@ -12,6 +16,8 @@ const SurveyPage: FC = () => {
   const { id } = useParams<{ id: string }>();
   const { data, isLoading, isError } = useSurvey(id!);
   const { t } = useTranslation('survey');
+  const { roles } = useUserStore();
+  const [sheetOpen, setSheetOpen] = useState(false);
 
   if (isLoading || isError || data === undefined) {
     return (
@@ -28,7 +34,20 @@ const SurveyPage: FC = () => {
           <CardHeader>
             <CardTitle>{data.title}</CardTitle>
           </CardHeader>
-          <CardContent>{data.description}</CardContent>
+          <CardContent className="flex items-center justify-between">
+            <p>{data.description}</p>
+            {roles?.includes(UsetRolesWithPrefix.voter) && (
+              <Button
+                variant="secondary"
+                disabled={data.userVoted}
+                onClick={() => {
+                  setSheetOpen(!sheetOpen);
+                }}
+              >
+                {t('vote')}
+              </Button>
+            )}
+          </CardContent>
         </Card>
         <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-2">
           <Card className="flex flex-col justify-between">
@@ -57,6 +76,13 @@ const SurveyPage: FC = () => {
           </Card>
         </div>
       </div>
+      <VoteSheet
+        id={data.id}
+        description={data.title}
+        kind={data.surveyKind}
+        open={sheetOpen}
+        onOpenChange={setSheetOpen}
+      />
     </div>
   );
 };

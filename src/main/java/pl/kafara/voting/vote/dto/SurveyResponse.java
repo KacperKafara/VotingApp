@@ -11,6 +11,7 @@ public record SurveyResponse(
         LocalDateTime endDate,
         LocalDateTime createdAt,
         String surveyKind,
-        List<UserVoteResponse> results
+        List<UserVoteResponse> results,
+        boolean userVoted
 ) {
 }

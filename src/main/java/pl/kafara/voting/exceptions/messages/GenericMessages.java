@@ -13,6 +13,7 @@ public class GenericMessages {
     public static final String NOT_AUTHORIZED_TO_PERFORM_THIS_ACTION = "You are not authorized to perform this action";
     public static final String INVALID_TOKEN = "Invalid token";
     public static final String INVALID_ARGUMENT_TYPE = "Invalid argument type";
+    public static final String INVALID_TOTP = "Invalid TOTP";
 
     private GenericMessages() {
     }

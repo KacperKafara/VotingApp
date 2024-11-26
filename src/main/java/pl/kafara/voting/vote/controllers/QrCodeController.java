@@ -3,6 +3,7 @@ package pl.kafara.voting.vote.controllers;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.zxing.WriterException;
+import dev.samstevens.totp.exceptions.QrGenerationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,7 +28,7 @@ public class QrCodeController {
 
     @GetMapping(produces = "image/png")
     @PreAuthorize("hasRole('VOTER')")
-    public ResponseEntity<byte[]> getQrCode() throws NotFoundException, IOException, WriterException {
+    public ResponseEntity<byte[]> getQrCode() throws NotFoundException, QrGenerationException {
         DecodedJWT jwt =  JWT.decode((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         UUID id = UUID.fromString(jwt.getSubject());
         return ResponseEntity.ok(qrCodeService.generateQrCode(id));

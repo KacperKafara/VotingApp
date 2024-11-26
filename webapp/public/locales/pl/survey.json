@@ -32,6 +32,16 @@
     "resultByGender": "Głosy według płci",
     "resultByAge": "Głosy według wieku"
   },
+  "sheet": {
+    "vote": "Oddaj swój głos!",
+    "voteResultInvalid": "Nieprawidłowy głos",
+    "totpInvalid": "Nieprawidłowy kod TOTP",
+    "voteOptions": "Dostępne opcje głosowania",
+    "totp": "Potwierdź swój głos kodem jednorazowym wygenerowanym przez aplikację Authenticator",
+    "errorTitle": "Błąd podczas głosowania",
+    "successTitle": "Głos został oddany",
+    "successMessage": "Głos został oddany pomyślnie."
+  },
   "noData": "Brak danych",
   "surveys": "Sondaże",
   "title": "Tytuł",
@@ -46,5 +56,6 @@
   "DEFINITELY_NO": "Zdecydowanie nie",
   "MALE": "Mężczyzna",
   "FEMALE": "Kobieta",
-  "OTHER": "Inna"
+  "OTHER": "Inna",
+  "vote": "Zagłosuj"
 }

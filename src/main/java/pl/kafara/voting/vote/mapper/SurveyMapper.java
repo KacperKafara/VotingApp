@@ -1,5 +1,6 @@
 package pl.kafara.voting.vote.mapper;
 
+import pl.kafara.voting.model.users.User;
 import pl.kafara.voting.model.vote.survey.Survey;
 import pl.kafara.voting.model.vote.survey.UserVoteSurvey;
 import pl.kafara.voting.model.vote.survey.UserVoteOtherSurvey;
@@ -10,6 +11,7 @@ import pl.kafara.voting.vote.dto.SurveyWithoutVotesResponse;
 import pl.kafara.voting.vote.dto.UserVoteResponse;
 
 import java.util.List;
+import java.util.UUID;
 
 public class SurveyMapper {
 
@@ -37,10 +39,14 @@ public class SurveyMapper {
         return survey;
     }
 
-    public static SurveyResponse surveyToSurveyResponse(Survey survey) {
+    public static SurveyResponse surveyToSurveyResponse(Survey survey, UUID userId) {
         List<UserVoteResponse> votes = survey.getUserVotes().stream()
                 .map(SurveyMapper::userVoteToUserVoteResponse)
                 .toList();
+
+        boolean userVoted = userId != null &&
+                survey.getUserVotes().stream()
+                        .anyMatch(userVote -> userVote.getUser().getId().equals(userId));
 
         return new SurveyResponse(
                 survey.getId(),
@@ -49,7 +55,8 @@ public class SurveyMapper {
                 survey.getEndDate(),
                 survey.getCreatedAt(),
                 survey.getSurveyKind().name(),
-                votes
+                votes,
+                userVoted
         );
     }
 
