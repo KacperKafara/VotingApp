@@ -1,4 +1,5 @@
-import { SurveyKind } from '@/types/survey';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { CreateVoteRequest, SurveyKind } from '@/types/survey';
 import { FC, useEffect, useState } from 'react';
 import {
   Sheet,
@@ -24,15 +25,25 @@ import {
   FormLabel,
   FormMessage,
 } from './ui/form';
-import { useCreateVote } from '@/data/useSurvey';
 import LoadingButton from './LoadingButton';
+import { VotingKind, VotingOption } from '@/types/voting';
+import { UseMutateAsyncFunction } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
+import { useVotingOptions } from '@/data/useVoting';
 
 interface VoteSheetProps {
   id: string;
   description: string;
-  kind: SurveyKind;
+  kind: SurveyKind | VotingKind;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  createVote: UseMutateAsyncFunction<
+    any,
+    AxiosError<unknown, any>,
+    CreateVoteRequest,
+    unknown
+  >;
+  isLoading: boolean;
 }
 
 const getFormSchema = (t: TFunction<'survey'>) =>
@@ -51,19 +62,27 @@ const VoteSheet: FC<VoteSheetProps> = ({
   description,
   open,
   onOpenChange,
+  createVote,
+  isLoading,
 }) => {
   const { t } = useTranslation('survey');
   const [posibleVotes, setPosibleVotes] = useState<string[]>([]);
+  const [posibleVotesOnList, setPosibleVotesOnList] = useState<VotingOption[]>(
+    []
+  );
   const { data, isError } = useParliamentaryClubs(
     kind === 'PARLIAMENTARY_CLUB'
   );
-  const { createVote, isLoading } = useCreateVote();
+
+  const { data: dataOnList, isError: isErrorOnList } = useVotingOptions(
+    id,
+    kind === 'ON_LIST'
+  );
   const form = useForm<FormSchema>({
     resolver: zodResolver(getFormSchema(t)),
   });
-
   useEffect(() => {
-    if (kind !== 'PARLIAMENTARY_CLUB') {
+    if (kind !== 'PARLIAMENTARY_CLUB' && kind !== 'ON_LIST') {
       setPosibleVotes([
         'DEFINITELY_YES',
         'YES',
@@ -73,10 +92,12 @@ const VoteSheet: FC<VoteSheetProps> = ({
       ]);
     } else if (data && !isError) {
       setPosibleVotes(data.data);
+    } else if (dataOnList && !isErrorOnList) {
+      setPosibleVotesOnList(dataOnList);
     } else {
       onOpenChange(false);
     }
-  }, [data, isError, kind, onOpenChange]);
+  }, [data, dataOnList, isError, isErrorOnList, kind, onOpenChange]);
 
   const onSubmit = form.handleSubmit(async (data) => {
     await createVote({ surveyId: id, ...data });
@@ -100,19 +121,31 @@ const VoteSheet: FC<VoteSheetProps> = ({
                   <FormLabel>{t('sheet.voteOptions')}</FormLabel>
                   <FormControl>
                     <RadioGroup onValueChange={field.onChange}>
-                      {posibleVotes.map((vote, index) => (
-                        <FormItem
-                          key={index}
-                          className="flex items-center space-x-2"
-                        >
-                          <FormControl>
-                            <RadioGroupItem value={vote} />
-                          </FormControl>
-                          <FormLabel>
-                            {kind === 'PARLIAMENTARY_CLUB' ? vote : t(vote)}
-                          </FormLabel>
-                        </FormItem>
-                      ))}
+                      {kind !== 'ON_LIST'
+                        ? posibleVotes.map((vote, index) => (
+                            <FormItem
+                              key={index}
+                              className="flex items-center space-x-2"
+                            >
+                              <FormControl>
+                                <RadioGroupItem value={vote} />
+                              </FormControl>
+                              <FormLabel>
+                                {kind === 'PARLIAMENTARY_CLUB' ? vote : t(vote)}
+                              </FormLabel>
+                            </FormItem>
+                          ))
+                        : posibleVotesOnList.map((vote, index) => (
+                            <FormItem
+                              key={index}
+                              className="flex items-center space-x-2"
+                            >
+                              <FormControl>
+                                <RadioGroupItem value={vote.id} />
+                              </FormControl>
+                              <FormLabel>{vote.option}</FormLabel>
+                            </FormItem>
+                          ))}
                     </RadioGroup>
                   </FormControl>
                   <FormMessage />

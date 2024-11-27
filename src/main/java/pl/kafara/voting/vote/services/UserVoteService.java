@@ -11,23 +11,29 @@ import pl.kafara.voting.exceptions.messages.SurveyMessages;
 import pl.kafara.voting.model.users.User;
 import pl.kafara.voting.model.vote.ParliamentaryClub;
 import pl.kafara.voting.model.vote.UserVoteResult;
+import pl.kafara.voting.model.vote.Voting;
+import pl.kafara.voting.model.vote.VotingOption;
 import pl.kafara.voting.model.vote.survey.Survey;
 import pl.kafara.voting.model.vote.survey.UserVoteOtherSurvey;
 import pl.kafara.voting.model.vote.survey.UserVoteParliamentaryClub;
-import pl.kafara.voting.vote.repositories.ParliamentaryClubRepository;
-import pl.kafara.voting.vote.repositories.OtherSurveyVoteRepository;
-import pl.kafara.voting.vote.repositories.ParliamentaryClubVoteRepository;
+import pl.kafara.voting.model.vote.userVotes.UserVoteOnList;
+import pl.kafara.voting.model.vote.userVotes.UserVoteOther;
+import pl.kafara.voting.vote.repositories.*;
 
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(propagation = Propagation.REQUIRES_NEW)
-public class SurveyVoteService {
+@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
+public class UserVoteService {
     private final ParliamentaryClubVoteRepository parliamentaryClubVoteRepository;
     private final OtherSurveyVoteRepository otherSurveyVoteRepository;
     private final SurveyService surveyService;
     private final ParliamentaryClubRepository parliamentaryClubRepository;
+    private final VotingService votingService;
+    private final UserVoteOtherRepository votingOtherRepository;
+    private final VotingOptionRepository votingOptionRepository;
+    private final UserVoteOnListRepository userVoteOnListRepository;
 
     @PreAuthorize("hasRole('VOTER')")
     public void voteParliamentaryClub(UUID surveyId, String parliamentaryClubId, User user) throws NotFoundException {
@@ -44,5 +50,22 @@ public class SurveyVoteService {
         Survey survey = surveyService.getSurveyById(surveyId);
 
         otherSurveyVoteRepository.save(new UserVoteOtherSurvey(survey, user, userVoteResult));
+    }
+
+    @PreAuthorize("hasRole('VOTER')")
+    public void voteVoting(UUID votingId, UserVoteResult userVoteResult, User user) throws NotFoundException {
+        Voting voting = votingService.getVotingById(votingId);
+
+        votingOtherRepository.save(new UserVoteOther(voting, user, userVoteResult));
+    }
+
+    @PreAuthorize("hasRole('VOTER')")
+    public void voteOnList(UUID votingId, UUID votingOptionId, User user) throws NotFoundException {
+        Voting voting = votingService.getVotingById(votingId);
+        VotingOption votingOption = votingOptionRepository.findByIdAndVoting(votingOptionId, voting).orElseThrow(
+                () -> new NotFoundException(SurveyMessages.VOTING_OPTION_NOT_FOUND, SurveyExceptionCodes.VOTING_OPTION_NOT_FOUND)
+        );
+
+        userVoteOnListRepository.save(new UserVoteOnList(voting, user, votingOption));
     }
 }

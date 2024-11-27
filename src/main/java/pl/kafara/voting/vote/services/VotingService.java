@@ -11,6 +11,7 @@ import pl.kafara.voting.exceptions.exceptionCodes.VotingExceptionCodes;
 import pl.kafara.voting.exceptions.messages.VotingMessages;
 import pl.kafara.voting.model.vote.Sitting;
 import pl.kafara.voting.model.vote.Voting;
+import pl.kafara.voting.model.vote.VotingOption;
 import pl.kafara.voting.util.filteringCriterias.VotingListFilteringCriteria;
 import pl.kafara.voting.vote.api.repositories.SittingRepository;
 import pl.kafara.voting.vote.dto.VotingListResponse;
@@ -18,6 +19,7 @@ import pl.kafara.voting.vote.dto.VotingWithoutVotesResponse;
 import pl.kafara.voting.vote.mapper.VotingMapper;
 import pl.kafara.voting.vote.repositories.VotingRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,7 +31,7 @@ public class VotingService {
     private final SittingRepository sittingRepository;
 
     @PreAuthorize("hasRole('USER')")
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public Voting getVotingById(UUID id) throws NotFoundException {
         return votingRepository.findById(id).orElseThrow(() -> new NotFoundException(VotingMessages.VOTING_NOT_FOUND, VotingExceptionCodes.VOTING_NOT_FOUND));
     }
@@ -76,4 +78,18 @@ public class VotingService {
         return votingRepository.getAllByEndDateAfterNow();
     }
 
+    @PreAuthorize("hasRole('MODERATOR')")
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void startVoting(UUID votingId, LocalDateTime endDate) throws NotFoundException {
+        Voting voting = getVotingById(votingId);
+        voting.setEndDate(endDate);
+        votingRepository.save(voting);
+    }
+
+    @PreAuthorize("hasRole('VOTER')")
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    public List<VotingOption> getVotingOptionsForVoting(UUID votingId) throws NotFoundException {
+        Voting voting = getVotingById(votingId);
+        return voting.getVotingOptions();
+    }
 }

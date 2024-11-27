@@ -123,13 +123,10 @@ export const useCreateVote = () => {
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: async (voteRequest: CreateVoteRequest) => {
-      const response = await api.post<SurveyResponse>(
-        `/surveys/${voteRequest.surveyId}/vote`,
-        {
-          voteResult: voteRequest.voteResult,
-          totp: voteRequest.totp,
-        }
-      );
+      const response = await api.post(`/surveys/${voteRequest.surveyId}/vote`, {
+        voteResult: voteRequest.voteResult,
+        totp: voteRequest.totp,
+      });
       return response.data;
     },
     onError: (error: AxiosError) => {

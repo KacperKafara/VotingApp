@@ -135,7 +135,6 @@ public class ApiService {
 
         for (Sitting sitting : sittings) {
             int iterator = 0;
-            boolean isEnd = false;
             List<Object> objects = restClient.get()
                     .uri(term + "/votings/" + sitting.getNumber())
                     .retrieve()

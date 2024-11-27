@@ -6,13 +6,17 @@ import pl.kafara.voting.vote.dto.VotingResponse;
 import pl.kafara.voting.vote.dto.VotingWithoutVotesResponse;
 
 import java.util.List;
+import java.util.UUID;
 
 public class VotingMapper {
 
-    public static VotingResponse votingToVotingResponse(Voting voting) {
+    public static VotingResponse votingToVotingResponse(Voting voting, UUID userId) {
         List<VoteResponse> votes = voting.getVotes().stream()
                 .map(VoteMapper::voteToVoteResponse)
                 .toList();
+
+        boolean userVoted = voting.getUserVotes().stream()
+                .anyMatch(vote -> vote.getUser().getId().equals(userId));
 
         return new VotingResponse(
                 voting.getId(),
@@ -20,9 +24,11 @@ public class VotingMapper {
                 voting.getDescription(),
                 voting.getTopic(),
                 voting.getDate(),
+                voting.getEndDate(),
                 voting.getKind(),
                 votes,
-                voting.getPrints()
+                voting.getPrints(),
+                userVoted
         );
     }
 

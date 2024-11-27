@@ -1,7 +1,16 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import useAxiosPrivate from './useAxiosPrivate';
-import { VotingResponse, VotingWithoutVotesResponse } from '@/types/voting';
+import {
+  VotingOption,
+  VotingResponse,
+  VotingWithoutVotesResponse,
+} from '@/types/voting';
 import { useVotingListFilters } from '@/hooks/useVotingListFilters';
+import { useToast } from '@/hooks/use-toast';
+import { useTranslation } from 'react-i18next';
+import { CreateVoteRequest } from '@/types/survey';
+import { AxiosError } from 'axios';
+import { ApplicationError } from '@/types/applicationError';
 
 export const useVoting = (id: string) => {
   const { api } = useAxiosPrivate();
@@ -51,6 +60,63 @@ export const useVotingList = () => {
         return Promise.reject(e);
       }
     },
+  });
+
+  return { isError, isLoading, error, data };
+};
+
+export const useCreateVote = () => {
+  const { api } = useAxiosPrivate();
+  const { toast } = useToast();
+  const { t } = useTranslation(['errors', 'voting']);
+  const queryClient = useQueryClient();
+
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: async (voteRequest: CreateVoteRequest) => {
+      const response = await api.post(`/votings/${voteRequest.surveyId}/vote`, {
+        voteResult: voteRequest.voteResult,
+        totp: voteRequest.totp,
+      });
+
+      return response.data;
+    },
+    onError: (error: AxiosError) => {
+      toast({
+        variant: 'destructive',
+        title: t('voting:sheet.errorTitle'),
+        description: t(
+          'errors:' + (error.response?.data as ApplicationError).code
+        ),
+      });
+    },
+    onSuccess: () => {
+      toast({
+        title: t('voting:sheet.successTitle'),
+        description: t('voting:sheet.successMessage'),
+      });
+      queryClient.invalidateQueries({ queryKey: ['voting'] });
+    },
+  });
+
+  return { createVote: mutateAsync, isLoading: isPending };
+};
+
+export const useVotingOptions = (id: string, enabled: boolean) => {
+  const { api } = useAxiosPrivate();
+
+  const { isError, isLoading, error, data } = useQuery({
+    queryKey: ['votingOptions', id],
+    queryFn: async () => {
+      try {
+        const { data } = await api.get<VotingOption[]>(
+          `/votings/${id}/votingOptions`
+        );
+        return data;
+      } catch (e) {
+        return Promise.reject(e);
+      }
+    },
+    enabled,
   });
 
   return { isError, isLoading, error, data };

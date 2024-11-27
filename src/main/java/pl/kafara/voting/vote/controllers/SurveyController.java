@@ -2,12 +2,8 @@ package pl.kafara.voting.vote.controllers;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import dev.samstevens.totp.code.CodeGenerator;
 import dev.samstevens.totp.code.CodeVerifier;
-import dev.samstevens.totp.code.DefaultCodeGenerator;
 import dev.samstevens.totp.exceptions.CodeGenerationException;
-import dev.samstevens.totp.time.SystemTimeProvider;
-import dev.samstevens.totp.time.TimeProvider;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -29,14 +25,13 @@ import pl.kafara.voting.exceptions.messages.GenericMessages;
 import pl.kafara.voting.model.users.User;
 import pl.kafara.voting.model.vote.UserVoteResult;
 import pl.kafara.voting.model.vote.survey.Survey;
-import pl.kafara.voting.model.vote.survey.UserVoteSurvey;
 import pl.kafara.voting.users.services.UserService;
 import pl.kafara.voting.util.AESUtils;
 import pl.kafara.voting.util.filteringCriterias.SurveysFilteringCriteria;
 import pl.kafara.voting.vote.dto.*;
 import pl.kafara.voting.vote.mapper.SurveyMapper;
 import pl.kafara.voting.vote.services.SurveyService;
-import pl.kafara.voting.vote.services.SurveyVoteService;
+import pl.kafara.voting.vote.services.UserVoteService;
 
 import java.util.UUID;
 
@@ -48,7 +43,7 @@ public class SurveyController {
     private final SurveyService surveyService;
     private final CodeVerifier codeVerifier;
     private final UserService userService;
-    private final SurveyVoteService surveyVoteService;
+    private final UserVoteService userVoteService;
     private final AESUtils aesUtils;
 
     @GetMapping("/{id}")
@@ -105,9 +100,9 @@ public class SurveyController {
         }
         try {
             UserVoteResult voteResult = UserVoteResult.fromString(request.voteResult());
-            surveyVoteService.voteOtherSurvey(id, voteResult, user);
+            userVoteService.voteOtherSurvey(id, voteResult, user);
         } catch (IllegalArgumentException e) {
-            surveyVoteService.voteParliamentaryClub(id, request.voteResult(), user);
+            userVoteService.voteParliamentaryClub(id, request.voteResult(), user);
         }
         return ResponseEntity.ok().build();
     }

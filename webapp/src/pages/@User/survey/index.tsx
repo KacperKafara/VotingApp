@@ -5,7 +5,7 @@ import SurveyResultChartByGender from '@/components/survey/SurveyResultChartByGe
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import VoteSheet from '@/components/VoteSheet';
-import { useSurvey } from '@/data/useSurvey';
+import { useCreateVote, useSurvey } from '@/data/useSurvey';
 import { useUserStore } from '@/store/userStore';
 import { UsetRolesWithPrefix } from '@/types/roles';
 import { FC, useState } from 'react';
@@ -18,6 +18,7 @@ const SurveyPage: FC = () => {
   const { t } = useTranslation('survey');
   const { roles } = useUserStore();
   const [sheetOpen, setSheetOpen] = useState(false);
+  const { createVote, isLoading: isLoadingCreateVote } = useCreateVote();
 
   if (isLoading || isError || data === undefined) {
     return (
@@ -37,7 +38,7 @@ const SurveyPage: FC = () => {
           <CardContent className="flex items-center justify-between">
             <p>{data.description}</p>
             {roles?.includes(UsetRolesWithPrefix.voter) &&
-              new Date() > new Date(data.endDate) && (
+              new Date() < new Date(data.endDate) && (
                 <Button
                   variant="secondary"
                   disabled={data.userVoted}
@@ -78,13 +79,15 @@ const SurveyPage: FC = () => {
         </div>
       </div>
       {roles?.includes(UsetRolesWithPrefix.voter) &&
-        new Date() > new Date(data.endDate) && (
+        new Date() < new Date(data.endDate) && (
           <VoteSheet
             id={data.id}
             description={data.title}
             kind={data.surveyKind}
             open={sheetOpen}
             onOpenChange={setSheetOpen}
+            createVote={createVote}
+            isLoading={isLoadingCreateVote}
           />
         )}
     </div>

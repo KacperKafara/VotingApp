@@ -78,6 +78,6 @@ public class SurveyService {
     @PreAuthorize("hasRole('USER')")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public List<Survey> getActiveSurveys() {
-        return surveyRepository.findAllByEndDateBeforeNow();
+        return surveyRepository.findAllByEndDateAfterNow();
     }
 }

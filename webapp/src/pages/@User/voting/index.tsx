@@ -1,10 +1,14 @@
 import LoadingIcon from '@/components/loading';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import VoteSheet from '@/components/VoteSheet';
 import VotingResultChart from '@/components/voting/VotingResultChart';
 import VotingResultChartByClub from '@/components/voting/VotingResultChartByClub';
-import { useVoting } from '@/data/useVoting';
+import { useCreateVote, useVoting } from '@/data/useVoting';
+import { useUserStore } from '@/store/userStore';
+import { UsetRolesWithPrefix } from '@/types/roles';
 import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -21,6 +25,9 @@ const VotingPage: FC = () => {
   const { data, isLoading, isError } = useVoting(id!);
   const { t } = useTranslation('voting');
   const [envoyName, setEnvoyName] = useState<string>('');
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const { roles } = useUserStore();
+  const { createVote, isLoading: isLoadingCreateVote } = useCreateVote();
 
   if (isLoading || isError || data === undefined) {
     return (
@@ -61,7 +68,21 @@ const VotingPage: FC = () => {
             <CardHeader>
               <CardTitle>{data.title}</CardTitle>
             </CardHeader>
-            <CardContent>{data.description}</CardContent>
+            <CardContent className="flex items-center justify-between">
+              <p>{data.description}</p>
+              {roles?.includes(UsetRolesWithPrefix.voter) &&
+                new Date() < new Date(data.endDate) && (
+                  <Button
+                    variant="secondary"
+                    disabled={data.userVoted}
+                    onClick={() => {
+                      setSheetOpen(!sheetOpen);
+                    }}
+                  >
+                    {t('vote')}
+                  </Button>
+                )}
+            </CardContent>
           </Card>
           {data.prints.length > 0 && (
             <Card>
@@ -134,6 +155,18 @@ const VotingPage: FC = () => {
           </Card>
         </div>
       </div>
+      {roles?.includes(UsetRolesWithPrefix.voter) &&
+        new Date() < new Date(data.endDate) && (
+          <VoteSheet
+            id={data.id}
+            description={data.title}
+            kind={data.kind}
+            open={sheetOpen}
+            onOpenChange={setSheetOpen}
+            createVote={createVote}
+            isLoading={isLoadingCreateVote}
+          />
+        )}
     </div>
   );
 };

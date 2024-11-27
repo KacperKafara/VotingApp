@@ -40,7 +40,8 @@
     "totp": "Potwierdź swój głos kodem jednorazowym wygenerowanym przez aplikację Authenticator",
     "errorTitle": "Błąd podczas głosowania",
     "successTitle": "Głos został oddany",
-    "successMessage": "Głos został oddany pomyślnie."
+    "successMessage": "Głos został oddany pomyślnie.",
+    "castVote": "Oddaj głos"
   },
   "noData": "Brak danych",
   "surveys": "Sondaże",

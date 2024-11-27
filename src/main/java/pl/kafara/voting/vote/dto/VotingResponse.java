@@ -13,8 +13,10 @@ public record VotingResponse(
         String description,
         String topic,
         LocalDateTime date,
+        LocalDateTime endDate,
         VotingKind kind,
         List<VoteResponse> votes,
-        List<Print> prints
+        List<Print> prints,
+        boolean userVoted
 ) {
 }

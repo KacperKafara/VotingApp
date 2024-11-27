@@ -17,5 +17,17 @@
   "all": "Wszystkie",
   "results": "Wyniki",
   "totalVotes": "Wszystkich głosów",
-  "prints": "Druki powiązane z głosowaniem"
+  "prints": "Druki powiązane z głosowaniem",
+  "vote": "Zagłosuj",
+  "sheet": {
+    "vote": "Oddaj swój głos!",
+    "voteResultInvalid": "Nieprawidłowy głos",
+    "totpInvalid": "Nieprawidłowy kod TOTP",
+    "voteOptions": "Dostępne opcje głosowania",
+    "totp": "Potwierdź swój głos kodem jednorazowym wygenerowanym przez aplikację Authenticator",
+    "errorTitle": "Błąd podczas głosowania",
+    "successTitle": "Głos został oddany",
+    "successMessage": "Głos został oddany pomyślnie.",
+    "castVote": "Oddaj głos"
+  }
 }

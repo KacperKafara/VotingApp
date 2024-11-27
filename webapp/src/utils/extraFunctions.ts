@@ -69,8 +69,6 @@ export const generateChartDataForVoting = (
     voteCounts[value] = (voteCounts[value] || 0) + 1;
   });
 
-  console.log(voteCounts);
-
   delete voteCounts['ABSENT'];
   delete voteCounts[t('ABSENT')];
 

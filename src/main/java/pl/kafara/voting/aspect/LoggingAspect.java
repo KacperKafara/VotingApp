@@ -39,6 +39,8 @@ public class LoggingAspect {
     private void transactionalLog() {
     }
 
+    private static final ThreadLocal<String> transactionIdThreadLocal = new ThreadLocal<>();
+
     @Around(value = "transactionalLog()", argNames = "jp")
     private Object logTransaction(ProceedingJoinPoint jp) throws Throwable {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -67,7 +69,10 @@ public class LoggingAspect {
         }
 
         String callerMethod = jp.getSignature().getName();
-        String txId = UUID.randomUUID().toString();
+        if(transactionIdThreadLocal.get() == null)
+            transactionIdThreadLocal.set(UUID.randomUUID().toString());
+
+        String txId = transactionIdThreadLocal.get();
 
         MethodSignature signature = (MethodSignature) jp.getSignature();
         Method method = signature.getMethod();
@@ -114,9 +119,9 @@ public class LoggingAspect {
         } else {
             String args = parsArgs(jp);
             if (args != null) {
-                log.info("Method {}.{} called by {} with args: {}", callerClass, callerMethod, username, args);
+                log.info("Method {}.{} called by {} with txId: {}, with args: {}", callerClass, callerMethod, username, txId, args);
             } else {
-                log.info("Method {}.{} called by {}", callerClass, callerMethod, username);
+                log.info("Method {}.{} called by {} with txId: {}", callerClass, callerMethod, username, txId);
             }
             try {
                 obj = jp.proceed();
@@ -125,9 +130,9 @@ public class LoggingAspect {
             }
             String returnValue = parseReturnValue(obj);
             if (returnValue != null) {
-                log.info("Method {}.{} called by {} returned with: {}", callerClass, callerMethod, username, returnValue);
+                log.info("Method {}.{} called by {} with txId: {}, returned with: {}", callerClass, callerMethod, username, txId, returnValue);
             } else {
-                log.info("Method {}.{} called by {} returned", callerClass, callerMethod, username);
+                log.info("Method {}.{} called by {} with txId: {}, returned", callerClass, callerMethod, username, txId);
             }
         }
         return obj;

@@ -19,15 +19,19 @@ export interface Print {
   url: string;
 }
 
+export type VotingKind = 'ELECTRONIC' | 'TRADITIONAL' | 'ON_LIST';
+
 export interface VotingResponse {
   id: string;
   title: string;
   description: string;
   topic: string;
   date: Date;
-  kind: 'ELECTRONIC' | 'TRADITIONAL' | 'ON_LIST';
+  endDate: Date;
+  kind: VotingKind;
   votes: VoteResponse[];
   prints: Print[];
+  userVoted: boolean;
 }
 
 export interface VotingWithoutVotesResponse {
@@ -36,5 +40,10 @@ export interface VotingWithoutVotesResponse {
   description: string;
   topic: string;
   date: Date;
-  kind: 'ELECTRONIC' | 'TRADITIONAL' | 'ON_LIST';
+  kind: VotingKind;
+}
+
+export interface VotingOption {
+  id: string;
+  option: string;
 }
