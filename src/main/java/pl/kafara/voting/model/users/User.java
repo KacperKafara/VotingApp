@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 import pl.kafara.voting.model.AbstractEntity;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,7 +20,7 @@ import java.util.Set;
 @ToString
 @Setter
 @SecondaryTable(name = "personal_data", pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id"))
-public class User extends AbstractEntity {
+public class User extends AbstractEntity implements Serializable {
 
     @Column(name = "username", nullable = false, unique = true)
     private String username;

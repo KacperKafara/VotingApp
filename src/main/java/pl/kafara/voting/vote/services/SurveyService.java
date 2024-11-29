@@ -1,6 +1,8 @@
 package pl.kafara.voting.vote.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,7 @@ public class SurveyService {
     private final SurveyRepository surveyRepository;
 
     @PreAuthorize("hasRole('MODERATOR')")
+    @CacheEvict(value = "latestSurvey", allEntries = true)
     public Survey create(Survey survey) {
         return surveyRepository.save(survey);
     }
@@ -40,6 +43,7 @@ public class SurveyService {
     }
 
     @PreAuthorize("permitAll()")
+    @Cacheable(value = "latestSurvey", key = "'latest'", unless = "#result == null || #result?.getId() == null")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public Survey getLatestSurvey() throws NotFoundException {
         return surveyRepository.findFirstByOrderByCreatedAtDesc().orElseThrow(

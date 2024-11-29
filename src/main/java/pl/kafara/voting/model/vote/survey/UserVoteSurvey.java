@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import pl.kafara.voting.model.AbstractEntity;
 import pl.kafara.voting.model.users.User;
 
+import java.io.Serializable;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -19,7 +21,7 @@ import pl.kafara.voting.model.users.User;
                 @UniqueConstraint(columnNames = {"user_id", "survey_id"})
         }
 )
-public abstract class UserVoteSurvey extends AbstractEntity {
+public abstract class UserVoteSurvey extends AbstractEntity implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false, updatable = false)

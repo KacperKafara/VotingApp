@@ -72,7 +72,8 @@ public class LoggingAspect {
         if(transactionIdThreadLocal.get() == null)
             transactionIdThreadLocal.set(UUID.randomUUID().toString());
 
-        String txId = transactionIdThreadLocal.get();
+        String useCaseId = transactionIdThreadLocal.get();
+        String txId = UUID.randomUUID().toString();
 
         MethodSignature signature = (MethodSignature) jp.getSignature();
         Method method = signature.getMethod();
@@ -100,28 +101,28 @@ public class LoggingAspect {
 
             String args = parsArgs(jp);
             if (args != null) {
-                log.info("Method {}.{} called by {} called in transaction {} with args: {}", callerClass, callerMethod, username, txId, args);
+                log.info("Method {}.{} called by {} called in transaction {}, with useCaseId {} with args: {}", callerClass, callerMethod, username, txId, useCaseId, args);
             } else {
-                log.info("Method {}.{} called by {} called in transaction {}", callerClass, callerMethod, username, txId);
+                log.info("Method {}.{} called by {} called in transaction {}, with useCaseId {}", callerClass, callerMethod, username, txId, useCaseId);
             }
             try {
                 obj = jp.proceed();
             } catch (Throwable e) {
-                log.error("Method {}.{} called by {} failed in transaction {} due {} with message {}", callerClass, callerMethod, username, txId, e.getClass().getName(), e.getMessage());
+                log.error("Method {}.{} called by {} failed in transaction {}, withUseCaseId {} due {} with message {}", callerClass, callerMethod, username, txId, useCaseId, e.getClass().getName(), e.getMessage());
                 throw e;
             }
             String returnValue = parseReturnValue(obj);
             if (returnValue != null) {
-                log.info("Method {}.{} called by {} returned in transaction {} with: {}", callerClass, callerMethod, username, txId, returnValue);
+                log.info("Method {}.{} called by {} returned in transaction {}, with useCaseId {} with: {}", callerClass, callerMethod, username, txId, useCaseId, returnValue);
             } else {
-                log.info("Method {}.{} called by {} returned in transaction {}", callerClass, callerMethod, username, txId);
+                log.info("Method {}.{} called by {} returned in transaction {}, with useCaseId {}", callerClass, callerMethod, username, txId, useCaseId);
             }
         } else {
             String args = parsArgs(jp);
             if (args != null) {
-                log.info("Method {}.{} called by {} with txId: {}, with args: {}", callerClass, callerMethod, username, txId, args);
+                log.info("Method {}.{} called by {} with useCaseId: {}, with args: {}", callerClass, callerMethod, username, useCaseId, args);
             } else {
-                log.info("Method {}.{} called by {} with txId: {}", callerClass, callerMethod, username, txId);
+                log.info("Method {}.{} called by {} with useCaseId: {}", callerClass, callerMethod, username, useCaseId);
             }
             try {
                 obj = jp.proceed();
@@ -130,9 +131,9 @@ public class LoggingAspect {
             }
             String returnValue = parseReturnValue(obj);
             if (returnValue != null) {
-                log.info("Method {}.{} called by {} with txId: {}, returned with: {}", callerClass, callerMethod, username, txId, returnValue);
+                log.info("Method {}.{} called by {} with useCaseId: {}, returned with: {}", callerClass, callerMethod, username, useCaseId, returnValue);
             } else {
-                log.info("Method {}.{} called by {} with txId: {}, returned", callerClass, callerMethod, username, txId);
+                log.info("Method {}.{} called by {} with useCaseId: {}, returned", callerClass, callerMethod, username, useCaseId);
             }
         }
         return obj;

@@ -1,6 +1,7 @@
 package pl.kafara.voting.vote.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -36,6 +37,7 @@ public class UserVoteService {
     private final UserVoteOnListRepository userVoteOnListRepository;
 
     @PreAuthorize("hasRole('VOTER')")
+    @CacheEvict(value = "latestSurvey", key="'latest'", condition = "#surveyId != null")
     public void voteParliamentaryClub(UUID surveyId, String parliamentaryClubId, User user) throws NotFoundException {
         Survey survey = surveyService.getSurveyById(surveyId);
         ParliamentaryClub parliamentaryClub = parliamentaryClubRepository.findById(parliamentaryClubId).orElseThrow(
@@ -46,6 +48,7 @@ public class UserVoteService {
     }
 
     @PreAuthorize("hasRole('VOTER')")
+    @CacheEvict(value = "latestSurvey", key="'latest'", condition = "#surveyId != null")
     public void voteOtherSurvey(UUID surveyId, UserVoteResult userVoteResult, User user) throws NotFoundException {
         Survey survey = surveyService.getSurveyById(surveyId);
 

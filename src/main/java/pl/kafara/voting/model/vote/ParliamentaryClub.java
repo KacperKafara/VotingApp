@@ -7,12 +7,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Entity
 @Table(name = "parliamentary_clubs")
-public class ParliamentaryClub {
+public class ParliamentaryClub implements Serializable {
     @Id
     private String id;
     private String email;

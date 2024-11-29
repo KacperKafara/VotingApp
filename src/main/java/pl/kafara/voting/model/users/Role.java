@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import pl.kafara.voting.model.AbstractEntity;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 @AllArgsConstructor
@@ -15,7 +16,7 @@ import java.util.Objects;
 @Entity
 @ToString
 @Table(name = "roles")
-public class Role extends AbstractEntity {
+public class Role extends AbstractEntity implements Serializable {
 
     @Column(nullable = false, unique = true, updatable = false, length = 20)
     @Enumerated(EnumType.STRING)

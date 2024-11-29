@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.kafara.voting.model.AbstractEntity;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "surveys")
-public class Survey extends AbstractEntity {
+public class Survey extends AbstractEntity implements Serializable {
 
     @Column(name = "title",nullable = false, unique = true)
     private String title;
@@ -31,6 +32,6 @@ public class Survey extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private SurveyKind surveyKind;
 
-    @OneToMany(mappedBy = "survey")
+    @OneToMany(mappedBy = "survey", fetch = FetchType.EAGER)
     private List<UserVoteSurvey> userVotes = new ArrayList<>();
 }

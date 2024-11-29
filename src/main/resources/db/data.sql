@@ -237,8 +237,7 @@ VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1058', 'Survey 1', 'Survey 1 descriptio
 -- Survey votes
 
 INSERT INTO public.user_vote_survey (id, survey_id, user_id, created_at, updated_at, version, vote_type)
-VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1064', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059', '5e642d0a-94d4-4a4f-8760-cd6d63cd1038', now(), now(), 1, 'other_survey'),
-       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1065', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059', '5e642d0a-94d4-4a4f-8760-cd6d63cd1039', now(), now(), 1, 'other_survey'),
+VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1065', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059', '5e642d0a-94d4-4a4f-8760-cd6d63cd1039', now(), now(), 1, 'other_survey'),
        ('5e642d0a-94d4-4a4f-8760-cd6d63cd1066', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059', '5e642d0a-94d4-4a4f-8760-cd6d63cd1040', now(), now(), 1, 'other_survey'),
        ('5e642d0a-94d4-4a4f-8760-cd6d63cd1067', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059', '5e642d0a-94d4-4a4f-8760-cd6d63cd1041', now(), now(), 1, 'other_survey'),
        ('5e642d0a-94d4-4a4f-8760-cd6d63cd1068', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059', '5e642d0a-94d4-4a4f-8760-cd6d63cd1042', now(), now(), 1, 'other_survey'),
@@ -250,8 +249,7 @@ VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1064', '5e642d0a-94d4-4a4f-8760-cd6d63c
        ('5e642d0a-94d4-4a4f-8760-cd6d63cd1074', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059', '5e642d0a-94d4-4a4f-8760-cd6d63cd1048', now(), now(), 1, 'other_survey');
 
 INSERT INTO public.user_vote_other_survey (id, result)
-VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1064', 'DEFINITELY_YES'),
-       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1065', 'DEFINITELY_YES'),
+VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1065', 'DEFINITELY_YES'),
        ('5e642d0a-94d4-4a4f-8760-cd6d63cd1066', 'DEFINITELY_YES'),
        ('5e642d0a-94d4-4a4f-8760-cd6d63cd1067', 'DEFINITELY_YES'),
        ('5e642d0a-94d4-4a4f-8760-cd6d63cd1068', 'DEFINITELY_YES'),

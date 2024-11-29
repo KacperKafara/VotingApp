@@ -6,12 +6,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.kafara.voting.model.AbstractEntity;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor
-public class VoterRoleRequest extends AbstractEntity {
+public class VoterRoleRequest extends AbstractEntity implements Serializable {
 
     @Column(name = "request_date", nullable = false)
     @Setter

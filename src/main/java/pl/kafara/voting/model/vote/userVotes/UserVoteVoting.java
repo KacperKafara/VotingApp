@@ -14,6 +14,12 @@ import pl.kafara.voting.model.vote.Voting;
 @AllArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING, name = "vote_type")
+@Table(
+        name = "user_vote_voting",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"user_id", "voting_id"})
+        }
+)
 public abstract class UserVoteVoting extends AbstractEntity {
 
     @ManyToOne
