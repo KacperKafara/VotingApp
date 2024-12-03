@@ -8,6 +8,9 @@ import lombok.Setter;
 import pl.kafara.voting.model.users.User;
 import pl.kafara.voting.model.vote.ParliamentaryClub;
 
+import java.time.LocalDateTime;
+import java.time.Period;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -20,7 +23,7 @@ public class UserVoteParliamentaryClub extends UserVoteSurvey {
     private ParliamentaryClub parliamentaryClub;
 
     public UserVoteParliamentaryClub(Survey survey, User user, ParliamentaryClub parliamentaryClub) {
-        super(user, survey);
+        super(user, Period.between(user.getBirthDate().toLocalDate(), LocalDateTime.now().toLocalDate()).getYears(), user.getGender(), survey);
         this.parliamentaryClub = parliamentaryClub;
     }
 }

@@ -4,13 +4,6 @@ import { VoteResponse, VotingResponse } from '@/types/voting';
 import { TFunction } from 'i18next';
 import uniqolor from 'uniqolor';
 
-export const calculateAge = (birthDate: Date) => {
-  const today = new Date();
-  const diffInMiliseconds = today.getTime() - birthDate.getTime();
-  const diffInYears = diffInMiliseconds / 1000 / 60 / 60 / 24 / 365.25;
-  return Math.abs(Math.round(diffInYears));
-};
-
 export const getAgeRange = (age: number) => {
   if (age >= 16 && age <= 30) return '16-30';
   if (age > 30 && age <= 40) return '30-40';

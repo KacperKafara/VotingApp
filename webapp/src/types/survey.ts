@@ -14,7 +14,7 @@ export interface CreateSurveyRequest {
 
 export interface UserVote {
   gender: 'MALE' | 'FEMALE' | 'OTHER';
-  birthDate: Date;
+  age: number;
   voteResult: string;
 }
 

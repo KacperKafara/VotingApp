@@ -1,6 +1,5 @@
 package pl.kafara.voting.vote.mapper;
 
-import pl.kafara.voting.model.users.User;
 import pl.kafara.voting.model.vote.survey.Survey;
 import pl.kafara.voting.model.vote.survey.UserVoteSurvey;
 import pl.kafara.voting.model.vote.survey.UserVoteOtherSurvey;
@@ -25,7 +24,7 @@ public class SurveyMapper {
 
         return new UserVoteResponse(
                 userVote.getUser().getGender().getName().name(),
-                userVote.getUser().getBirthDate(),
+                userVote.getAge(),
                 result
         );
     }

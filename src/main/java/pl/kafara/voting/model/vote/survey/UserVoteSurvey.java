@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import pl.kafara.voting.model.AbstractEntity;
+import pl.kafara.voting.model.users.Gender;
 import pl.kafara.voting.model.users.User;
 
 import java.io.Serializable;
@@ -26,6 +27,12 @@ public abstract class UserVoteSurvey extends AbstractEntity implements Serializa
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private User user;
+
+    @Column(nullable = false, updatable = false)
+    private int age;
+    @ManyToOne
+    @JoinColumn(name = "gender_id", nullable = false, updatable = false)
+    private Gender gender;
 
     @ManyToOne
     @JoinColumn(name = "survey_id", nullable = false, updatable = false)

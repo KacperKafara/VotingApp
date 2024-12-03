@@ -44,14 +44,16 @@ public class VotingService {
         if(filteringCriteria.getSitting() == null || filteringCriteria.getSitting() == 0) {
             votingPage = votingRepository.getVotingByTitleContains(
                     filteringCriteria.getPageable(),
-                    filteringCriteria.getTitle()
+                    filteringCriteria.getTitle(),
+                    filteringCriteria.isWasActive()
             );
         } else {
             Sitting sitting = sittingRepository.findById(Math.toIntExact(filteringCriteria.getSitting())).orElseThrow(() -> new NotFoundException(VotingMessages.SITTING_NOT_FOUND, VotingExceptionCodes.SITTING_NOT_FOUND));
             votingPage = votingRepository.getVotingByTitleContainsAndSitting(
                     filteringCriteria.getPageable(),
                     filteringCriteria.getTitle(),
-                    sitting
+                    sitting,
+                    filteringCriteria.isWasActive()
             );
         }
 

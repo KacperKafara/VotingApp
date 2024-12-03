@@ -8,4 +8,5 @@ import lombok.experimental.SuperBuilder;
 public class VotingListFilteringCriteria extends FilteringCriteria {
     private final String title;
     private final Long sitting;
+    private final boolean wasActive;
 }

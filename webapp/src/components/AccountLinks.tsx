@@ -115,6 +115,15 @@ const AccountsLinks: FC<AccountsLinksProps> = ({ className }) => {
               variant="link"
               className="text-wrap"
               onClick={() => {
+                navigate('/user/ever-active-votings');
+              }}
+            >
+              {t('everActiveVotings')}
+            </Button>
+            <Button
+              variant="link"
+              className="text-wrap"
+              onClick={() => {
                 navigate('/user/votings');
               }}
             >

@@ -17,6 +17,7 @@ public record VotingResponse(
         VotingKind kind,
         List<VoteResponse> votes,
         List<Print> prints,
-        boolean userVoted
+        boolean userVoted,
+        List<UserVoteResponse> userVotes
 ) {
 }

@@ -1,5 +1,4 @@
-import { SurveyResponse, UserVote } from '@/types/survey';
-import { getAgeRange, generateChartConfig } from '@/utils/extraFunctions';
+import { UserVote } from '@/types/survey';
 import { TFunction } from 'i18next';
 import { FC } from 'react';
 import {
@@ -14,58 +13,59 @@ import {
   CartesianGrid,
   Customized,
   LabelList,
-  Text,
   Legend,
+  Text,
   XAxis,
 } from 'recharts';
+import { generateChartConfig } from '@/utils/extraFunctions';
+import { VotingResponse } from '@/types/voting';
 
-interface SurveyResultChartByAgeProps {
-  data: SurveyResponse;
+interface VotingResultChartByGenderProps {
+  data: VotingResponse;
   tFunction: TFunction;
 }
 
 interface ChartDataItem {
-  ageRange: string;
+  gender: string;
   [voteResult: string]: number | string;
 }
 
-const SurveyResultChartByAge: FC<SurveyResultChartByAgeProps> = ({
+const VotingResultChartByGender: FC<VotingResultChartByGenderProps> = ({
   data,
   tFunction,
 }) => {
   const t = tFunction;
 
-  const countVotesByAgeRange = (votes: UserVote[]): ChartDataItem[] => {
-    const chartDataMap: { [ageRange: string]: ChartDataItem } = {};
+  const countVotesByGender = (votes: UserVote[]): ChartDataItem[] => {
+    const chartDataMap: { [gender: string]: ChartDataItem } = {};
 
-    if (data.surveyKind === 'OTHER') {
+    if (data.kind !== 'ON_LIST') {
       votes.forEach((vote) => {
         vote.voteResult = t(vote.voteResult);
       });
     }
 
     votes.forEach((vote) => {
-      const ageRange = getAgeRange(vote.age);
-      const { voteResult } = vote;
+      const { gender, voteResult } = vote;
 
-      if (!chartDataMap[ageRange]) {
-        chartDataMap[ageRange] = { ageRange: ageRange };
+      if (!chartDataMap[gender]) {
+        chartDataMap[gender] = { gender: t(gender) };
       }
 
-      if (!chartDataMap[ageRange][voteResult]) {
-        chartDataMap[ageRange][voteResult] = 0;
+      if (!chartDataMap[gender][voteResult]) {
+        chartDataMap[gender][voteResult] = 0;
       }
 
-      chartDataMap[ageRange][voteResult] =
-        (chartDataMap[ageRange][voteResult] as number) + 1;
+      chartDataMap[gender][voteResult] =
+        (chartDataMap[gender][voteResult] as number) + 1;
     });
 
     return Object.values(chartDataMap);
   };
 
-  const chartData = countVotesByAgeRange(data.results);
+  const chartData = countVotesByGender(data.userVotes);
 
-  const chartConfig = generateChartConfig(data.results) satisfies ChartConfig;
+  const chartConfig = generateChartConfig(data.userVotes) satisfies ChartConfig;
 
   return (
     <ChartContainer
@@ -75,7 +75,7 @@ const SurveyResultChartByAge: FC<SurveyResultChartByAgeProps> = ({
       <BarChart accessibilityLayer data={chartData} margin={{ top: 30 }}>
         <Customized
           component={() => {
-            return data.results.length === 0 ? (
+            return data.userVotes.length === 0 ? (
               <Text
                 style={{ transform: `translate(50%, 50%)`, fontSize: 14 }}
                 x={0}
@@ -90,7 +90,7 @@ const SurveyResultChartByAge: FC<SurveyResultChartByAgeProps> = ({
         />
         <CartesianGrid vertical={false} />
         <XAxis
-          dataKey="ageRange"
+          dataKey="gender"
           tickLine={false}
           tickMargin={10}
           axisLine={false}
@@ -123,4 +123,4 @@ const SurveyResultChartByAge: FC<SurveyResultChartByAgeProps> = ({
   );
 };
 
-export default SurveyResultChartByAge;
+export default VotingResultChartByGender;

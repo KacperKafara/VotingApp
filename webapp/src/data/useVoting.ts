@@ -38,7 +38,7 @@ interface VotingListResponse {
   pageSize: number;
 }
 
-export const useVotingList = () => {
+export const useVotingList = (wasActive = false) => {
   const { api } = useAxiosPrivate();
   const { pageNumber, pageSize, title, sitting, sort } = useVotingListFilters();
 
@@ -53,6 +53,7 @@ export const useVotingList = () => {
             sort: sort,
             title: title,
             sitting: sitting,
+            wasActive: wasActive,
           },
         });
         return data;

@@ -1,3 +1,5 @@
+import { UserVote } from './survey';
+
 interface EnvoyResponse {
   name: string;
   surname: string;
@@ -32,6 +34,7 @@ export interface VotingResponse {
   votes: VoteResponse[];
   prints: Print[];
   userVoted: boolean;
+  userVotes: UserVote[];
 }
 
 export interface VotingWithoutVotesResponse {

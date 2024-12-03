@@ -8,6 +8,9 @@ import pl.kafara.voting.model.users.User;
 import pl.kafara.voting.model.vote.Voting;
 import pl.kafara.voting.model.vote.VotingOption;
 
+import java.time.LocalDateTime;
+import java.time.Period;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -21,7 +24,7 @@ public class UserVoteOnList extends UserVoteVoting {
     private VotingOption votingOption;
 
     public UserVoteOnList(Voting voting, User user, VotingOption votingOption) {
-        super(user, voting);
+        super(user, Period.between(user.getBirthDate().toLocalDate(), LocalDateTime.now().toLocalDate()).getYears(), user.getGender(), voting);
         this.votingOption = votingOption;
     }
 }

@@ -6,7 +6,10 @@
   "headers": {
     "result": "Result",
     "resultByClub": "Result by clubs",
-    "resultByEnvoys": "How envoys voted"
+    "resultByEnvoys": "How envoys voted",
+    "resultUsers": "How users voted",
+    "resultUsersByGender": "How users vote by gender",
+    "resultUsersByAge": "How users vote by age"
   },
   "envoyName": "Envoy",
   "title": "Title",
@@ -29,5 +32,6 @@
     "successTitle": "Vote has been cast",
     "successMessage": "Vote has been cast successfully.",
     "castVote": "Cast vote"
-  }
+  },
+  "noData": "No data"
 }

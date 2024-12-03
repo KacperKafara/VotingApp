@@ -19,22 +19,25 @@ import pl.kafara.voting.model.vote.survey.UserVoteOtherSurvey;
 import pl.kafara.voting.model.vote.survey.UserVoteParliamentaryClub;
 import pl.kafara.voting.model.vote.userVotes.UserVoteOnList;
 import pl.kafara.voting.model.vote.userVotes.UserVoteOther;
+import pl.kafara.voting.vote.dto.OwnVoteResponse;
+import pl.kafara.voting.vote.dto.OwnVotesListResponse;
 import pl.kafara.voting.vote.repositories.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
 public class UserVoteService {
-    private final ParliamentaryClubVoteRepository parliamentaryClubVoteRepository;
-    private final OtherSurveyVoteRepository otherSurveyVoteRepository;
     private final SurveyService surveyService;
     private final ParliamentaryClubRepository parliamentaryClubRepository;
     private final VotingService votingService;
-    private final UserVoteOtherRepository votingOtherRepository;
     private final VotingOptionRepository votingOptionRepository;
     private final UserVoteOnListRepository userVoteOnListRepository;
+    private final ParliamentaryClubVoteRepository parliamentaryClubVoteRepository;
+    private final OtherSurveyVoteRepository otherSurveyVoteRepository;
+    private final UserVoteOtherRepository votingOtherRepository;
 
     @PreAuthorize("hasRole('VOTER')")
     @CacheEvict(value = "latestSurvey", key="'latest'", condition = "#surveyId != null")

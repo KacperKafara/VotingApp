@@ -11,5 +11,6 @@
   "activeSurveysAndVotings": "Active Surveys and Votings",
   "error": "Error",
   "logInAgain": "Log in again",
-  "roleRequests": "Voter Role Requests"
+  "roleRequests": "Voter Role Requests",
+  "everActiveVotings": "All Active Votings"
 }

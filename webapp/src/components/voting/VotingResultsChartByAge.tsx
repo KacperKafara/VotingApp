@@ -1,4 +1,4 @@
-import { SurveyResponse, UserVote } from '@/types/survey';
+import { UserVote } from '@/types/survey';
 import { getAgeRange, generateChartConfig } from '@/utils/extraFunctions';
 import { TFunction } from 'i18next';
 import { FC } from 'react';
@@ -18,9 +18,10 @@ import {
   Legend,
   XAxis,
 } from 'recharts';
+import { VotingResponse } from '@/types/voting';
 
-interface SurveyResultChartByAgeProps {
-  data: SurveyResponse;
+interface VotingResultChartByAgeProps {
+  data: VotingResponse;
   tFunction: TFunction;
 }
 
@@ -29,7 +30,7 @@ interface ChartDataItem {
   [voteResult: string]: number | string;
 }
 
-const SurveyResultChartByAge: FC<SurveyResultChartByAgeProps> = ({
+const VotingResultChartByAge: FC<VotingResultChartByAgeProps> = ({
   data,
   tFunction,
 }) => {
@@ -38,7 +39,7 @@ const SurveyResultChartByAge: FC<SurveyResultChartByAgeProps> = ({
   const countVotesByAgeRange = (votes: UserVote[]): ChartDataItem[] => {
     const chartDataMap: { [ageRange: string]: ChartDataItem } = {};
 
-    if (data.surveyKind === 'OTHER') {
+    if (data.kind !== 'ON_LIST') {
       votes.forEach((vote) => {
         vote.voteResult = t(vote.voteResult);
       });
@@ -63,9 +64,9 @@ const SurveyResultChartByAge: FC<SurveyResultChartByAgeProps> = ({
     return Object.values(chartDataMap);
   };
 
-  const chartData = countVotesByAgeRange(data.results);
+  const chartData = countVotesByAgeRange(data.userVotes);
 
-  const chartConfig = generateChartConfig(data.results) satisfies ChartConfig;
+  const chartConfig = generateChartConfig(data.userVotes) satisfies ChartConfig;
 
   return (
     <ChartContainer
@@ -75,7 +76,7 @@ const SurveyResultChartByAge: FC<SurveyResultChartByAgeProps> = ({
       <BarChart accessibilityLayer data={chartData} margin={{ top: 30 }}>
         <Customized
           component={() => {
-            return data.results.length === 0 ? (
+            return data.userVotes.length === 0 ? (
               <Text
                 style={{ transform: `translate(50%, 50%)`, fontSize: 14 }}
                 x={0}
@@ -123,4 +124,4 @@ const SurveyResultChartByAge: FC<SurveyResultChartByAgeProps> = ({
   );
 };
 
-export default SurveyResultChartByAge;
+export default VotingResultChartByAge;

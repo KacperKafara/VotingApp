@@ -31,6 +31,9 @@ const UserVotingListPage = loadable(() => import('./pages/@User/votingList'));
 const UserVotingAndSurveysYouCanVotePage = loadable(
   () => import('./pages/@User/votingAndSurveysYouCanVote')
 );
+const UserVotingListEverActivePage = loadable(
+  () => import('./pages/@User/wasActiveVotingList')
+);
 
 const ProfilePage = loadable(() => import('./pages/Profile'));
 
@@ -66,6 +69,10 @@ const UserRoutes: RouteObject[] = [
   {
     path: 'active-surveys-and-votings',
     Component: UserVotingAndSurveysYouCanVotePage,
+  },
+  {
+    path: 'ever-active-votings',
+    Component: UserVotingListEverActivePage,
   },
 ];
 

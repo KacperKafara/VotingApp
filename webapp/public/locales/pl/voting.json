@@ -6,7 +6,10 @@
   "headers": {
     "result": "Wynik",
     "resultByClub": "Głosy wg klubów",
-    "resultByEnvoys": "Jak głosowali posłowie"
+    "resultByEnvoys": "Jak głosowali posłowie",
+    "resultUsers": "Jak głosowali użytkownicy",
+    "resultUsersByGender": "Jak głosowali użytkownicy wg płci",
+    "resultUsersByAge": "Jak głosowali użytkownicy wg wieku"
   },
   "envoyName": "Poseł",
   "title": "Tytuł",
@@ -29,5 +32,6 @@
     "successTitle": "Głos został oddany",
     "successMessage": "Głos został oddany pomyślnie.",
     "castVote": "Oddaj głos"
-  }
+  },
+  "noData": "Brak danych"
 }

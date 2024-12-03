@@ -23,10 +23,21 @@ public interface VotingRepository extends JpaRepository<Voting, UUID> {
     Optional<Voting> getVotingFiltered(int sittingDay, int votingNumber, Sitting sitting);
 
     @Transactional(propagation = Propagation.MANDATORY, readOnly = true)
-    Page<Voting> getVotingByTitleContains(Pageable pageable, String title);
+    @Query("""
+        SELECT v FROM Voting v
+        WHERE LOWER(v.title) LIKE LOWER(CONCAT('%', :title, '%'))
+        AND (:wasActive = false OR v.endDate IS NOT NULL)
+    """)
+    Page<Voting> getVotingByTitleContains(Pageable pageable, String title, boolean wasActive);
 
     @Transactional(propagation = Propagation.MANDATORY, readOnly = true)
-    Page<Voting> getVotingByTitleContainsAndSitting(Pageable pageable, String title, Sitting sitting);
+    @Query("""
+        SELECT v FROM Voting v
+        WHERE LOWER(v.title) LIKE LOWER(CONCAT('%', :title, '%'))
+        AND v.sitting = :sitting
+        AND (:wasActive = false OR v.endDate IS NOT NULL)
+    """)
+    Page<Voting> getVotingByTitleContainsAndSitting(Pageable pageable, String title, Sitting sitting, boolean wasActive);
 
     @Transactional(propagation = Propagation.MANDATORY, readOnly = true)
     @Query("SELECT v FROM Voting v WHERE v.endDate > CURRENT_TIMESTAMP")

@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import pl.kafara.voting.model.vote.UserVoteResult;
 import pl.kafara.voting.model.users.User;
 
+import java.time.LocalDateTime;
+import java.time.Period;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -19,7 +22,7 @@ public class UserVoteOtherSurvey extends UserVoteSurvey {
     private UserVoteResult result;
 
     public UserVoteOtherSurvey(Survey survey, User user, UserVoteResult result) {
-        super(user, survey);
+        super(user, Period.between(user.getBirthDate().toLocalDate(), LocalDateTime.now().toLocalDate()).getYears(), user.getGender(), survey);
         this.result = result;
     }
 }

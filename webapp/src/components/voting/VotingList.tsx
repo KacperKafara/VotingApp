@@ -37,12 +37,13 @@ import {
 
 interface VotingListProps {
   type: string;
+  wasActive?: boolean;
 }
 
-const VotingListComponent: FC<VotingListProps> = ({ type }) => {
+const VotingListComponent: FC<VotingListProps> = ({ type, wasActive }) => {
   const { t } = useTranslation(['voting', 'errors', 'pageChanger']);
   const { title, sort, sitting, setFilters } = useVotingListFilters();
-  const { isError, isLoading, data, error } = useVotingList();
+  const { isError, isLoading, data, error } = useVotingList(wasActive);
   const [debouncedTitle, setDebouncedTitle] = useState<string>(title!);
   const [value] = useDebounce(debouncedTitle, 500);
   const navigate = useNavigate();
