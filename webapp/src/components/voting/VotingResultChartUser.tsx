@@ -32,7 +32,7 @@ const VotingResultChartUser: FC<VotingResultChartProps> = ({
   const chartData = Object.keys(chartConfig).map((key) => ({
     name:
       data.kind !== 'ON_LIST'
-        ? t(chartConfig[key].label as string)
+        ? t(`userResults.${chartConfig[key].label}`)
         : chartConfig[key].label,
     value: voteCounts[key] || 0,
     fill: chartConfig[key].color,

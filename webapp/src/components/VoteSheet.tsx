@@ -131,7 +131,9 @@ const VoteSheet: FC<VoteSheetProps> = ({
                                 <RadioGroupItem value={vote} />
                               </FormControl>
                               <FormLabel>
-                                {kind === 'PARLIAMENTARY_CLUB' ? vote : t(vote)}
+                                {kind === 'PARLIAMENTARY_CLUB'
+                                  ? vote
+                                  : t(`userResults.${vote}`)}
                               </FormLabel>
                             </FormItem>
                           ))

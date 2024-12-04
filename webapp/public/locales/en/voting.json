@@ -3,6 +3,16 @@
   "NO": "No",
   "ABSTAIN": "Abstain",
   "ABSENT": "Absent",
+  "MALE": "Male",
+  "FEMALE": "Female",
+  "OTHER": "Other",
+  "userResults": {
+    "DEFINITELY_YES": "Definitely yes",
+    "YES": "Yes",
+    "I_DONT_KNOW": "I don't know",
+    "NO": "No",
+    "DEFINITELY_NO": "Definitely no"
+  },
   "headers": {
     "result": "Result",
     "resultByClub": "Result by clubs",

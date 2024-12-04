@@ -29,7 +29,7 @@ const SurveyResultChart: FC<SurveyResultChartProps> = ({ data, tFunction }) => {
   const pieChartData = Object.keys(chartConfig).map((key) => ({
     name:
       data.surveyKind === 'OTHER'
-        ? t(chartConfig[key].label as string)
+        ? t(`userResults.${chartConfig[key].label}`)
         : chartConfig[key].label,
     value: voteCounts[key] || 0,
     fill: chartConfig[key].color,

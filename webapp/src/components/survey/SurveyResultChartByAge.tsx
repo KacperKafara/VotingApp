@@ -40,7 +40,7 @@ const SurveyResultChartByAge: FC<SurveyResultChartByAgeProps> = ({
 
     if (data.surveyKind === 'OTHER') {
       votes.forEach((vote) => {
-        vote.voteResult = t(vote.voteResult);
+        vote.voteResult = t(`userResults.${vote.voteResult}`);
       });
     }
 
@@ -63,9 +63,10 @@ const SurveyResultChartByAge: FC<SurveyResultChartByAgeProps> = ({
     return Object.values(chartDataMap);
   };
 
-  const chartData = countVotesByAgeRange(data.results);
+  const copy = data.results.map((result) => ({ ...result }));
 
-  const chartConfig = generateChartConfig(data.results) satisfies ChartConfig;
+  const chartData = countVotesByAgeRange(copy);
+  const chartConfig = generateChartConfig(copy) satisfies ChartConfig;
 
   return (
     <ChartContainer

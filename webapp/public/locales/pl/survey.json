@@ -50,11 +50,13 @@
   "createdAt": "Utworzono",
   "kind": "Rodzaj",
   "all": "Wszystkie",
-  "DEFINITELY_YES": "Zdecydowanie tak",
-  "YES": "Tak",
-  "I_DONT_KNOW": "Nie wiem",
-  "NO": "Nie",
-  "DEFINITELY_NO": "Zdecydowanie nie",
+  "userResults": {
+    "DEFINITELY_YES": "Zdecydowanie tak",
+    "YES": "Tak",
+    "I_DONT_KNOW": "Nie wiem",
+    "NO": "Nie",
+    "DEFINITELY_NO": "Zdecydowanie nie"
+  },
   "MALE": "Mężczyzna",
   "FEMALE": "Kobieta",
   "OTHER": "Inna",

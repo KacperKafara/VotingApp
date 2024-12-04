@@ -3,6 +3,16 @@
   "NO": "Przeciw",
   "ABSTAIN": "Wstrzymał się",
   "ABSENT": "Nieobecny",
+  "MALE": "Mężczyzna",
+  "FEMALE": "Kobieta",
+  "OTHER": "Inna",
+  "userResults": {
+    "DEFINITELY_YES": "Zdecydowanie tak",
+    "YES": "Tak",
+    "I_DONT_KNOW": "Nie wiem",
+    "NO": "Nie",
+    "DEFINITELY_NO": "Zdecydowanie nie"
+  },
   "headers": {
     "result": "Wynik",
     "resultByClub": "Głosy wg klubów",

@@ -41,7 +41,7 @@ const VotingResultChartByAge: FC<VotingResultChartByAgeProps> = ({
 
     if (data.kind !== 'ON_LIST') {
       votes.forEach((vote) => {
-        vote.voteResult = t(vote.voteResult);
+        vote.voteResult = t(`userResults.${vote.voteResult}`);
       });
     }
 
@@ -64,9 +64,9 @@ const VotingResultChartByAge: FC<VotingResultChartByAgeProps> = ({
     return Object.values(chartDataMap);
   };
 
-  const chartData = countVotesByAgeRange(data.userVotes);
-
-  const chartConfig = generateChartConfig(data.userVotes) satisfies ChartConfig;
+  const copy = data.userVotes.map((vote) => ({ ...vote }));
+  const chartData = countVotesByAgeRange(copy);
+  const chartConfig = generateChartConfig(copy) satisfies ChartConfig;
 
   return (
     <ChartContainer

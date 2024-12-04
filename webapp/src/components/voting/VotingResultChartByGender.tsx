@@ -41,7 +41,7 @@ const VotingResultChartByGender: FC<VotingResultChartByGenderProps> = ({
 
     if (data.kind !== 'ON_LIST') {
       votes.forEach((vote) => {
-        vote.voteResult = t(vote.voteResult);
+        vote.voteResult = t(`userResults.${vote.voteResult}`);
       });
     }
 
@@ -63,9 +63,9 @@ const VotingResultChartByGender: FC<VotingResultChartByGenderProps> = ({
     return Object.values(chartDataMap);
   };
 
-  const chartData = countVotesByGender(data.userVotes);
-
-  const chartConfig = generateChartConfig(data.userVotes) satisfies ChartConfig;
+  const copy = data.userVotes.map((vote) => ({ ...vote }));
+  const chartData = countVotesByGender(copy);
+  const chartConfig = generateChartConfig(copy) satisfies ChartConfig;
 
   return (
     <ChartContainer

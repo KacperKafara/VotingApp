@@ -50,11 +50,13 @@
   "createdAt": "Created at",
   "kind": "Kind",
   "all": "All",
-  "DEFINITELY_YES": "Definitely yes",
-  "YES": "Yes",
-  "I_DONT_KNOW": "I don't know",
-  "NO": "No",
-  "DEFINITELY_NO": "Definitely no",
+  "userResults": {
+    "DEFINITELY_YES": "Definitely yes",
+    "YES": "Yes",
+    "I_DONT_KNOW": "I don't know",
+    "NO": "No",
+    "DEFINITELY_NO": "Definitely no"
+  },
   "MALE": "Male",
   "FEMALE": "Female",
   "OTHER": "Other",

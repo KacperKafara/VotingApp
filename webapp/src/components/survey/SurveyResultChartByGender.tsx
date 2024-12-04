@@ -40,7 +40,7 @@ const SurveyResultChartByGender: FC<SurveyResultChartByGenderProps> = ({
 
     if (data.surveyKind === 'OTHER') {
       votes.forEach((vote) => {
-        vote.voteResult = t(vote.voteResult);
+        vote.voteResult = t(`userResults.${vote.voteResult}`);
       });
     }
 
@@ -62,9 +62,9 @@ const SurveyResultChartByGender: FC<SurveyResultChartByGenderProps> = ({
     return Object.values(chartDataMap);
   };
 
-  const chartData = countVotesByGender(data.results);
-
-  const chartConfig = generateChartConfig(data.results) satisfies ChartConfig;
+  const copy = data.results.map((result) => ({ ...result }));
+  const chartData = countVotesByGender(copy);
+  const chartConfig = generateChartConfig(copy) satisfies ChartConfig;
 
   return (
     <ChartContainer
