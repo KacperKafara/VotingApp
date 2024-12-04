@@ -6,10 +6,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import pl.kafara.voting.model.AbstractEntity;
+import pl.kafara.voting.model.users.tokens.AccountVerificationToken;
+import pl.kafara.voting.model.users.tokens.SafeToken;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity

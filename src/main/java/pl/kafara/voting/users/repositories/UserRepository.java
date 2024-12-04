@@ -24,6 +24,8 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Transactional(readOnly = true, propagation = Propagation.MANDATORY)
     List<User> getUsersByCreatedAtBeforeAndVerifiedIsFalse(LocalDateTime createdAt);
     @Transactional(readOnly = true, propagation = Propagation.MANDATORY)
+    List<User> getUsersByCreatedAtBeforeAndCreatedAtAfterAndVerifiedIsFalse(LocalDateTime createdAtBefore, LocalDateTime createdAtAfter);
+    @Transactional(readOnly = true, propagation = Propagation.MANDATORY)
     Page<User> getAllByUsernameContains(Pageable pageable, String username);
     @Transactional(readOnly = true, propagation = Propagation.MANDATORY)
     Page<User> getAllByUsernameContainsAndRolesContaining(Pageable pageable, String username, Role role);

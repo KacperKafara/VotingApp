@@ -1,21 +1,16 @@
 import { useVerifyAccount } from '@/data/useAuthenticate';
 import { FC, useEffect, useRef } from 'react';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 const VerifyAccount: FC = () => {
   const called = useRef(false);
-  const { token } = useParams<{ token: string }>();
   const { verifyAccount } = useVerifyAccount();
 
   useEffect(() => {
     if (called.current) return;
-    const fetchData = async () => {
-      if (token) {
-        await verifyAccount(token);
-      }
-    };
-    fetchData();
-  }, [token, verifyAccount]);
+    called.current = true;
+    verifyAccount();
+  }, [verifyAccount]);
 
   return <Navigate to="/" replace={true} />;
 };

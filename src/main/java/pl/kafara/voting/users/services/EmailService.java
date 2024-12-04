@@ -47,7 +47,7 @@ public class EmailService {
 
     @Async
     public void sendAccountDeletedEmail(List<User> users) {
-        for(User user : users) {
+        for (User user : users) {
             Map<String, Object> templateModel = Map.of(
                     "name", user.getUsername()
             );
@@ -86,5 +86,16 @@ public class EmailService {
         );
         String subject = mailMessageSource.getMessage("voterRoleRequestRejected.subject", null, Locale.of(language));
         htmlEmailService.createHtmlEmail(email, subject, "voterRoleRequestRejected", templateModel, language);
+    }
+
+    @Async
+    public void sendVerificationReminderEmail(User user, SensitiveData token) {
+        URI uri = URI.create(url + "/resetPassword/" + token.data());
+        Map<String, Object> templateModel = Map.of(
+                "name", user.getUsername(),
+                "uri", uri
+        );
+        String subject = mailMessageSource.getMessage("verificationReminder.subject", null, Locale.of(user.getLanguage()));
+        htmlEmailService.createHtmlEmail(user.getEmail(), subject, "verificationReminder", templateModel, user.getLanguage());
     }
 }

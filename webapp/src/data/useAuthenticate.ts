@@ -5,7 +5,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useTranslation } from 'react-i18next';
 import { ApplicationError } from '@/types/applicationError';
 import { RegistrationData } from '@/types/registrationData';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 interface LoginRequest {
   username: string;
@@ -69,10 +69,11 @@ export const useRegister = () => {
 
 export const useVerifyAccount = () => {
   const { toast } = useToast();
+  const { token } = useParams<{ token: string }>();
   const { t } = useTranslation(['errors', 'registerPage']);
 
   const { mutateAsync } = useMutation({
-    mutationFn: async (token: string) => {
+    mutationFn: async () => {
       const response = await api.post(`/verify/${token}`);
       return response.data;
     },
