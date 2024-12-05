@@ -2,6 +2,7 @@
   "defaultTitle": "Błąd",
   "sessionExpired": "Sesja wygasła",
   "sessionExpiredMessage": "Twoja sesja wygasła. Zaloguj się ponownie.",
+  "authenticationFailed": "Błąd podczas logowania",
   "USER_BLOCKED": "Użytkownik zablokowany",
   "INTERNAL_SERVER_ERROR": "Coś poszło nie tak",
   "NOT_FOUND": "Nie znaleziono",
@@ -38,5 +39,7 @@
   "USER_ALREADY_HAS_VOTER_ROLE": "Użytkownik już ma rolę wyborcy",
   "VOTING_NOT_FOUND": "Nie znaleziono głosowania",
   "SITTING_NOT_FOUND": "Nie znaleziono posiedzenia",
-  "SURVEY_NOT_FOUND": "Nie znaleziono sondażu"
+  "SURVEY_NOT_FOUND": "Nie znaleziono sondażu",
+  "SURVEY_NOT_ACTIVE": "Sondaż nie jest już aktywny",
+  "VOTING_NOT_ACTIVE": "Głosowanie nie jest już aktywne"
 }

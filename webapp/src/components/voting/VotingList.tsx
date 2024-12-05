@@ -151,7 +151,7 @@ const VotingListComponent: FC<VotingListProps> = ({ type, wasActive }) => {
                     )}
                   </TableCell>
                   <TableCell className="pr-8">
-                    {type === 'user' && (
+                    {type === 'user' ? (
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -165,6 +165,22 @@ const VotingListComponent: FC<VotingListProps> = ({ type, wasActive }) => {
                             </Button>
                           </TooltipTrigger>
                           <TooltipContent>{t('results')}</TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    ) : (
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              onClick={() => {
+                                navigate(`/moderator/votings/${voting.id}`);
+                              }}
+                            >
+                              ...
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>{t('details')}</TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
                     )}

@@ -2,6 +2,7 @@
   "defaultTitle": "Error",
   "sessionExpired": "Session expired",
   "sessionExpiredMessage": "Your session has expired. Please log in again.",
+  "authenticationFailed": "Authentication failed",
   "USER_BLOCKED": "User is blocked",
   "USER_NOT_FOUND": "User not found",
   "INTERNAL_SERVER_ERROR": "Something went wrong",
@@ -38,5 +39,7 @@
   "USER_ALREADY_HAS_VOTER_ROLE": "User already has voter role",
   "VOTING_NOT_FOUND": "Voting not found",
   "SITTING_NOT_FOUND": "Sitting not found",
-  "SURVEY_NOT_FOUND": "Survey not found"
+  "SURVEY_NOT_FOUND": "Survey not found",
+  "SURVEY_NOT_ACTIVE": "Survey is not active",
+  "VOTING_NOT_ACTIVE": "Voting is not active"
 }

@@ -43,5 +43,38 @@
     "successMessage": "Głos został oddany pomyślnie.",
     "castVote": "Oddaj głos"
   },
-  "noData": "Brak danych"
+  "noData": "Brak danych",
+  "activateVoting": {
+    "successTitle": "Głosowanie zostało aktywowane",
+    "successMessage": "Głosowanie zostało aktywowane pomyślnie."
+  },
+  "details": "Szczegóły",
+  "votingDetails": {
+    "sittingDetails": {
+      "title": "Szczegóły posiedzenia",
+      "sittingDay": "Dzień posiedzenia",
+      "sittingTitle": "Tytuł"
+    },
+    "votingDetails": {
+      "title":"Szczegóły głosowania",
+      "topic": "Temat",
+      "description": "Opis",
+      "date":"Data głosowania",
+      "endDate": "Data zakończenia głosowania",
+      "noEndDate": "Głosowanie nie jest i nie było dostępne dla użytkowników.",
+      "startVoting": "Rozpocznij głosowanie"
+    },
+    "votingOptions": {
+      "title": "Opcje głosowania"
+    }
+  },
+  "startVoting": {
+    "errors": {
+      "endDateRequired": "Data zakończenia głosowania jest wymagana",
+      "endDateInvalid": "Data zakończenia głosowania powinna być w przyszłości"
+    },
+    "dialogTitle": "Rozpocznij głosowanie",
+    "dialogDescription": "Podaj datę zakończenia głosowania. Pamiętaj, że głosowanie będzie dostępne dla użytkowników do tej daty.",
+    "pickEndDate": "Wybierz datę zakończenia"
+  }
 }

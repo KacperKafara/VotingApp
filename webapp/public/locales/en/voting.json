@@ -43,5 +43,38 @@
     "successMessage": "Vote has been cast successfully.",
     "castVote": "Cast vote"
   },
-  "noData": "No data"
+  "noData": "No data",
+  "activateVoting": {
+    "successTitle": "Voting has been activated",
+    "successMessage": "Voting has been activated successfully."
+  },
+  "details": "Details",
+  "votingDetails": {
+    "sittingDetails": {
+      "title": "Sitting details",
+      "sittingDay": "Day of sitting",
+      "sittingTitle": "Title"
+    },
+    "votingDetails": {
+      "title": "Voting details",
+      "topic": "Topic",
+      "description": "Description",
+      "date": "Voting Date",
+      "endDate": "Voting End Date",
+      "noEndDate": "No end date",
+      "startVoting": "Start voting"
+    },
+    "votingOptions": {
+      "title": "Voting options"
+    }
+  },
+  "startVoting": {
+    "errors": {
+      "endDateRequired": "End date is required",
+      "endDateInvalid": "End date is should be in the future"
+    },
+    "dialogTitle": "Start voting",
+    "dialogDescription": "Please provide the end date for the voting. Remember that the voting will be available for users until the end date.",
+    "pickEndDate": "Pick end date"
+  }
 }

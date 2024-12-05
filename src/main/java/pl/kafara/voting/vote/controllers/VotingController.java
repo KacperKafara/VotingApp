@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.kafara.voting.exceptions.NotFoundException;
 import pl.kafara.voting.exceptions.TotpException;
+import pl.kafara.voting.exceptions.VotingOrSurveyNotActiveException;
 import pl.kafara.voting.exceptions.exceptionCodes.SurveyExceptionCodes;
 import pl.kafara.voting.exceptions.messages.GenericMessages;
 import pl.kafara.voting.model.users.User;
@@ -48,7 +49,7 @@ public class VotingController {
     private final UserVoteService userVoteService;
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<VotingResponse> getVoting(@PathVariable UUID id) throws NotFoundException {
         DecodedJWT jwt = JWT.decode((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         UUID userId = UUID.fromString(jwt.getSubject());
@@ -92,7 +93,11 @@ public class VotingController {
             userVoteService.voteOnList(id, voteResult, user);
         } catch (IllegalArgumentException ignored) {
             UserVoteResult voteResult = UserVoteResult.fromString(request.voteResult());
-            userVoteService.voteVoting(id, voteResult, user);
+            try {
+                userVoteService.voteVoting(id, voteResult, user);
+            } catch (VotingOrSurveyNotActiveException e) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+            }
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
@@ -116,6 +121,12 @@ public class VotingController {
                 .toList();
 
         return ResponseEntity.ok(votingOptionResponses);
+    }
+
+    @GetMapping("/{id}/details")
+    @PreAuthorize("hasRole('MODERATOR')")
+    public ResponseEntity<VotingDetailsResponse> getVotingDetails(@PathVariable UUID id) throws NotFoundException {
+        return ResponseEntity.ok(VotingMapper.votingToVotingDetailsResponse(votingService.getVotingById(id)));
     }
 
 }

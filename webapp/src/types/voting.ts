@@ -37,6 +37,19 @@ export interface VotingResponse {
   userVotes: UserVote[];
 }
 
+export interface VotingDetailsResponse {
+  id: string;
+  sittingTitle: string;
+  sittingDay: number;
+  date: Date;
+  votingOptions: VotingOption[];
+  endDate: Date;
+  title: string;
+  description: string;
+  topic: string;
+  prints: Print[];
+}
+
 export interface VotingWithoutVotesResponse {
   id: string;
   title: string;

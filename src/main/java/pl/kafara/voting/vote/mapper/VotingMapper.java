@@ -3,10 +3,7 @@ package pl.kafara.voting.vote.mapper;
 import pl.kafara.voting.model.vote.Voting;
 import pl.kafara.voting.model.vote.userVotes.UserVoteOnList;
 import pl.kafara.voting.model.vote.userVotes.UserVoteOther;
-import pl.kafara.voting.vote.dto.UserVoteResponse;
-import pl.kafara.voting.vote.dto.VoteResponse;
-import pl.kafara.voting.vote.dto.VotingResponse;
-import pl.kafara.voting.vote.dto.VotingWithoutVotesResponse;
+import pl.kafara.voting.vote.dto.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -74,5 +71,24 @@ public class VotingMapper {
     }
 
     private VotingMapper() {
+    }
+
+    public static VotingDetailsResponse votingToVotingDetailsResponse(Voting voting) {
+        List<VotingOptionResponse> votingOptions = voting.getVotingOptions().stream()
+                .map(VotingOptionMapper::votingOptionToVotingOptionResponse)
+                .toList();
+
+        return new VotingDetailsResponse(
+                voting.getId(),
+                voting.getSitting().getTitle(),
+                voting.getSittingDay(),
+                voting.getDate(),
+                votingOptions,
+                voting.getEndDate(),
+                voting.getTitle(),
+                voting.getDescription(),
+                voting.getTopic(),
+                voting.getPrints()
+        );
     }
 }

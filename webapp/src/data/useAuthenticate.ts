@@ -29,7 +29,7 @@ export const useAuthenticate = () => {
     onError: (error: AxiosError) => {
       toast({
         variant: 'destructive',
-        title: 'Authentication failed',
+        title: t('authenticationFailed'),
         description: t((error.response?.data as ApplicationError).code),
       });
     },

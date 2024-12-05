@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.kafara.voting.exceptions.NotFoundException;
 import pl.kafara.voting.exceptions.TotpException;
+import pl.kafara.voting.exceptions.VotingOrSurveyNotActiveException;
 import pl.kafara.voting.exceptions.exceptionCodes.SurveyExceptionCodes;
 import pl.kafara.voting.exceptions.messages.GenericMessages;
 import pl.kafara.voting.model.users.User;
@@ -102,7 +103,13 @@ public class SurveyController {
             UserVoteResult voteResult = UserVoteResult.fromString(request.voteResult());
             userVoteService.voteOtherSurvey(id, voteResult, user);
         } catch (IllegalArgumentException e) {
-            userVoteService.voteParliamentaryClub(id, request.voteResult(), user);
+            try {
+                userVoteService.voteParliamentaryClub(id, request.voteResult(), user);
+            } catch (VotingOrSurveyNotActiveException ex) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+            }
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
         return ResponseEntity.ok().build();
     }

@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import useAxiosPrivate from './useAxiosPrivate';
 import {
+  VotingDetailsResponse,
   VotingOption,
   VotingResponse,
   VotingWithoutVotesResponse,
@@ -118,6 +119,61 @@ export const useVotingOptions = (id: string, enabled: boolean) => {
       }
     },
     enabled,
+  });
+
+  return { isError, isLoading, error, data };
+};
+
+export const useActivateVoting = () => {
+  const { api } = useAxiosPrivate();
+  const { toast } = useToast();
+  const { t } = useTranslation(['errors', 'voting']);
+  const queryClient = useQueryClient();
+
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: async ({ id, endDate }: { id: string; endDate: Date }) => {
+      const response = await api.patch(`/votings/${id}`, {
+        endDate: endDate,
+      });
+
+      return response.data;
+    },
+    onError: (error: AxiosError) => {
+      toast({
+        variant: 'destructive',
+        title: t('defaultTitle'),
+        description: t(
+          'errors:' + (error.response?.data as ApplicationError).code
+        ),
+      });
+    },
+    onSuccess: () => {
+      toast({
+        title: t('voting:activateVoting.successTitle'),
+        description: t('voting:activateVoting.successMessage'),
+      });
+      queryClient.invalidateQueries({ queryKey: ['votingDetails'] });
+    },
+  });
+
+  return { activateVoting: mutateAsync, isLoading: isPending };
+};
+
+export const useVotingDetails = (id: string) => {
+  const { api } = useAxiosPrivate();
+
+  const { isError, isLoading, error, data } = useQuery({
+    queryKey: ['votingDetails', id],
+    queryFn: async () => {
+      try {
+        const { data } = await api.get<VotingDetailsResponse>(
+          `/votings/${id}/details`
+        );
+        return data;
+      } catch (e) {
+        return Promise.reject(e);
+      }
+    },
   });
 
   return { isError, isLoading, error, data };
