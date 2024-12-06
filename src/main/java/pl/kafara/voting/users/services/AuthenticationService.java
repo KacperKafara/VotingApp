@@ -1,5 +1,6 @@
 package pl.kafara.voting.users.services;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +28,8 @@ import pl.kafara.voting.util.SensitiveData;
 import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -45,7 +48,7 @@ public class AuthenticationService {
     private int maxFailedAttempts;
 
     @PreAuthorize("permitAll()")
-    public SensitiveData authenticate(LoginRequest loginRequest) throws NotFoundException, AccountNotActiveException, InvalidLoginDataException {
+    public Map<String, SensitiveData> authenticate(LoginRequest loginRequest) throws NotFoundException, AccountNotActiveException, InvalidLoginDataException {
         User user = userRepository.findByUsername(loginRequest.username())
                 .orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.INVALID_CREDENTIALS));
 
@@ -69,7 +72,13 @@ public class AuthenticationService {
         user.setLanguage(loginRequest.language());
         userRepository.save(user);
 
-        return new SensitiveData(jwtService.createToken(user.getUsername(), user.getId(), user.getRoles()));
+        String jwtToken = jwtService.createToken(user.getUsername(), user.getId(), user.getRoles());
+        String refreshToken = jwtService.createRefreshToken(user.getId());
+
+        return Map.of(
+                "token", new SensitiveData(jwtToken),
+                "refreshToken", new SensitiveData(refreshToken)
+        );
     }
 
     @PreAuthorize("permitAll()")
@@ -84,5 +93,19 @@ public class AuthenticationService {
         user.setGender(gender);
         userRepository.save(user);
         return tokenService.generateAccountVerificationToken(user);
+    }
+
+    @PreAuthorize("permitAll()")
+    public Map<String, SensitiveData> refresh(SensitiveData refreshToken) throws NotFoundException {
+        DecodedJWT decodedJWT = jwtService.decodeRefreshToken(refreshToken);
+        UUID id = UUID.fromString(decodedJWT.getSubject());
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.USER_NOT_FOUND));
+        String jwtToken = jwtService.createToken(user.getUsername(), user.getId(), user.getRoles());
+
+        return Map.of(
+                "token", new SensitiveData(jwtToken),
+                "refreshToken", refreshToken
+        );
     }
 }

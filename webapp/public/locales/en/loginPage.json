@@ -8,5 +8,6 @@
   "passwordToShort": "Password is too short",
   "loginToLong": "Login is too long",
   "passwordToLong": "Password is too long",
-  "register": "Register"
+  "register": "Register",
+  "googleLogin": "Login with Google"
 }

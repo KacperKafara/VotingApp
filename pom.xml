@@ -5,12 +5,12 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.5</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <version>3.4.0</version>
+        <relativePath/>
     </parent>
     <groupId>pl.kafara</groupId>
     <artifactId>voting</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2</version>
     <name>voting</name>
     <description>voting</description>
     <developers>
@@ -24,6 +24,10 @@
         <testcontainers.version>1.20.3</testcontainers.version>
         <rest-assured.version>5.4.0</rest-assured.version>
         <zxing.version>3.5.3</zxing.version>
+        <dbrider.version>1.44.0</dbrider.version>
+        <auth0.version>4.4.0</auth0.version>
+        <totp.version>1.7.1</totp.version>
+        <maven-tests-plugins.version>3.5.2</maven-tests-plugins.version>
     </properties>
     <dependencies>
         <dependency>
@@ -34,16 +38,9 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
         <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-client</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -67,6 +64,30 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-database-postgresql</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
             <version>${rest-assured.version}</version>
@@ -85,33 +106,21 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.auth0</groupId>
-            <artifactId>java-jwt</artifactId>
-            <version>4.4.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-mail</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+            <groupId>com.github.database-rider</groupId>
+            <artifactId>rider-junit5</artifactId>
+            <version>${dbrider.version}</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>com.github.database-rider</groupId>
-            <artifactId>rider-junit5</artifactId>
-            <version>1.44.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-database-postgresql</artifactId>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>${auth0.version}</version>
         </dependency>
         <dependency>
             <groupId>dev.samstevens.totp</groupId>
             <artifactId>totp</artifactId>
-            <version>1.7.1</version>
+            <version>${totp.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.zxing</groupId>
@@ -123,8 +132,6 @@
             <artifactId>javase</artifactId>
             <version>${zxing.version}</version>
         </dependency>
-
-
     </dependencies>
 
     <build>
@@ -157,7 +164,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
+                <version>${maven-tests-plugins.version}</version>
                 <configuration>
                     <excludes>
                         <exclude>**/*IT.java</exclude>
@@ -176,7 +183,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.0.0-M5</version>
+                <version>${maven-tests-plugins.version}</version>
                 <configuration>
                     <excludes>
                         <exclude>**/*Test.java</exclude>

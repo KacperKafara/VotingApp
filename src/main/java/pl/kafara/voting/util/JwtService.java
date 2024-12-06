@@ -22,8 +22,12 @@ import java.util.stream.Collectors;
 public class JwtService {
     @Value("${security.jwt.token.secret-key:secret-value}")
     private String secretKey;
-    @Value("${security.jwt.token.expiration-time:3600000}")
+    @Value("${security.jwt.token.expiration-time:3600}")
     private long expireLength;
+    @Value("${security.jwt.refreshToken.secret-key:secret-value}")
+    private String refreshTokenSecretKey;
+    @Value("${security.jwt.refreshToken.expiration-time:86400}")
+    private long refreshTokenExpireLength;
 
     @PostConstruct
     protected void init() {
@@ -46,6 +50,23 @@ public class JwtService {
                 .withIssuedAt(Date.from(now.atZone(ZoneId.systemDefault()).toInstant()))
                 .withExpiresAt(Date.from(expirationTime.atZone(ZoneId.systemDefault()).toInstant()))
                 .sign(Algorithm.HMAC256(secretKey));
+    }
+
+    public String createRefreshToken(UUID id) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime expirationTime = now.plusSeconds(refreshTokenExpireLength);
+
+        return JWT.create()
+                .withIssuer("VotingApp")
+                .withSubject(id.toString())
+                .withIssuedAt(Date.from(now.atZone(ZoneId.systemDefault()).toInstant()))
+                .withExpiresAt(Date.from(expirationTime.atZone(ZoneId.systemDefault()).toInstant()))
+                .sign(Algorithm.HMAC256(refreshTokenSecretKey));
+    }
+
+    public DecodedJWT decodeRefreshToken(SensitiveData token) {
+        JWTVerifier verifier = JWT.require(Algorithm.HMAC256(refreshTokenSecretKey)).build();
+        return verifier.verify(token.data());
     }
 
     public Authentication validateToken(String token) {

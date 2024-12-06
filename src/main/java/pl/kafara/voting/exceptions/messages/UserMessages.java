@@ -23,6 +23,7 @@ public class UserMessages {
     public static final String ACCEPT_OWN_REQUEST_ROLE = "You cannot accept your own request";
     public static final String REJECT_OWN_REQUEST_ROLE = "You cannot reject your own request";
     public static final String USER_ALREADY_HAS_VOTER_ROLE = "User already has voter role";
+    public static final String REFRESH_TOKEN_VERIFICATION_EXCEPTION = "Refresh token verification exception";
 
     private UserMessages() {
     }

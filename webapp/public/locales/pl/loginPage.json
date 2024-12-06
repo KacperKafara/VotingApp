@@ -8,5 +8,6 @@
   "passwordToShort": "Hasło jest za krótkie",
   "loginToLong": "Login jest za długi",
   "passwordToLong": "Hasło jest za długie",
-  "register": "Rejestracja"
+  "register": "Rejestracja",
+  "googleLogin": "Zaloguj przez Google"
 }

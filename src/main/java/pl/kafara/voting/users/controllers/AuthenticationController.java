@@ -1,5 +1,6 @@
 package pl.kafara.voting.users.controllers;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import pl.kafara.voting.exceptions.NotFoundException;
+import pl.kafara.voting.exceptions.exceptionCodes.UserExceptionCodes;
 import pl.kafara.voting.exceptions.messages.GenericMessages;
+import pl.kafara.voting.exceptions.messages.UserMessages;
 import pl.kafara.voting.exceptions.user.AccountNotActiveException;
 import pl.kafara.voting.exceptions.user.InvalidLoginDataException;
 import pl.kafara.voting.users.dto.LoginRequest;
@@ -23,6 +26,7 @@ import pl.kafara.voting.users.services.EmailService;
 import pl.kafara.voting.util.SensitiveData;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,7 +39,9 @@ public class AuthenticationController {
     @PostMapping("/authenticate")
     public ResponseEntity<LoginResponse> authenticate(@Validated @RequestBody LoginRequest loginRequest) {
         try {
-            return ResponseEntity.ok(new LoginResponse(authenticationService.authenticate(loginRequest).data()));
+            Map<String, SensitiveData> data = authenticationService.authenticate(loginRequest);
+            LoginResponse loginResponse = new LoginResponse(data.get("token").data(), data.get("refreshToken").data());
+            return ResponseEntity.ok(loginResponse);
         } catch (AccountNotActiveException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         } catch (InvalidLoginDataException | NotFoundException e) {
@@ -51,5 +57,19 @@ public class AuthenticationController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, GenericMessages.SOMETHING_WENT_WRONG);
         emailService.sendAccountVerificationEmail(registrationRequest.email(), token, registrationRequest.firstName(), registrationRequest.language());
         return ResponseEntity.ok().build();
+    }
+
+    @PreAuthorize("permitAll()")
+    @PostMapping("/refresh")
+    public ResponseEntity<LoginResponse> refresh(@RequestBody SensitiveData refreshToken) {
+        try {
+            Map<String, SensitiveData> data = authenticationService.refresh(refreshToken);
+            LoginResponse loginResponse = new LoginResponse(data.get("token").data(), data.get("refreshToken").data());
+            return ResponseEntity.ok(loginResponse);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage(), e);
+        } catch (JWTVerificationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, UserMessages.REFRESH_TOKEN_VERIFICATION_EXCEPTION, new InvalidLoginDataException(UserMessages.REFRESH_TOKEN_VERIFICATION_EXCEPTION, UserExceptionCodes.INVALID_REFRESH_TOKEN));
+        }
     }
 }

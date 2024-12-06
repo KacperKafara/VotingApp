@@ -3,9 +3,11 @@ import { create } from 'zustand';
 
 interface UserStore {
   token?: string;
+  refreshToken?: string;
   id?: string;
   roles?: string[];
   setToken: (token: string) => void;
+  setRefreshToken: (token: string) => void;
   logOut: () => void;
 }
 
@@ -26,11 +28,13 @@ export const getActiveRole = (roles: string[]): string =>
   roles.sort((a, b) => rolePriority[a] - rolePriority[b]).at(0)!;
 
 const LSToken = localStorage.getItem('token');
+const LSRefreshToken = localStorage.getItem('refreshToken');
 
 const decodedLSToken = LSToken === null ? undefined : decodeJwt(LSToken!);
 
 export const useUserStore = create<UserStore>((set) => ({
   token: LSToken === null ? undefined : LSToken,
+  refreshToken: LSRefreshToken === null ? undefined : LSRefreshToken,
   id: LSToken === null ? undefined : decodedLSToken!.sub,
   roles: LSToken === null ? undefined : decodedLSToken!.authorities,
   setToken: (token: string) =>
@@ -43,11 +47,20 @@ export const useUserStore = create<UserStore>((set) => ({
         roles: payload.authorities,
       };
     }),
+  setRefreshToken: (token: string) =>
+    set(() => {
+      localStorage.setItem('refreshToken', token);
+      return {
+        refreshToken: token,
+      };
+    }),
   logOut: () =>
     set(() => {
       localStorage.removeItem('token');
+      localStorage.removeItem('refreshToken');
       return {
         token: undefined,
+        refreshToken: undefined,
         id: undefined,
         roles: undefined,
       };

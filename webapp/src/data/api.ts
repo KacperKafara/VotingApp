@@ -6,3 +6,10 @@ export const api = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
+export const refreshApi = axios.create({
+  baseURL: import.meta.env.VITE_BACKEND_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});

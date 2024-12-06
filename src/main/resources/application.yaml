@@ -36,6 +36,13 @@ spring:
     redis:
       host: localhost
       port: 6379
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 299181901813-c16f9vs4rl91mrst8neacms4l2sskec2.apps.googleusercontent.com
+            client-secret: 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
 
 
 app:
@@ -50,6 +57,9 @@ security:
     token:
       secret-key: secret-key
       expiration-time: 86400000
+    refreshToken:
+      expiration-time: 86400000
+      secret-key: refresh-secret-key
   max-failed-attempts: 3
   jws:
     token:

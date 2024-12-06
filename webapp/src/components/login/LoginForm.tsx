@@ -19,6 +19,7 @@ import { getActiveRole, roleMapping, useUserStore } from '@/store/userStore';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Button } from '../ui/button';
 import ResetPassword from './ForgotPassword';
+import GoogleLoginButton from './GoogleLoginButton';
 
 const getLoginSchema = (t: TFunction<'loginPage'>) =>
   z.object({
@@ -41,7 +42,7 @@ interface LoginFormProps {
 const LoginForm: FC<LoginFormProps> = ({ className }) => {
   const { authenticate, isPending } = useAuthenticate();
   const { t } = useTranslation('loginPage');
-  const { setToken, roles } = useUserStore();
+  const { setToken, setRefreshToken, roles } = useUserStore();
   const navigate = useNavigate();
   const [resetPasswordOpen, setResetPasswordOpen] = useState(false);
 
@@ -60,6 +61,7 @@ const LoginForm: FC<LoginFormProps> = ({ className }) => {
       language: i18next.language,
     });
     setToken(result.token);
+    setRefreshToken(result.refreshToken);
     navigate(`/${roleMapping[getActiveRole(roles!)]}`);
   });
 
@@ -123,6 +125,7 @@ const LoginForm: FC<LoginFormProps> = ({ className }) => {
             className="mt-1 h-fit"
             isLoading={isPending}
           />
+          {/* <GoogleLoginButton /> */}
         </form>
       </Form>
       <ResetPassword

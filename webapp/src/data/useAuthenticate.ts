@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { api } from './api';
 import { AxiosError } from 'axios';
 import { useToast } from '@/hooks/use-toast';
@@ -15,6 +15,7 @@ interface LoginRequest {
 
 interface LoginResponse {
   token: string;
+  refreshToken: string;
 }
 
 export const useAuthenticate = () => {
@@ -93,4 +94,32 @@ export const useVerifyAccount = () => {
   });
 
   return { verifyAccount: mutateAsync };
+};
+
+interface OAuthResponse {
+  url: string;
+}
+
+export const useOAuthUrl = () => {
+  const { toast } = useToast();
+  const { t } = useTranslation('errors');
+  const { data } = useQuery({
+    queryKey: ['oauthUrl'],
+    queryFn: async () => {
+      try {
+        const response = await api.get<OAuthResponse>('/oauth/google');
+        return response.data;
+      } catch (error) {
+        const axiosError = error as AxiosError;
+        toast({
+          variant: 'destructive',
+          title: t('defaultTitle'),
+          description: t((axiosError.response?.data as ApplicationError).code),
+        });
+        return Promise.reject(error);
+      }
+    },
+  });
+
+  return { googleOAuthUrl: data };
 };

@@ -35,6 +35,7 @@ public class UserExceptionCodes {
     public static final String ACCEPT_OWN_REQUEST_ROLE = "ACCEPT_OWN_REQUEST_ROLE";
     public static final String REJECT_OWN_REQUEST_ROLE = "REJECT_OWN_REQUEST_ROLE";
     public static final String USER_ALREADY_HAS_VOTER_ROLE = "USER_ALREADY_HAS_VOTER_ROLE";
+    public static final String INVALID_REFRESH_TOKEN = "INVALID_REFRESH_TOKEN";
 
     private UserExceptionCodes() {
     }

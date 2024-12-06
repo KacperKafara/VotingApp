@@ -1,12 +1,14 @@
 import { useUserStore } from '@/store/userStore';
 import { useEffect } from 'react';
-import { api } from './api';
+import { api, refreshApi } from './api';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
+import { AxiosError } from 'axios';
 
 const useAxiosPrivate = () => {
-  const { token, logOut } = useUserStore();
+  const { token, refreshToken, setToken, logOut } = useUserStore();
+  const { t } = useTranslation('errors');
   const navigate = useNavigate();
   const { toast } = useToast();
   useEffect(() => {
@@ -22,14 +24,33 @@ const useAxiosPrivate = () => {
 
     const responseInterceptor = api.interceptors.response.use(
       (response) => response,
-      (error) => {
-        if (error.response?.status === 401) {
+      async (error) => {
+        const prevRequest = error.config;
+        error = error as AxiosError;
+        if (refreshToken === undefined) {
           logOut();
-          navigate('/');
-          toast({
-            title: t('sessionExpired'),
-            description: t('sessionExpiredMessage'),
-          });
+          return Promise.reject(error);
+        }
+        if (error.response?.status === 401 && !prevRequest._retry) {
+          prevRequest._retry = true;
+
+          try {
+            const response = await refreshApi.post('/refresh', {
+              data: refreshToken,
+            });
+            const newToken = response.data.token;
+            setToken(newToken);
+            prevRequest.headers.Authorization = `Bearer ${newToken}`;
+            return api.request(prevRequest);
+          } catch (error) {
+            logOut();
+            navigate('/');
+            toast({
+              title: t('sessionExpired'),
+              description: t('sessionExpiredMessage'),
+            });
+            return Promise.reject(error);
+          }
         }
         return Promise.reject(error);
       }
@@ -39,7 +60,7 @@ const useAxiosPrivate = () => {
       api.interceptors.request.eject(requestInterceptor);
       api.interceptors.response.eject(responseInterceptor);
     };
-  }, [token, logOut, navigate, toast]);
+  }, [token, logOut, navigate, toast, t, refreshToken, setToken]);
 
   return { api };
 };
