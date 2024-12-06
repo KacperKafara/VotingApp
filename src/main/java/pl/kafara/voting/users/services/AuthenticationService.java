@@ -1,6 +1,7 @@
 package pl.kafara.voting.users.services;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
+import dev.samstevens.totp.code.CodeVerifier;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +23,7 @@ import pl.kafara.voting.users.mapper.RegistrationMapper;
 import pl.kafara.voting.users.repositories.GenderRepository;
 import pl.kafara.voting.users.repositories.RoleRepository;
 import pl.kafara.voting.users.repositories.UserRepository;
+import pl.kafara.voting.util.AESUtils;
 import pl.kafara.voting.util.JwtService;
 import pl.kafara.voting.util.SensitiveData;
 
@@ -43,6 +45,8 @@ public class AuthenticationService {
     private final UserRepository userRepository;
     private final TokenService tokenService;
     private final JwtService jwtService;
+    private final AESUtils aesUtils;
+    private final CodeVerifier codeVerifier;
 
     @Value("${security.max-failed-attempts:3}")
     private int maxFailedAttempts;
@@ -65,6 +69,11 @@ public class AuthenticationService {
             user.setLastFailedLogin(LocalDateTime.now());
             userRepository.save(user);
             throw new InvalidLoginDataException(UserMessages.INVALID_CREDENTIALS, UserExceptionCodes.INVALID_CREDENTIALS);
+        }
+        
+        if(user.getAuthorisationTotpSecret() != null) {
+            if(!codeVerifier.isValidCode(aesUtils.decrypt(user.getAuthorisationTotpSecret()), loginRequest.totpCode()))
+                throw new InvalidLoginDataException(UserMessages.INVALID_CREDENTIALS, UserExceptionCodes.INVALID_CREDENTIALS);
         }
 
         user.setFailedLoginAttempts(0);

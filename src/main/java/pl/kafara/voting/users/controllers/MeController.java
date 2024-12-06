@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.kafara.voting.exceptions.ApplicationOptimisticLockException;
 import pl.kafara.voting.exceptions.NotFoundException;
+import pl.kafara.voting.exceptions.user.TotpAuthorisationException;
 import pl.kafara.voting.exceptions.user.WrongPasswordException;
 import pl.kafara.voting.model.users.User;
+import pl.kafara.voting.users.dto.Change2FaStateRequest;
 import pl.kafara.voting.users.dto.ChangePasswordRequest;
 import pl.kafara.voting.users.dto.UpdateUserDataRequest;
 import pl.kafara.voting.users.dto.UserResponse;
@@ -43,6 +45,19 @@ public class MeController {
             userService.changePassword(password, id);
             return ResponseEntity.ok().build();
         } catch (WrongPasswordException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
+    }
+
+    @PatchMapping("/2fa")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Void> change2FaState(@Validated @RequestBody Change2FaStateRequest request) {
+        DecodedJWT jwt =  JWT.decode((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        UUID id = UUID.fromString(jwt.getSubject());
+        try {
+            userService.change2FaState(id, request.active());
+            return ResponseEntity.ok().build();
+        } catch (NotFoundException | TotpAuthorisationException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
     }

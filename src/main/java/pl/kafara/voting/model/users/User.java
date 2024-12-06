@@ -49,8 +49,10 @@ public class User extends AbstractEntity implements Serializable {
     private Gender gender;
     @Column(name = "language", nullable = false)
     private String language;
-    @Column(name = "totp_secret", nullable = true, unique = true)
+    @Column(name = "totp_secret", unique = true)
     private String totpSecret;
+    @Column(name = "authorisation_totp_secret", unique = true)
+    private String authorisationTotpSecret;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
     private VoterRoleRequest voterRoleRequest;

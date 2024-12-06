@@ -1,5 +1,7 @@
 package pl.kafara.voting.users.services;
 
+import dev.samstevens.totp.secret.SecretGenerator;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,6 +22,7 @@ import pl.kafara.voting.users.mapper.UserMapper;
 import pl.kafara.voting.users.repositories.GenderRepository;
 import pl.kafara.voting.users.repositories.RoleRepository;
 import pl.kafara.voting.users.repositories.UserRepository;
+import pl.kafara.voting.util.AESUtils;
 import pl.kafara.voting.util.filteringCriterias.FilteringCriteria;
 import pl.kafara.voting.util.JwsService;
 import pl.kafara.voting.util.SensitiveData;
@@ -38,6 +41,8 @@ public class UserService {
     private final RoleRepository roleRepository;
     private final GenderRepository genderRepository;
     private final JwsService jwsService;
+    private final AESUtils aesUtils;
+    private final SecretGenerator secretGenerator;
 
     public SensitiveData resetPassword(String email) throws NotFoundException, AccountNotActiveException, NoSuchAlgorithmException {
         User user = userRepository.findByEmail(email).orElseThrow(
@@ -170,5 +175,14 @@ public class UserService {
         user.setEmail(userData.email());
         user.setGender(gender);
         return userRepository.save(user);
+    }
+
+    public void change2FaState(UUID id, boolean active) throws NotFoundException, TotpAuthorisationException {
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.USER_NOT_FOUND));
+        if(user.getAuthorisationTotpSecret() != null) {
+            throw new TotpAuthorisationException(UserMessages.TOTP_AUTHORISATION_ALREADY_ACTIVE, UserExceptionCodes.TOTP_AUTHORISATION_ALREADY_ACTIVE);
+        }
+        user.setAuthorisationTotpSecret(aesUtils.encrypt(secretGenerator.generate()));
+        userRepository.save(user);
     }
 }

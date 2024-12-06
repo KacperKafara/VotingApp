@@ -24,6 +24,8 @@ public class UserMessages {
     public static final String REJECT_OWN_REQUEST_ROLE = "You cannot reject your own request";
     public static final String USER_ALREADY_HAS_VOTER_ROLE = "User already has voter role";
     public static final String REFRESH_TOKEN_VERIFICATION_EXCEPTION = "Refresh token verification exception";
+    public static final String FIRST_ACTIVATE_2FA = "First activate 2FA";
+    public static final String TOTP_AUTHORISATION_ALREADY_ACTIVE = "2FA already active";
 
     private UserMessages() {
     }

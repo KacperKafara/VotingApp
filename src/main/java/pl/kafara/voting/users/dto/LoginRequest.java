@@ -15,7 +15,8 @@ public record LoginRequest(
         String password,
         @NotBlank
         @Pattern(regexp = "pl|en")
-        String language
+        String language,
+        String totpCode
         ) {
     @Override
     public String toString() {

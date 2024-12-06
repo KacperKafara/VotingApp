@@ -36,6 +36,8 @@ public class UserExceptionCodes {
     public static final String REJECT_OWN_REQUEST_ROLE = "REJECT_OWN_REQUEST_ROLE";
     public static final String USER_ALREADY_HAS_VOTER_ROLE = "USER_ALREADY_HAS_VOTER_ROLE";
     public static final String INVALID_REFRESH_TOKEN = "INVALID_REFRESH_TOKEN";
+    public static final String FIRST_ACTIVATE_2FA = "FIRST_ACTIVATE_2FA";
+    public static final String TOTP_AUTHORISATION_ALREADY_ACTIVE = "TOTP_AUTHORISATION_ALREADY_ACTIVE";
 
     private UserExceptionCodes() {
     }
