@@ -64,40 +64,40 @@ const ResetPassword: FC<ResetPasswordProps> = ({ open, onOpenChange }) => {
           <DialogDescription>
             {t('resetPassword:description')}
           </DialogDescription>
-          <Form {...form}>
-            <form onSubmit={onSubmit}>
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        type="email"
-                        autoComplete="email"
-                        placeholder="Email"
-                      />
-                    </FormControl>
-                    <FormMessage className="text-center" />
-                  </FormItem>
-                )}
-              />
-              <div className="mt-2 flex justify-between">
-                <LoadingButton
-                  type="submit"
-                  text={t('common:submit')}
-                  isLoading={isPending}
-                />
-                <DialogClose asChild>
-                  <Button type="button" variant="secondary">
-                    {t('common:close')}
-                  </Button>
-                </DialogClose>
-              </div>
-            </form>
-          </Form>
         </DialogHeader>
+        <Form {...form}>
+          <form onSubmit={onSubmit}>
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type="email"
+                      autoComplete="email"
+                      placeholder="Email"
+                    />
+                  </FormControl>
+                  <FormMessage className="text-center" />
+                </FormItem>
+              )}
+            />
+            <div className="mt-2 flex justify-between">
+              <LoadingButton
+                type="submit"
+                text={t('common:submit')}
+                isLoading={isPending}
+              />
+              <DialogClose asChild>
+                <Button type="button" variant="secondary">
+                  {t('common:close')}
+                </Button>
+              </DialogClose>
+            </div>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

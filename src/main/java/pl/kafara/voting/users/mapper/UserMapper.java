@@ -19,6 +19,7 @@ public class UserMapper {
                 .collect(Collectors.toSet());
 
         boolean activeRoleRequest = user.getVoterRoleRequest() != null && (user.getVoterRoleRequest().getResolution().equals(RoleRequestResolution.PENDING) || user.getVoterRoleRequest().getResolution().equals(RoleRequestResolution.ACCEPTED));
+        boolean active2fa = user.getAuthorisationTotpSecret() != null;
 
         return new UserResponse(
                 user.getId(),
@@ -34,7 +35,8 @@ public class UserMapper {
                 user.isVerified(),
                 user.getLastLogin(),
                 user.getLastFailedLogin(),
-                activeRoleRequest
+                activeRoleRequest,
+                active2fa
         );
     }
 }

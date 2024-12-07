@@ -1,0 +1,78 @@
+spring:
+  application:
+    name: voting
+  datasource:
+    url: jdbc:postgresql://testDatabase:5432/voting
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:/db/data.sql
+  cache:
+    type: redis
+  flyway:
+    enabled: false
+    baseline-on-migrate: true
+
+  mail:
+    host: mail
+    port: 25
+    username: user
+    password: user
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
+          transfer:
+            protocol: smtp
+        from: votingapp@kafara.pl
+  thymeleaf:
+    check-template-location: false
+  data:
+    redis:
+      host: redis
+      port: 6379
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 299181901813-c16f9vs4rl91mrst8neacms4l2sskec2.apps.googleusercontent.com
+            client-secret: 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
+
+
+app:
+  url: http://localhost:5173
+
+server:
+  servlet:
+    context-path: /api/v1
+
+security:
+  jwt:
+    token:
+      secret-key: secret-key
+      expiration-time: 86400000
+    refreshToken:
+      expiration-time: 86400000
+      secret-key: refresh-secret-key
+  max-failed-attempts: 3
+  jws:
+    token:
+      secret-key: jws-secret-key
+  encryption:
+    secret-key: PdRgUkXp2s5v8y/B
+
+
+sejm:
+  api:
+    url: https://api.sejm.gov.pl/sejm/
+  term: term10

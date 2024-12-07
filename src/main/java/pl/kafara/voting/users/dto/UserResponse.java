@@ -20,6 +20,7 @@ public record UserResponse(
         boolean verified,
         LocalDateTime lastLogin,
         LocalDateTime lastFailedLogin,
-        boolean activeRoleRequest
+        boolean activeRoleRequest,
+        boolean active2fa
 ) {
 }

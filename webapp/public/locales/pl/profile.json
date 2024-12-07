@@ -31,9 +31,17 @@
   "personalDataUpdated": "Dane osobowe zaktualizowane",
   "emailInvalid": "Email jest nieprawidłowy",
   "selectGender": "Wybierz płeć",
-  "displayQRCode": "Wyświetl kod QR",
+  "displayQRCodeForVoting": "Wyświetl kod QR do głosowania",
+  "displayQRCodeForAuthorisation": "Wyświetl kod QR do autoryzacji",
   "scanThisCode": "Zeskanuj ten kody w aplikacji do uwierzytelniania aby móc potwierdzić swój głos.",
   "createRoleRequest": "Zgłoszenie prośby o rolę wyborcy",
   "send": "Wyślij",
-  "sendDescription": "Czy na pewno chcesz utworzyć prośbę o rolę wyborcy?"
+  "sendDescription": "Czy na pewno chcesz utworzyć prośbę o rolę wyborcy?",
+  "activate2FADialog": "Aktywuj dwuetapowe uwierzytelnianie",
+  "activate2FA": "Aktywuj dwuetapowe uwierzytelnianie",
+  "activate2FADescription": "Czy na pewno chcesz aktywować dwuetapowe uwierzytelnianie?",
+  "scanThisCodeToLogin": "Zeskanuj ten kod w aplikacji do uwierzytelniania aby móc zalogować się następnym razem.",
+  "deactivate2FADialog": "Dezaktywuj dwuetapowe uwierzytelnianie",
+  "deactivate2FA": "Dezaktywuj dwuetapowe uwierzytelnianie",
+  "deactivate2FADescription": "Czy na pewno chcesz dezaktywować dwuetapowe uwierzytelnianie?"
 }

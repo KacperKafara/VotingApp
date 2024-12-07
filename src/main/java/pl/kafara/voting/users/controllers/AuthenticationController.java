@@ -18,9 +18,11 @@ import pl.kafara.voting.exceptions.messages.GenericMessages;
 import pl.kafara.voting.exceptions.messages.UserMessages;
 import pl.kafara.voting.exceptions.user.AccountNotActiveException;
 import pl.kafara.voting.exceptions.user.InvalidLoginDataException;
+import pl.kafara.voting.exceptions.user.MFARequiredException;
 import pl.kafara.voting.users.dto.LoginRequest;
 import pl.kafara.voting.users.dto.LoginResponse;
 import pl.kafara.voting.users.dto.RegistrationRequest;
+import pl.kafara.voting.users.dto.TotpLoginRequest;
 import pl.kafara.voting.users.services.AuthenticationService;
 import pl.kafara.voting.users.services.EmailService;
 import pl.kafara.voting.util.SensitiveData;
@@ -40,6 +42,22 @@ public class AuthenticationController {
     public ResponseEntity<LoginResponse> authenticate(@Validated @RequestBody LoginRequest loginRequest) {
         try {
             Map<String, SensitiveData> data = authenticationService.authenticate(loginRequest);
+            LoginResponse loginResponse = new LoginResponse(data.get("token").data(), data.get("refreshToken").data());
+            return ResponseEntity.ok(loginResponse);
+        } catch (AccountNotActiveException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        } catch (InvalidLoginDataException | NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage(), e);
+        } catch (MFARequiredException e) {
+            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e);
+        }
+    }
+
+    @PreAuthorize("permitAll()")
+    @PostMapping("/verifyTotp")
+    public ResponseEntity<LoginResponse> verifyTotp(@Validated @RequestBody TotpLoginRequest loginRequest) {
+        try {
+            Map<String, SensitiveData> data = authenticationService.verifyTotp(loginRequest);
             LoginResponse loginResponse = new LoginResponse(data.get("token").data(), data.get("refreshToken").data());
             return ResponseEntity.ok(loginResponse);
         } catch (AccountNotActiveException e) {

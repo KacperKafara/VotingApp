@@ -38,6 +38,7 @@ public class UserExceptionCodes {
     public static final String INVALID_REFRESH_TOKEN = "INVALID_REFRESH_TOKEN";
     public static final String FIRST_ACTIVATE_2FA = "FIRST_ACTIVATE_2FA";
     public static final String TOTP_AUTHORISATION_ALREADY_ACTIVE = "TOTP_AUTHORISATION_ALREADY_ACTIVE";
+    public static final String MFA_REQUIRED = "MFA_REQUIRED";
 
     private UserExceptionCodes() {
     }

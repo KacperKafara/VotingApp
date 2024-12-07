@@ -15,6 +15,7 @@ export interface User {
   lastLogin: Date;
   lastFailedLogin: Date;
   activeRoleRequest: boolean;
+  active2fa: boolean;
 }
 
 export interface UsersFiltered {

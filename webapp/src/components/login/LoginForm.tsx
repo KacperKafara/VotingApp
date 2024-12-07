@@ -19,7 +19,7 @@ import { getActiveRole, roleMapping, useUserStore } from '@/store/userStore';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Button } from '../ui/button';
 import ResetPassword from './ForgotPassword';
-import GoogleLoginButton from './GoogleLoginButton';
+import TotpInput from './TotpInput';
 
 const getLoginSchema = (t: TFunction<'loginPage'>) =>
   z.object({
@@ -39,16 +39,25 @@ interface LoginFormProps {
   className?: string;
 }
 
+interface TwoFactorProps {
+  username: string;
+  open: boolean;
+}
+
 const LoginForm: FC<LoginFormProps> = ({ className }) => {
   const { authenticate, isPending } = useAuthenticate();
   const { t } = useTranslation('loginPage');
   const { setToken, setRefreshToken, roles } = useUserStore();
   const navigate = useNavigate();
   const [resetPasswordOpen, setResetPasswordOpen] = useState(false);
+  const [twoFactorOpen, setTwoFactorOpen] = useState<TwoFactorProps>({
+    username: '',
+    open: false,
+  });
 
   const form = useForm<LoginSchema>({
     resolver: zodResolver(getLoginSchema(t)),
-    values: {
+    defaultValues: {
       username: '',
       password: '',
     },
@@ -60,8 +69,18 @@ const LoginForm: FC<LoginFormProps> = ({ className }) => {
       password,
       language: i18next.language,
     });
-    setToken(result.token);
-    setRefreshToken(result.refreshToken);
+
+    if (
+      'code' in result &&
+      'message' in result &&
+      result.code === 'MFA_REQUIRED'
+    ) {
+      setTwoFactorOpen({ username, open: true });
+      return;
+    }
+
+    setToken('token' in result ? result.token : '');
+    setRefreshToken('refreshToken' in result ? result.refreshToken : '');
     navigate(`/${roleMapping[getActiveRole(roles!)]}`);
   });
 
@@ -125,12 +144,16 @@ const LoginForm: FC<LoginFormProps> = ({ className }) => {
             className="mt-1 h-fit"
             isLoading={isPending}
           />
-          {/* <GoogleLoginButton /> */}
         </form>
       </Form>
       <ResetPassword
         open={resetPasswordOpen}
         onOpenChange={() => setResetPasswordOpen(!resetPasswordOpen)}
+      />
+      <TotpInput
+        open={twoFactorOpen.open}
+        onOpenChange={() => setTwoFactorOpen({ username: '', open: false })}
+        username={twoFactorOpen.username}
       />
     </div>
   );

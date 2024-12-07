@@ -31,9 +31,17 @@
   "personalDataUpdated": "Personal data updated",
   "emailInvalid": "Email is invalid",
   "selectGender:": "Select gender",
-  "displayQRCode": "Display QR code",
+  "displayQRCodeForVoting": "Display QR code for voting",
+  "displayQRCodeForAuthorisation": "Display QR code for authorisation",
   "scanThisCode": "Scan this code in the authentication app to confirm your vote.",
   "createRoleRequest": "Request for voter role",
   "send": "Send",
-  "sendDescription": "Are you sure you want to create a request for voter role?"
+  "sendDescription": "Are you sure you want to create a request for voter role?",
+  "activate2FADialog": "Activate two-factor authentication",
+  "activate2FA": "Activate two-factor authentication",
+  "activate2FADescription": "Are you sure you want to activate two-factor authentication?",
+  "scanThisCodeToLogin": "Scan this code in the authentication app to log in next time.",
+  "deactivate2FADialog": "Deactivate two-factor authentication",
+  "deactivate2FA": "Deactivate two-factor authentication",
+  "deactivate2FADescription": "Are you sure you want to deactivate two-factor authentication?"
 }

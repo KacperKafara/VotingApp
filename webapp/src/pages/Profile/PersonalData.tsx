@@ -10,10 +10,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useUpdate2FA } from '@/data/useProfile';
 import { useCreateRoleRequest } from '@/data/useRoleRequest';
 import { cn } from '@/lib/utils';
 import { User } from '@/types/user';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface PersonalDataProps {
@@ -31,8 +32,21 @@ const PersonalData: FC<PersonalDataProps> = ({
   const [editProfileOpen, setEditProfileOpen] = useState(false);
   const [changePasswordDialogOpen, setChangePasswordDialogOpen] =
     useState(false);
-  const [displayQRCodeOpen, setDisplayQRCodeOpen] = useState(false);
+  const [displayQRCodeVotingOpen, setDisplayQRCodeVotingOpen] = useState(false);
+  const [displayQRCodeAuthorisationOpen, setDisplayQRCodeAuthorisationOpen] =
+    useState(false);
   const { createRoleRequest, isPending } = useCreateRoleRequest();
+  const { update2FA, isLoading, isSuccess } = useUpdate2FA();
+
+  const activate2FA = async () => {
+    await update2FA(true);
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      setDisplayQRCodeAuthorisationOpen(true);
+    }
+  }, [isSuccess]);
 
   return (
     <Card className={cn(className, 'relative')}>
@@ -100,13 +114,50 @@ const PersonalData: FC<PersonalDataProps> = ({
           >
             {t('changePassword')}
           </DropdownMenuItem>
+          {user.active2fa && (
+            <>
+              <DropdownMenuItem
+                onClick={() => {
+                  setDisplayQRCodeAuthorisationOpen(
+                    !displayQRCodeAuthorisationOpen
+                  );
+                }}
+              >
+                {t('displayQRCodeForAuthorisation')}
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <ConfirmDialog
+                  className="w-full px-2 py-1.5 text-sm outline-none"
+                  variant="ghost"
+                  isLoading={isLoading}
+                  buttonText={t('deactivate2FADialog')}
+                  dialogTitle={t('deactivate2FA')}
+                  dialogDescription={t('deactivate2FADescription')}
+                  confirmAction={() => update2FA(false)}
+                />
+              </DropdownMenuItem>
+            </>
+          )}
+          {!user.active2fa && (
+            <DropdownMenuItem asChild>
+              <ConfirmDialog
+                // className="w-full px-2 py-1.5 text-sm outline-none"
+                variant="ghost"
+                isLoading={isLoading}
+                buttonText={t('activate2FADialog')}
+                dialogTitle={t('activate2FA')}
+                dialogDescription={t('activate2FADescription')}
+                confirmAction={activate2FA}
+              />
+            </DropdownMenuItem>
+          )}
           {user.roles.includes('VOTER') ? (
             <DropdownMenuItem
               onClick={() => {
-                setDisplayQRCodeOpen(!displayQRCodeOpen);
+                setDisplayQRCodeVotingOpen(!displayQRCodeVotingOpen);
               }}
             >
-              {t('displayQRCode')}
+              {t('displayQRCodeForVoting')}
             </DropdownMenuItem>
           ) : user.roles.includes('USER') &&
             !user.roles.includes('VOTER') &&
@@ -141,8 +192,19 @@ const PersonalData: FC<PersonalDataProps> = ({
         }
       />
       <QRCodeDialog
-        open={displayQRCodeOpen}
-        onOpenChange={() => setDisplayQRCodeOpen(!displayQRCodeOpen)}
+        open={displayQRCodeVotingOpen}
+        onOpenChange={() =>
+          setDisplayQRCodeVotingOpen(!displayQRCodeVotingOpen)
+        }
+        kind="voting"
+        tFunction={t}
+      />
+      <QRCodeDialog
+        open={displayQRCodeAuthorisationOpen}
+        onOpenChange={() =>
+          setDisplayQRCodeAuthorisationOpen(!displayQRCodeAuthorisationOpen)
+        }
+        kind="login"
         tFunction={t}
       />
     </Card>

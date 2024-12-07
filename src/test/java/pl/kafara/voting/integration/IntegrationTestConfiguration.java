@@ -16,6 +16,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.MountableFile;
 import pl.kafara.voting.users.dto.LoginRequest;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.DriverManager;
 
@@ -28,6 +29,7 @@ public abstract class IntegrationTestConfiguration {
     static final Network network = Network.newNetwork();
     public static String token;
     protected static String baseUrl;
+    static final Path yamlPath = Paths.get("src/test/resources/application-tests.yaml");
 
     protected static ConnectionHolder connectionHolder;
 
@@ -63,17 +65,11 @@ public abstract class IntegrationTestConfiguration {
             .withNetwork(network)
             .withExposedPorts(8080)
             .withLogConsumer(outputFrame -> System.out.print(outputFrame.getUtf8String()))
+            .withCopyToContainer(MountableFile.forHostPath(yamlPath), "/opt/application-tests.yaml")
             .dependsOn(postgres, redis, mail)
-            .withEnv("SPRING_MAIL_HOST", "mail")
-            .withEnv("SPRING_MAIL_PORT", "25")
-            .withEnv("SPRING_DATA_REDIS_HOST", "redis")
-            .withEnv("SPRING_DATA_REDIS_PORT", "6379")
-            .withEnv("SPRING_DATASOURCE_URL", "jdbc:postgresql://testDatabase:5432/voting")
-            .withEnv("SPRING_DATASOURCE_USERNAME", "postgres")
-            .withEnv("SPRING_DATASOURCE_PASSWORD", "postgres")
             .withEnv("SPRING_TESTS", "true")
             .withCopyToContainer(jar, "/opt/app.jar")
-            .withCommand("sh", "-c", "java -jar /opt/app.jar")
+            .withCommand("sh", "-c", "java -jar -Dspring.config.location=/opt/application-tests.yaml /opt/app.jar")
             .waitingFor(Wait.forHttp("/api/v1/actuator/health").forPort(8080).forStatusCode(200));
 
     @BeforeAll

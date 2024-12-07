@@ -16,9 +16,11 @@ import pl.kafara.voting.exceptions.messages.GenericMessages;
 import pl.kafara.voting.exceptions.messages.UserMessages;
 import pl.kafara.voting.exceptions.user.AccountNotActiveException;
 import pl.kafara.voting.exceptions.user.InvalidLoginDataException;
+import pl.kafara.voting.exceptions.user.MFARequiredException;
 import pl.kafara.voting.model.users.*;
 import pl.kafara.voting.users.dto.LoginRequest;
 import pl.kafara.voting.users.dto.RegistrationRequest;
+import pl.kafara.voting.users.dto.TotpLoginRequest;
 import pl.kafara.voting.users.mapper.RegistrationMapper;
 import pl.kafara.voting.users.repositories.GenderRepository;
 import pl.kafara.voting.users.repositories.RoleRepository;
@@ -52,35 +54,47 @@ public class AuthenticationService {
     private int maxFailedAttempts;
 
     @PreAuthorize("permitAll()")
-    public Map<String, SensitiveData> authenticate(LoginRequest loginRequest) throws NotFoundException, AccountNotActiveException, InvalidLoginDataException {
-        User user = userRepository.findByUsername(loginRequest.username())
-                .orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.INVALID_CREDENTIALS));
+    public Map<String, SensitiveData> authenticate(LoginRequest loginRequest) throws NotFoundException, AccountNotActiveException, InvalidLoginDataException, MFARequiredException {
+        User user = checkIsUserVerifiedOrBlocked(loginRequest.username());
 
-        if(!user.isVerified()) throw new AccountNotActiveException(UserMessages.USER_NOT_VERIFIED, UserExceptionCodes.USER_NOT_VERIFIED);
-        if(user.isBlocked()) throw new AccountNotActiveException(UserMessages.USER_BLOCKED, UserExceptionCodes.USER_BLOCKED);
-
-        if(user.getFailedLoginAttempts() >= maxFailedAttempts && Duration.between(user.getLastFailedLogin(), LocalDateTime.now()).toDays() <= 24)
-            throw new AccountNotActiveException(UserMessages.AUTHENTICATION_BLOCKED, UserExceptionCodes.AUTHENTICATION_BLOCKED);
-        else if(user.getFailedLoginAttempts() >= maxFailedAttempts)
-            user.setFailedLoginAttempts(0);
-
-        if(!passwordEncoder.matches(loginRequest.password(), user.getPassword())) {
+        if (!passwordEncoder.matches(loginRequest.password(), user.getPassword())) {
             user.setFailedLoginAttempts(user.getFailedLoginAttempts() + 1);
             user.setLastFailedLogin(LocalDateTime.now());
             userRepository.save(user);
             throw new InvalidLoginDataException(UserMessages.INVALID_CREDENTIALS, UserExceptionCodes.INVALID_CREDENTIALS);
         }
-        
-        if(user.getAuthorisationTotpSecret() != null) {
-            if(!codeVerifier.isValidCode(aesUtils.decrypt(user.getAuthorisationTotpSecret()), loginRequest.totpCode()))
-                throw new InvalidLoginDataException(UserMessages.INVALID_CREDENTIALS, UserExceptionCodes.INVALID_CREDENTIALS);
+
+        if (user.getAuthorisationTotpSecret() != null) {
+            user.setLanguage(loginRequest.language());
+            userRepository.save(user);
+            throw new MFARequiredException(UserMessages.MFA_REQUIRED, UserExceptionCodes.MFA_REQUIRED);
+        }
+
+        user.setLanguage(loginRequest.language());
+        user.setFailedLoginAttempts(0);
+        user.setLastLogin(LocalDateTime.now());
+        userRepository.save(user);
+
+        String jwtToken = jwtService.createToken(user.getUsername(), user.getId(), user.getRoles());
+        String refreshToken = jwtService.createRefreshToken(user.getId());
+
+        return Map.of(
+                "token", new SensitiveData(jwtToken),
+                "refreshToken", new SensitiveData(refreshToken)
+        );
+    }
+
+    @PreAuthorize("permitAll()")
+    public Map<String, SensitiveData> verifyTotp(TotpLoginRequest loginRequest) throws NotFoundException, InvalidLoginDataException, AccountNotActiveException {
+        User user = checkIsUserVerifiedOrBlocked(loginRequest.username());
+
+        if (!codeVerifier.isValidCode(aesUtils.decrypt(user.getAuthorisationTotpSecret()), loginRequest.totp())) {
+            throw new InvalidLoginDataException(UserMessages.INVALID_CREDENTIALS, UserExceptionCodes.INVALID_CREDENTIALS);
         }
 
         user.setFailedLoginAttempts(0);
         user.setLastLogin(LocalDateTime.now());
-        user.setLanguage(loginRequest.language());
         userRepository.save(user);
-
         String jwtToken = jwtService.createToken(user.getUsername(), user.getId(), user.getRoles());
         String refreshToken = jwtService.createRefreshToken(user.getId());
 
@@ -116,5 +130,23 @@ public class AuthenticationService {
                 "token", new SensitiveData(jwtToken),
                 "refreshToken", refreshToken
         );
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    protected User checkIsUserVerifiedOrBlocked(String username) throws NotFoundException, AccountNotActiveException {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.INVALID_CREDENTIALS));
+
+        if (!user.isVerified())
+            throw new AccountNotActiveException(UserMessages.USER_NOT_VERIFIED, UserExceptionCodes.USER_NOT_VERIFIED);
+        if (user.isBlocked())
+            throw new AccountNotActiveException(UserMessages.USER_BLOCKED, UserExceptionCodes.USER_BLOCKED);
+
+        if (user.getFailedLoginAttempts() >= maxFailedAttempts && Duration.between(user.getLastFailedLogin(), LocalDateTime.now()).toDays() <= 24)
+            throw new AccountNotActiveException(UserMessages.AUTHENTICATION_BLOCKED, UserExceptionCodes.AUTHENTICATION_BLOCKED);
+        else if (user.getFailedLoginAttempts() >= maxFailedAttempts)
+            user.setFailedLoginAttempts(0);
+
+        return userRepository.save(user);
     }
 }

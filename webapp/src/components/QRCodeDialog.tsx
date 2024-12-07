@@ -12,12 +12,14 @@ import { TFunction } from 'i18next';
 interface QRCodeDialogProps {
   open: boolean;
   onOpenChange: () => void;
+  kind: 'login' | 'voting';
   tFunction: TFunction;
 }
 
 const QRCodeDialog: FC<QRCodeDialogProps> = ({
   open,
   onOpenChange,
+  kind,
   tFunction: t,
 }) => {
   const [qrCodeSrc, setQrCodeSrc] = useState('');
@@ -25,9 +27,14 @@ const QRCodeDialog: FC<QRCodeDialogProps> = ({
 
   useEffect(() => {
     const fetchQRCode = async () => {
-      const { data } = await api.get('/qr-code', {
-        responseType: 'arraybuffer',
-      });
+      const { data } =
+        kind === 'voting'
+          ? await api.get('/qr-code', {
+              responseType: 'arraybuffer',
+            })
+          : await api.get('/qr-code/authorisation', {
+              responseType: 'arraybuffer',
+            });
 
       const base64 = btoa(
         new Uint8Array(data).reduce(
@@ -42,14 +49,16 @@ const QRCodeDialog: FC<QRCodeDialogProps> = ({
     if (open) {
       fetchQRCode();
     }
-  }, [api, open]);
+  }, [api, kind, open]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>QR Code</DialogTitle>
-          <DialogDescription>{t('scanThisCode')}</DialogDescription>
+          <DialogDescription>
+            {kind === 'voting' ? t('scanThisCode') : t('scanThisCodeToLogin')}
+          </DialogDescription>
         </DialogHeader>
         <div className="flex justify-center">
           <img src={qrCodeSrc} alt="QR Code" />

@@ -9,5 +9,11 @@
   "loginToLong": "Login is too long",
   "passwordToLong": "Password is too long",
   "register": "Register",
-  "googleLogin": "Login with Google"
+  "googleLogin": "Login with Google",
+  "invalidTotp": "Invalid TOTP code",
+  "totp": {
+    "title": "Two-factor authentication",
+    "description": "Enter the code from the authentication app",
+    "submit": "Submit"
+  }
 }

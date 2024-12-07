@@ -24,7 +24,36 @@ export const useAuthenticate = () => {
 
   const { mutateAsync, isSuccess, isPending } = useMutation({
     mutationFn: async (data: LoginRequest) => {
-      const response = await api.post<LoginResponse>('/authenticate', data);
+      const response = await api.post<LoginResponse | ApplicationError>(
+        '/authenticate',
+        data
+      );
+      return response.data;
+    },
+    onError: (error: AxiosError) => {
+      toast({
+        variant: 'destructive',
+        title: t('authenticationFailed'),
+        description: t((error.response?.data as ApplicationError).code),
+      });
+    },
+  });
+
+  return { authenticate: mutateAsync, isSuccess, isPending };
+};
+
+interface TotpLoginRequest {
+  username: string;
+  totp: string;
+}
+
+export const useTotpAuthenticate = () => {
+  const { toast } = useToast();
+  const { t } = useTranslation('errors');
+
+  const { mutateAsync, isSuccess, isPending } = useMutation({
+    mutationFn: async (data: TotpLoginRequest) => {
+      const response = await api.post<LoginResponse>('/verifyTotp', data);
       return response.data;
     },
     onError: (error: AxiosError) => {

@@ -9,5 +9,11 @@
   "loginToLong": "Login jest za długi",
   "passwordToLong": "Hasło jest za długie",
   "register": "Rejestracja",
-  "googleLogin": "Zaloguj przez Google"
+  "googleLogin": "Zaloguj przez Google",
+  "invalidTotp": "Nieprawidłowy kod TOTP",
+  "totp": {
+    "title": "Dwuetapowe uwierzytelnianie",
+    "description": "Wprowadź kod z aplikacji do uwierzytelniania",
+    "submit": "Wyślij"
+  }
 }

@@ -26,6 +26,7 @@ public class UserMessages {
     public static final String REFRESH_TOKEN_VERIFICATION_EXCEPTION = "Refresh token verification exception";
     public static final String FIRST_ACTIVATE_2FA = "First activate 2FA";
     public static final String TOTP_AUTHORISATION_ALREADY_ACTIVE = "2FA already active";
+    public static final String MFA_REQUIRED = "MFA required";
 
     private UserMessages() {
     }
