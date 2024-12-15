@@ -23,12 +23,19 @@ import pl.kafara.voting.exceptions.NotFoundException;
 import pl.kafara.voting.exceptions.exceptionCodes.UserExceptionCodes;
 import pl.kafara.voting.exceptions.messages.GenericMessages;
 import pl.kafara.voting.exceptions.messages.UserMessages;
+import pl.kafara.voting.exceptions.user.OAuthGenericException;
 
 import java.security.NoSuchAlgorithmException;
 
 @ControllerAdvice
 @Slf4j
 public class BasicExceptionHandler {
+
+    @ExceptionHandler(OAuthGenericException.class)
+    public ResponseEntity<ExceptionResponse> handleOAuthGenericException(OAuthGenericException e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ExceptionResponse(e.getMessage(), UserExceptionCodes.INTERNAL_SERVER_ERROR));
+    }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ExceptionResponse> handleDataIntegrityViolationException(DataIntegrityViolationException e) {

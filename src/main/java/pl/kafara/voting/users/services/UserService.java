@@ -49,10 +49,10 @@ public class UserService {
                 () -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.USER_WITH_EMAIL_NOT_FOUND)
         );
 
-        if(user.isBlocked())
+        if (user.isBlocked())
             throw new AccountNotActiveException(UserMessages.USER_BLOCKED, UserExceptionCodes.USER_BLOCKED);
 
-        if(!user.isVerified())
+        if (!user.isVerified())
             throw new AccountNotActiveException(UserMessages.USER_NOT_VERIFIED, UserExceptionCodes.USER_NOT_VERIFIED);
 
         return tokenService.generateResetPasswordToken(user);
@@ -72,7 +72,7 @@ public class UserService {
 
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.USER_NOT_FOUND));
 
-        if(jwsService.verifySignature(tagValue, user.getId(), user.getVersion())) {
+        if (jwsService.verifySignature(tagValue, user.getId(), user.getVersion())) {
             throw new ApplicationOptimisticLockException(UserMessages.OPTIMISTIC_LOCK, UserExceptionCodes.USER_OPTIMISTIC_LOCK);
         }
         Set<Role> rolesEntities = new HashSet<>();
@@ -82,7 +82,7 @@ public class UserService {
             rolesEntities.add(roleEntity);
         }
 
-        if(rolesEntities.isEmpty())
+        if (rolesEntities.isEmpty())
             throw new UserMustHaveAtLeastOneRoleException(UserMessages.USER_MUST_HAVE_AT_LEAST_ONE_ROLE, UserExceptionCodes.USER_MUST_HAVE_AT_LEAST_ONE_ROLE);
 
         Role voterRole = roleRepository.findByName(UserRoleEnum.VOTER).orElseThrow(() -> new NotFoundException(UserMessages.ROLE_NOT_FOUND, UserExceptionCodes.ROLE_NOT_FOUND));
@@ -90,7 +90,7 @@ public class UserService {
 
         boolean hasVoterRole = user.getRoles().contains(voterRole);
         user.setRoles(rolesEntities);
-        if(hasVoterRole && rolesEntities.contains(userRole)) {
+        if (hasVoterRole && rolesEntities.contains(userRole)) {
             user.getRoles().add(voterRole);
         }
     }
@@ -98,7 +98,7 @@ public class UserService {
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public User block(UUID id, String tagValue) throws NotFoundException, ApplicationOptimisticLockException {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.USER_NOT_FOUND));
-        if(jwsService.verifySignature(tagValue, user.getId(), user.getVersion())) {
+        if (jwsService.verifySignature(tagValue, user.getId(), user.getVersion())) {
             throw new ApplicationOptimisticLockException(UserMessages.OPTIMISTIC_LOCK, UserExceptionCodes.USER_OPTIMISTIC_LOCK);
         }
         user.setBlocked(true);
@@ -108,7 +108,7 @@ public class UserService {
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public User unblock(UUID id, String tagValue) throws NotFoundException, ApplicationOptimisticLockException {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.USER_NOT_FOUND));
-        if(jwsService.verifySignature(tagValue, user.getId(), user.getVersion())) {
+        if (jwsService.verifySignature(tagValue, user.getId(), user.getVersion())) {
             throw new ApplicationOptimisticLockException(UserMessages.OPTIMISTIC_LOCK, UserExceptionCodes.USER_OPTIMISTIC_LOCK);
         }
         user.setBlocked(false);
@@ -118,7 +118,7 @@ public class UserService {
     @PreAuthorize("isAuthenticated()")
     public User changePassword(ChangePasswordRequest password, UUID userId) throws NotFoundException, WrongPasswordException {
         User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.USER_NOT_FOUND));
-        if(!passwordEncoder.matches(password.oldPassword(), user.getPassword()))
+        if (!passwordEncoder.matches(password.oldPassword(), user.getPassword()))
             throw new WrongPasswordException(UserMessages.WRONG_PASSWORD, UserExceptionCodes.WRONG_PASSWORD);
 
         user.setPassword(passwordEncoder.encode(password.newPassword()));
@@ -135,6 +135,12 @@ public class UserService {
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public User getUserById(UUID id) throws NotFoundException {
         return userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.USER_NOT_FOUND));
+    }
+
+    @PreAuthorize("permitAll()")
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
+    public User getUserByOAuthId(String oAuthId) {
+        return userRepository.findByOAuthId(oAuthId).orElse(null);
     }
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
@@ -164,7 +170,7 @@ public class UserService {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.USER_NOT_FOUND));
         Gender gender = genderRepository.findByName(GenderEnum.valueOf(userData.gender())).orElseThrow(() -> new NotFoundException(GenericMessages.NOT_FOUND, UserExceptionCodes.NOT_FOUND));
 
-        if(jwsService.verifySignature(tagValue, user.getId(), user.getVersion())) {
+        if (jwsService.verifySignature(tagValue, user.getId(), user.getVersion())) {
             throw new ApplicationOptimisticLockException(UserMessages.OPTIMISTIC_LOCK, UserExceptionCodes.USER_OPTIMISTIC_LOCK);
         }
 
@@ -179,9 +185,14 @@ public class UserService {
 
     public void change2FaState(UUID id, boolean active) throws NotFoundException, TotpAuthorisationException {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.USER_NOT_FOUND));
-        if(user.getAuthorisationTotpSecret() != null) {
+        if (!active) {
+            user.setAuthorisationTotpSecret(null);
+            userRepository.save(user);
+            return;
+        } else if (user.getAuthorisationTotpSecret() != null) {
             throw new TotpAuthorisationException(UserMessages.TOTP_AUTHORISATION_ALREADY_ACTIVE, UserExceptionCodes.TOTP_AUTHORISATION_ALREADY_ACTIVE);
         }
+
         user.setAuthorisationTotpSecret(aesUtils.encrypt(secretGenerator.generate()));
         userRepository.save(user);
     }

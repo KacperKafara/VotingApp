@@ -13,7 +13,7 @@ interface LoginRequest {
   language: string;
 }
 
-interface LoginResponse {
+export interface LoginResponse {
   token: string;
   refreshToken: string;
 }

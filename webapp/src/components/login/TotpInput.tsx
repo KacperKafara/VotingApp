@@ -34,7 +34,7 @@ interface TotpInputProps {
 const TotpInput: FC<TotpInputProps> = ({ open, onOpenChange, username }) => {
   const { t } = useTranslation('loginPage');
   const { authenticate, isPending } = useTotpAuthenticate();
-  const { setToken, setRefreshToken, roles } = useUserStore();
+  const { setToken, setRefreshToken } = useUserStore();
   const navigate = useNavigate();
 
   const form = useForm<TotpFormSchema>({
@@ -49,7 +49,13 @@ const TotpInput: FC<TotpInputProps> = ({ open, onOpenChange, username }) => {
 
     setToken(result.token);
     setRefreshToken(result.refreshToken);
-    navigate(`/${roleMapping[getActiveRole(roles!)]}`);
+    const unsubscribe = useUserStore.subscribe((state) => {
+      const roles = state.roles;
+      if (roles) {
+        navigate(`/${roleMapping[getActiveRole(roles)]}`);
+        unsubscribe();
+      }
+    });
   });
 
   return (

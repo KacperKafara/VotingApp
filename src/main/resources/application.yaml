@@ -43,6 +43,9 @@ spring:
           google:
             client-id: 299181901813-c16f9vs4rl91mrst8neacms4l2sskec2.apps.googleusercontent.com
             client-secret: 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
+            redirect-uri: http://localhost:5173/login/oauth2/code/google
+            auth-uri: https://accounts.google.com/o/oauth2/v2/auth
+            token-uri: https://oauth2.googleapis.com/token
 
 
 app:

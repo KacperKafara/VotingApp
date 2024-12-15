@@ -152,7 +152,6 @@ const AccountsLinks: FC<AccountsLinksProps> = ({ className }) => {
             confirmAction={createRoleRequest}
           />
         )}
-
       <ChangePasswordDialog
         open={changePasswordDialogOpen}
         onOpenChange={() =>

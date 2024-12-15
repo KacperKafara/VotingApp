@@ -14,7 +14,7 @@ import { useUpdate2FA } from '@/data/useProfile';
 import { useCreateRoleRequest } from '@/data/useRoleRequest';
 import { cn } from '@/lib/utils';
 import { User } from '@/types/user';
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface PersonalDataProps {
@@ -40,13 +40,10 @@ const PersonalData: FC<PersonalDataProps> = ({
 
   const activate2FA = async () => {
     await update2FA(true);
-  };
-
-  useEffect(() => {
     if (isSuccess) {
       setDisplayQRCodeAuthorisationOpen(true);
     }
-  }, [isSuccess]);
+  };
 
   return (
     <Card className={cn(className, 'relative')}>

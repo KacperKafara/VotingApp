@@ -3,6 +3,7 @@ package pl.kafara.voting.users.repositories;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,4 +30,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     Page<User> getAllByUsernameContains(Pageable pageable, String username);
     @Transactional(readOnly = true, propagation = Propagation.MANDATORY)
     Page<User> getAllByUsernameContainsAndRolesContaining(Pageable pageable, String username, Role role);
+    @Transactional(readOnly = true, propagation = Propagation.MANDATORY)
+    @Query("SELECT u FROM User u WHERE u.oAuthId = :oAuthId")
+    Optional<User> findByOAuthId(String oAuthId);
 }

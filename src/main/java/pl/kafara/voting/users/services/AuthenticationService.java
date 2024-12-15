@@ -49,6 +49,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AESUtils aesUtils;
     private final CodeVerifier codeVerifier;
+    private final UserService userService;
 
     @Value("${security.max-failed-attempts:3}")
     private int maxFailedAttempts;
@@ -85,6 +86,28 @@ public class AuthenticationService {
     }
 
     @PreAuthorize("permitAll()")
+    public Map<String, SensitiveData> authenticate(SensitiveData subject) throws NotFoundException, AccountNotActiveException {
+        User user = userService.getUserByOAuthId(subject.data());
+        checkIsUserVerifiedOrBlocked(user.getUsername());
+
+        if (user.getAuthorisationTotpSecret() != null) {
+            return Map.of(
+                    "username", new SensitiveData(user.getUsername())
+            );
+        }
+
+        user.setFailedLoginAttempts(0);
+        user.setLastLogin(LocalDateTime.now());
+        userRepository.save(user);
+        String jwtToken = jwtService.createToken(user.getUsername(), user.getId(), user.getRoles());
+        String refreshToken = jwtService.createRefreshToken(user.getId());
+        return Map.of(
+                "token", new SensitiveData(jwtToken),
+                "refreshToken", new SensitiveData(refreshToken)
+        );
+    }
+
+    @PreAuthorize("permitAll()")
     public Map<String, SensitiveData> verifyTotp(TotpLoginRequest loginRequest) throws NotFoundException, InvalidLoginDataException, AccountNotActiveException {
         User user = checkIsUserVerifiedOrBlocked(loginRequest.username());
 
@@ -112,6 +135,19 @@ public class AuthenticationService {
                 .orElseThrow(() -> new NotFoundException(GenericMessages.NOT_FOUND, UserExceptionCodes.NOT_FOUND));
         User user = RegistrationMapper.mapToUser(registrationRequest);
         user.setPassword(passwordEncoder.encode(registrationRequest.password()));
+        user.getRoles().add(role);
+        user.setGender(gender);
+        userRepository.save(user);
+        return tokenService.generateAccountVerificationToken(user);
+    }
+
+    @PreAuthorize("permitAll()")
+    public SensitiveData register(User user, GenderEnum genderEnum) throws NotFoundException, NoSuchAlgorithmException {
+        Role role = roleRepository.findByName(UserRoleEnum.USER)
+            .orElseThrow(() -> new NotFoundException(UserMessages.ROLE_NOT_FOUND, UserExceptionCodes.ROLE_NOT_FOUND));
+        Gender gender = genderRepository.findByName(genderEnum)
+            .orElseThrow(() -> new NotFoundException(GenericMessages.NOT_FOUND, UserExceptionCodes.NOT_FOUND));
+
         user.getRoles().add(role);
         user.setGender(gender);
         userRepository.save(user);

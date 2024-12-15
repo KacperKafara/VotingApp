@@ -28,7 +28,7 @@ public class User extends AbstractEntity implements Serializable {
     @Column(name = "username", nullable = false, unique = true)
     private String username;
     @ToString.Exclude
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -50,8 +50,10 @@ public class User extends AbstractEntity implements Serializable {
     @Column(name = "language", nullable = false)
     private String language;
     @Column(name = "totp_secret", unique = true)
+    @ToString.Exclude
     private String totpSecret;
     @Column(name = "authorisation_totp_secret", unique = true)
+    @ToString.Exclude
     private String authorisationTotpSecret;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
@@ -68,6 +70,13 @@ public class User extends AbstractEntity implements Serializable {
     private LocalDateTime lastLogin;
     @Column(name = "last_failed_login")
     private LocalDateTime lastFailedLogin;
+
+    @Enumerated(EnumType.STRING)
+    private OAuthProvider oAuthProvider;
+
+    @ToString.Exclude
+    @Column(name = "oauth_id", unique = true)
+    private String oAuthId;
 
     public User(String firstName, String lastName, String phoneNumber, LocalDateTime birthDate, String username, String email, String language) {
         this.firstName = firstName;

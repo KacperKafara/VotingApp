@@ -20,6 +20,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { Button } from '../ui/button';
 import ResetPassword from './ForgotPassword';
 import TotpInput from './TotpInput';
+import GoogleLoginButton from './GoogleLoginButton';
 
 const getLoginSchema = (t: TFunction<'loginPage'>) =>
   z.object({
@@ -39,7 +40,7 @@ interface LoginFormProps {
   className?: string;
 }
 
-interface TwoFactorProps {
+export interface TwoFactorProps {
   username: string;
   open: boolean;
 }
@@ -47,7 +48,7 @@ interface TwoFactorProps {
 const LoginForm: FC<LoginFormProps> = ({ className }) => {
   const { authenticate, isPending } = useAuthenticate();
   const { t } = useTranslation('loginPage');
-  const { setToken, setRefreshToken, roles } = useUserStore();
+  const { setToken, setRefreshToken } = useUserStore();
   const navigate = useNavigate();
   const [resetPasswordOpen, setResetPasswordOpen] = useState(false);
   const [twoFactorOpen, setTwoFactorOpen] = useState<TwoFactorProps>({
@@ -81,7 +82,13 @@ const LoginForm: FC<LoginFormProps> = ({ className }) => {
 
     setToken('token' in result ? result.token : '');
     setRefreshToken('refreshToken' in result ? result.refreshToken : '');
-    navigate(`/${roleMapping[getActiveRole(roles!)]}`);
+    const unsubscribe = useUserStore.subscribe((state) => {
+      const roles = state.roles;
+      if (roles) {
+        navigate(`/${roleMapping[getActiveRole(roles)]}`);
+        unsubscribe();
+      }
+    });
   });
 
   return (
@@ -144,6 +151,7 @@ const LoginForm: FC<LoginFormProps> = ({ className }) => {
             className="mt-1 h-fit"
             isLoading={isPending}
           />
+          <GoogleLoginButton />
         </form>
       </Form>
       <ResetPassword
