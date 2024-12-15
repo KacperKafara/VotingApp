@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { AxiosError } from 'axios';
 
 const useAxiosPrivate = () => {
-  const { token, refreshToken, setToken, logOut } = useUserStore();
+  const { token, refreshToken, useOAuth, setToken, logOut } = useUserStore();
   const { t } = useTranslation('errors');
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -39,7 +39,7 @@ const useAxiosPrivate = () => {
               data: refreshToken,
             });
             const newToken = response.data.token;
-            setToken(newToken);
+            setToken(newToken, useOAuth);
             prevRequest.headers.Authorization = `Bearer ${newToken}`;
             return api.request(prevRequest);
           } catch (error) {
@@ -60,7 +60,7 @@ const useAxiosPrivate = () => {
       api.interceptors.request.eject(requestInterceptor);
       api.interceptors.response.eject(responseInterceptor);
     };
-  }, [token, logOut, navigate, toast, t, refreshToken, setToken]);
+  }, [token, logOut, navigate, toast, t, refreshToken, setToken, useOAuth]);
 
   return { api };
 };

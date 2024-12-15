@@ -6,7 +6,8 @@ interface UserStore {
   refreshToken?: string;
   id?: string;
   roles?: string[];
-  setToken: (token: string) => void;
+  useOAuth?: boolean;
+  setToken: (token: string, useOAuth: boolean | undefined) => void;
   setRefreshToken: (token: string) => void;
   logOut: () => void;
 }
@@ -37,7 +38,8 @@ export const useUserStore = create<UserStore>((set) => ({
   refreshToken: LSRefreshToken === null ? undefined : LSRefreshToken,
   id: LSToken === null ? undefined : decodedLSToken!.sub,
   roles: LSToken === null ? undefined : decodedLSToken!.authorities,
-  setToken: (token: string) =>
+  useOAuth: undefined,
+  setToken: (token: string, useOAuth?: boolean) =>
     set(() => {
       const payload = decodeJwt(token);
       localStorage.setItem('token', token);
@@ -45,6 +47,7 @@ export const useUserStore = create<UserStore>((set) => ({
         token,
         id: payload.sub,
         roles: payload.authorities,
+        useOAuth: useOAuth,
       };
     }),
   setRefreshToken: (token: string) =>
@@ -63,6 +66,7 @@ export const useUserStore = create<UserStore>((set) => ({
         refreshToken: undefined,
         id: undefined,
         roles: undefined,
+        useOAuth: undefined,
       };
     }),
 }));

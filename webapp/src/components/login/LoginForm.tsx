@@ -80,7 +80,7 @@ const LoginForm: FC<LoginFormProps> = ({ className }) => {
       return;
     }
 
-    setToken('token' in result ? result.token : '');
+    setToken('token' in result ? result.token : '', undefined);
     setRefreshToken('refreshToken' in result ? result.refreshToken : '');
     const unsubscribe = useUserStore.subscribe((state) => {
       const roles = state.roles;

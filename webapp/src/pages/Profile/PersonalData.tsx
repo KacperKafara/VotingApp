@@ -13,6 +13,7 @@ import {
 import { useUpdate2FA } from '@/data/useProfile';
 import { useCreateRoleRequest } from '@/data/useRoleRequest';
 import { cn } from '@/lib/utils';
+import { useUserStore } from '@/store/userStore';
 import { User } from '@/types/user';
 import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -37,6 +38,7 @@ const PersonalData: FC<PersonalDataProps> = ({
     useState(false);
   const { createRoleRequest, isPending } = useCreateRoleRequest();
   const { update2FA, isLoading, isSuccess } = useUpdate2FA();
+  const { useOAuth } = useUserStore();
 
   const activate2FA = async () => {
     await update2FA(true);
@@ -104,13 +106,16 @@ const PersonalData: FC<PersonalDataProps> = ({
           >
             {t('updateData')}
           </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() =>
-              setChangePasswordDialogOpen(!changePasswordDialogOpen)
-            }
-          >
-            {t('changePassword')}
-          </DropdownMenuItem>
+          {useOAuth === false ||
+            (useOAuth === undefined && (
+              <DropdownMenuItem
+                onClick={() =>
+                  setChangePasswordDialogOpen(!changePasswordDialogOpen)
+                }
+              >
+                {t('changePassword')}
+              </DropdownMenuItem>
+            ))}
           {user.active2fa && (
             <>
               <DropdownMenuItem

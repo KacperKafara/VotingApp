@@ -6,13 +6,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import pl.kafara.voting.model.AbstractEntity;
-import pl.kafara.voting.model.users.tokens.AccountVerificationToken;
-import pl.kafara.voting.model.users.tokens.SafeToken;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -70,9 +67,6 @@ public class User extends AbstractEntity implements Serializable {
     private LocalDateTime lastLogin;
     @Column(name = "last_failed_login")
     private LocalDateTime lastFailedLogin;
-
-    @Enumerated(EnumType.STRING)
-    private OAuthProvider oAuthProvider;
 
     @ToString.Exclude
     @Column(name = "oauth_id", unique = true)

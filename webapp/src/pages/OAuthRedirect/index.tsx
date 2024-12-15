@@ -43,7 +43,7 @@ const OAuthRedirect: FC = () => {
           setTwoFactorOpen({ username: result.data.username.data, open: true });
           return;
         } else if (result.status === 200 && 'token' in result.data) {
-          setToken('token' in result.data ? result.data.token : '');
+          setToken('token' in result.data ? result.data.token : '', true);
           setRefreshToken(
             'refreshToken' in result.data ? result.data.refreshToken : ''
           );
@@ -89,6 +89,7 @@ const OAuthRedirect: FC = () => {
         open={twoFactorOpen.open}
         onOpenChange={() => setTwoFactorOpen({ username: '', open: false })}
         username={twoFactorOpen.username}
+        useOAuth={true}
       />
     </div>
   );

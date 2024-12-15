@@ -29,9 +29,15 @@ interface TotpInputProps {
   open: boolean;
   onOpenChange: () => void;
   username: string;
+  useOAuth?: boolean;
 }
 
-const TotpInput: FC<TotpInputProps> = ({ open, onOpenChange, username }) => {
+const TotpInput: FC<TotpInputProps> = ({
+  open,
+  onOpenChange,
+  username,
+  useOAuth,
+}) => {
   const { t } = useTranslation('loginPage');
   const { authenticate, isPending } = useTotpAuthenticate();
   const { setToken, setRefreshToken } = useUserStore();
@@ -47,7 +53,7 @@ const TotpInput: FC<TotpInputProps> = ({ open, onOpenChange, username }) => {
   const onSubmit = form.handleSubmit(async ({ totp }) => {
     const result = await authenticate({ username, totp });
 
-    setToken(result.token);
+    setToken(result.token, useOAuth);
     setRefreshToken(result.refreshToken);
     const unsubscribe = useUserStore.subscribe((state) => {
       const roles = state.roles;

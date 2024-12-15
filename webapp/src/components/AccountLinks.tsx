@@ -23,7 +23,7 @@ const AccountsLinks: FC<AccountsLinksProps> = ({ className }) => {
   const [changePasswordDialogOpen, setChangePasswordDialogOpen] =
     useState(false);
   const { t } = useTranslation(['navbar', 'roleRequest']);
-  const { roles } = useUserStore();
+  const { roles, useOAuth } = useUserStore();
   const { createRoleRequest, isPending } = useCreateRoleRequest();
 
   return (
@@ -34,12 +34,15 @@ const AccountsLinks: FC<AccountsLinksProps> = ({ className }) => {
       <Button onClick={() => navigate('/profile')} className="w-3/4">
         {t('profile')}
       </Button>
-      <Button
-        onClick={() => setChangePasswordDialogOpen(true)}
-        className="w-3/4"
-      >
-        {t('changePassword')}
-      </Button>
+      {useOAuth === false ||
+        (useOAuth === undefined && (
+          <Button
+            onClick={() => setChangePasswordDialogOpen(true)}
+            className="w-3/4"
+          >
+            {t('changePassword')}
+          </Button>
+        ))}
       {roles?.includes(`ROLE_${UserRoles.admin}`) && (
         <Collapsible className="w-3/4">
           <CollapsibleTrigger asChild>
