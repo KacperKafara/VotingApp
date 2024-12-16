@@ -1,3 +1,4 @@
+import LoadingButton from '@/components/LoadingButton';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {
@@ -8,107 +9,104 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { PhoneInput } from '@/components/ui/phone-input';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { zodResolver } from '@hookform/resolvers/zod';
-import i18next, { TFunction } from 'i18next';
-import { FC } from 'react';
-import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import { z } from 'zod';
-import { CalendarIcon } from 'lucide-react';
 import {
-  Select,
   SelectContent,
   SelectItem,
-  SelectValue,
   SelectTrigger,
+  SelectValue,
 } from '@/components/ui/select';
+import { useFillData } from '@/data/useAuthenticate';
+import { FillOAuthData } from '@/types/registrationData';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Select } from '@radix-ui/react-select';
+import { enUS, pl } from 'date-fns/locale';
+import i18next, { TFunction } from 'i18next';
+import { CalendarIcon } from 'lucide-react';
+import { FC, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { isValidPhoneNumber } from 'react-phone-number-input';
-import { PhoneInput } from '@/components/ui/phone-input';
-import { RegistrationData } from '@/types/registrationData';
-import LoadingButton from '@/components/LoadingButton';
-import { pl, enUS } from 'date-fns/locale';
-import { useRegister } from '@/data/useAuthenticate';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { z } from 'zod';
 
-const getRegistrationSchema = (t: TFunction<'registerPage'>) =>
-  z
-    .object({
-      username: z
-        .string()
-        .min(3, { message: t('usernameToShort') })
-        .max(50, { message: t('usernameToLong') }),
-      password: z
-        .string()
-        .min(8, { message: t('passwordToShort') })
-        .max(50, { message: t('passwordToLong') }),
-      confirmPassword: z
-        .string()
-        .min(8, { message: t('passwordToShort') })
-        .max(50, { message: t('passwordToLong') }),
-      email: z.string().email({ message: t('emailInvalid') }),
-      firstName: z
-        .string()
-        .min(1, { message: t('firstNameRequired') })
-        .max(50, { message: t('firstNameToLong') }),
-      lastName: z
-        .string()
-        .min(1, { message: t('lastNameRequired') })
-        .max(50, { message: t('lastNameToLong') }),
-      phoneNumber: z
-        .string()
-        .refine(isValidPhoneNumber, { message: t('phoneNumberInvalid') }),
-      birthDate: z
-        .date({
-          required_error: t('birthDateRequired'),
-        })
-        .max(new Date(), { message: t('birthDateInvalid') }),
-      gender: z
-        .string({
-          required_error: t('genderRequired'),
-        })
-        .min(0, { message: t('genderInvalid') })
-        .max(2, { message: t('genderInvalid') }),
-    })
-    .refine((data) => data.password === data.confirmPassword, {
-      message: t('passwordsNotMatch'),
-      path: ['confirmPassword'],
-    });
+const getFillDataSchema = (t: TFunction<'registerPage'>) =>
+  z.object({
+    username: z
+      .string()
+      .min(3, { message: t('usernameToShort') })
+      .max(50, { message: t('usernameToLong') }),
+    email: z.string().email({ message: t('emailInvalid') }),
+    firstName: z
+      .string()
+      .min(1, { message: t('firstNameRequired') })
+      .max(50, { message: t('firstNameToLong') }),
+    lastName: z
+      .string()
+      .min(1, { message: t('lastNameRequired') })
+      .max(50, { message: t('lastNameToLong') }),
+    phoneNumber: z
+      .string()
+      .refine(isValidPhoneNumber, { message: t('phoneNumberInvalid') }),
+    birthDate: z
+      .date({
+        required_error: t('birthDateRequired'),
+      })
+      .max(new Date(), { message: t('birthDateInvalid') }),
+    gender: z
+      .string({
+        required_error: t('genderRequired'),
+      })
+      .min(0, { message: t('genderInvalid') })
+      .max(2, { message: t('genderInvalid') }),
+  });
 
-type RegistrationSchema = z.infer<ReturnType<typeof getRegistrationSchema>>;
+type FillDataSchema = z.infer<ReturnType<typeof getFillDataSchema>>;
 
-const RegisterPage: FC = () => {
+const OAuthFillData: FC = () => {
+  const { fillDataOAuth, isPending } = useFillData();
+  const navigate = useNavigate();
+  const location = useLocation();
   const { t } = useTranslation('registerPage');
-  const { register, isPending } = useRegister();
-  const form = useForm<RegistrationSchema>({
-    resolver: zodResolver(getRegistrationSchema(t)),
+  const data = location.state.data as FillOAuthData;
+
+  useEffect(() => {
+    if (!data || data.jwtToken === '' || data.jwtToken === undefined) {
+      navigate('/');
+    }
+  }, [data, navigate]);
+
+  const form = useForm<FillDataSchema>({
+    resolver: zodResolver(getFillDataSchema(t)),
     defaultValues: {
-      username: '',
-      password: '',
-      confirmPassword: '',
-      email: '',
-      firstName: '',
-      lastName: '',
-      phoneNumber: '',
+      username: data.username || '',
+      email: data.email || '',
+      firstName: data.firstName || '',
+      lastName: data.lastName || '',
+      phoneNumber: data.phoneNumber || '',
+      birthDate: data.birthDate ? new Date(data.birthDate) : undefined,
+      gender: data.gender.toString() || undefined,
     },
   });
 
-  const onSubmit = form.handleSubmit(async (data) => {
-    const registrationData: RegistrationData = {
-      username: data.username,
-      password: data.password,
-      email: data.email,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      phoneNumber: data.phoneNumber,
-      birthDate: data.birthDate,
-      gender: parseInt(data.gender),
-      language: i18next.language,
+  const onSubmit = form.handleSubmit(async (formData) => {
+    const submitData: FillOAuthData = {
+      jwtToken: data.jwtToken,
+      username: formData.username,
+      email: formData.email,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      phoneNumber: formData.phoneNumber,
+      birthDate: formData.birthDate,
+      gender: parseInt(formData.gender),
     };
-    await register(registrationData);
+
+    await fillDataOAuth(submitData);
   });
 
   return (
@@ -128,38 +126,6 @@ const RegisterPage: FC = () => {
                     {...field}
                     autoComplete="username"
                     placeholder={t('username')}
-                  />
-                </FormControl>
-                <FormMessage className="text-center" />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormControl>
-                  <Input
-                    {...field}
-                    type="password"
-                    placeholder={t('password')}
-                  />
-                </FormControl>
-                <FormMessage className="text-center" />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="confirmPassword"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormControl>
-                  <Input
-                    {...field}
-                    type="password"
-                    placeholder={t('confirmPassword')}
                   />
                 </FormControl>
                 <FormMessage className="text-center" />
@@ -296,4 +262,4 @@ const RegisterPage: FC = () => {
   );
 };
 
-export default RegisterPage;
+export default OAuthFillData;

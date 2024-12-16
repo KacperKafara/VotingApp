@@ -12,5 +12,6 @@
   "registration": {
     "sucessTitle": "Rejestracja zakończona sukcesem",
     "sucessMessage": "Pomyślnie zarejestrowałeś się. Sprawdź swoją skrzynkę e-mail, aby zweryfikować swoje konto."
-  }
+  },
+  "fillData": "Wypełnij dane aby kontynuować"
 }

@@ -1,3 +1,4 @@
+import LoadingIcon from '@/components/loading';
 import { TwoFactorProps } from '@/components/login/LoginForm';
 import TotpInput from '@/components/login/TotpInput';
 import { api } from '@/data/api';
@@ -15,6 +16,7 @@ const OAuthRedirect: FC = () => {
   const navigate = useNavigate();
   const { setToken, setRefreshToken, roles } = useUserStore();
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
   const { t } = useTranslation(['loginPage', 'errors', 'common']);
   const [twoFactorOpen, setTwoFactorOpen] = useState<TwoFactorProps>({
     username: '',
@@ -24,6 +26,7 @@ const OAuthRedirect: FC = () => {
   useEffect(() => {
     (async () => {
       if (called.current) return;
+      setIsLoading(true);
       try {
         called.current = true;
         const code = window.location.search;
@@ -56,8 +59,19 @@ const OAuthRedirect: FC = () => {
           });
         }
       } catch (e) {
-        console.error(e);
         const error = e as AxiosError;
+        if (error.response?.status === 422) {
+          toast({
+            description: t('common:fillData'),
+          });
+          navigate('/oauth/fill-data', {
+            state: {
+              data: error.response.data,
+            },
+          });
+          return;
+        }
+
         if (
           error.response &&
           error.response.data &&
@@ -79,19 +93,28 @@ const OAuthRedirect: FC = () => {
           });
         }
         navigate('/');
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, [navigate, roles, setRefreshToken, setToken, t, toast]);
 
   return (
-    <div>
-      <TotpInput
-        open={twoFactorOpen.open}
-        onOpenChange={() => setTwoFactorOpen({ username: '', open: false })}
-        username={twoFactorOpen.username}
-        useOAuth={true}
-      />
-    </div>
+    <>
+      {isLoading && (
+        <div className="flex h-full items-center justify-center">
+          <LoadingIcon />
+        </div>
+      )}
+      <div>
+        <TotpInput
+          open={twoFactorOpen.open}
+          onOpenChange={() => setTwoFactorOpen({ username: '', open: false })}
+          username={twoFactorOpen.username}
+          useOAuth={true}
+        />
+      </div>
+    </>
   );
 };
 

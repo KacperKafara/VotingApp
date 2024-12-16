@@ -10,6 +10,7 @@ const VerifyAccountPage = loadable(
   () => import('./pages/Register/verifyAccount')
 );
 const OAuthRedirectPage = loadable(() => import('./pages/OAuthRedirect'));
+const OAuthFillDataPage = loadable(() => import('./pages/OAuthFillData'));
 
 const AdminUsersPage = loadable(() => import('./pages/@Admin/users'));
 const AdminUserPage = loadable(() => import('./pages/@Admin/user'));
@@ -51,6 +52,7 @@ const Routes: RouteObject[] = [
   { path: '/resetPassword/:token', Component: ResetPasswordPage },
   { path: '/verify/:token', Component: VerifyAccountPage },
   { path: '/login/oauth2/code/google', Component: OAuthRedirectPage },
+  { path: '/oauth/fill-data', Component: OAuthFillDataPage },
 ];
 
 const AdminRoutes: RouteObject[] = [

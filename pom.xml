@@ -28,6 +28,7 @@
         <auth0.version>4.4.0</auth0.version>
         <totp.version>1.7.1</totp.version>
         <maven-tests-plugins.version>3.5.2</maven-tests-plugins.version>
+        <google-api-client.version>2.7.1</google-api-client.version>
     </properties>
     <dependencies>
         <dependency>
@@ -132,6 +133,12 @@
             <artifactId>javase</artifactId>
             <version>${zxing.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.api-client</groupId>
+            <artifactId>google-api-client</artifactId>
+            <version>${google-api-client.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>

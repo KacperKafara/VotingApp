@@ -17,10 +17,10 @@ public record GoogleTokenResponse(
         @JsonProperty("id_token")
         String idToken
 ) {
-//        @Override
-//        public String toString() {
-//                return new StringJoiner(", ", GoogleTokenResponse.class.getSimpleName() + "[", "]")
-//                        .add("expiresIn=" + expiresIn)
-//                        .toString();
-//        }
+        @Override
+        public String toString() {
+                return new StringJoiner(", ", GoogleTokenResponse.class.getSimpleName() + "[", "]")
+                        .add("expiresIn=" + expiresIn)
+                        .toString();
+        }
 }

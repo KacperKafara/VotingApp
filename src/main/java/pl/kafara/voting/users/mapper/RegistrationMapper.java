@@ -1,6 +1,7 @@
 package pl.kafara.voting.users.mapper;
 
 import pl.kafara.voting.model.users.User;
+import pl.kafara.voting.users.dto.OAuth.google.FillDataDTO;
 import pl.kafara.voting.users.dto.OAuth.google.GoogleProfileData;
 import pl.kafara.voting.users.dto.OAuth.google.profileData.GoogleEmailAddress;
 import pl.kafara.voting.users.dto.OAuth.google.profileData.GoogleName;
@@ -27,42 +28,44 @@ public class RegistrationMapper {
     }
 
     public static User googleProfileDataToUser(GoogleProfileData googleProfileData, String subject) {
-        String firstName = googleProfileData.names()
+        String firstName = googleProfileData.names() != null ? googleProfileData.names()
                 .stream()
                 .filter(name -> name.metadata().primary())
                 .findFirst()
                 .map(GoogleName::givenName)
-                .orElse(null);
+                .orElse(null) : null;
 
-        String lastName = googleProfileData.names()
+        String lastName = googleProfileData.names() != null ? googleProfileData.names()
                 .stream()
                 .filter(name -> name.metadata().primary())
                 .findFirst()
                 .map(GoogleName::familyName)
-                .orElse(null);
+                .orElse(null) : null;
 
-        String phoneNumber = googleProfileData.phoneNumbers()
+        String phoneNumber = googleProfileData.phoneNumbers() != null ? googleProfileData.phoneNumbers()
                 .stream()
                 .filter(number -> number.metadata().primary())
                 .findFirst()
                 .map(GooglePhoneNumber::canonicalForm)
-                .orElse(null);
+                .orElse(null) : null;
 
-        String email = googleProfileData.emailAddresses()
+        String email = googleProfileData.emailAddresses() != null ? googleProfileData.emailAddresses()
                 .stream()
                 .filter(emailAddress -> emailAddress.metadata().primary())
                 .findFirst()
                 .map(GoogleEmailAddress::value)
-                .orElse(null);
+                .orElse(null) : null;
 
-        String username = Objects.requireNonNull(email).split("@")[0];
+        String username = email != null ? email.split("@")[0] : null;
 
-        LocalDateTime birthDate = googleProfileData.birthDates()
+        LocalDateTime birthDate = googleProfileData.birthDates() != null ? googleProfileData.birthDates()
                 .stream()
-                .filter(bd -> bd.metadata().primary())
+                .filter(bd -> bd.date().day() != null &&
+                        bd.date().month() != null &&
+                        bd.date().year() != null)
                 .findFirst()
                 .map(data -> LocalDateTime.of(data.date().year(), data.date().month(), data.date().day(), 0, 0))
-                .orElse(null);
+                .orElse(null) : null;
 
         User user = new User(
                 firstName,
@@ -75,5 +78,17 @@ public class RegistrationMapper {
         );
         user.setOAuthId(subject);
         return user;
+    }
+
+    public static User fillDataDTOToUser(FillDataDTO fillData) {
+        return new User(
+                fillData.firstName(),
+                fillData.lastName(),
+                fillData.phoneNumber(),
+                fillData.birthDate(),
+                fillData.username(),
+                fillData.email(),
+                "pl"
+        );
     }
 }

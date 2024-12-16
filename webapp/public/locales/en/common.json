@@ -10,5 +10,6 @@
   "registration": {
     "sucessTitle": "Registration successful",
     "sucessMessage": "You have successfully registered. Please check your email to verify your account."
-  }
+  },
+  "fillData": "Fill in the data to continue"
 }

@@ -4,7 +4,7 @@ import { AxiosError } from 'axios';
 import { useToast } from '@/hooks/use-toast';
 import { useTranslation } from 'react-i18next';
 import { ApplicationError } from '@/types/applicationError';
-import { RegistrationData } from '@/types/registrationData';
+import { FillOAuthData, RegistrationData } from '@/types/registrationData';
 import { useNavigate, useParams } from 'react-router-dom';
 
 interface LoginRequest {
@@ -151,4 +151,33 @@ export const useOAuthUrl = () => {
   });
 
   return { googleOAuthUrl: data };
+};
+
+export const useFillData = () => {
+  const { toast } = useToast();
+  const { t } = useTranslation(['errors', 'common']);
+  const navigate = useNavigate();
+
+  const { mutateAsync, isSuccess, isPending } = useMutation({
+    mutationFn: async (data: FillOAuthData) => {
+      const response = await api.post('/oauth/google/fillData', data);
+      return response.data;
+    },
+    onError: (error: AxiosError) => {
+      toast({
+        variant: 'destructive',
+        title: t('defaultTitle'),
+        description: t((error.response?.data as ApplicationError).code),
+      });
+    },
+    onSuccess: () => {
+      toast({
+        title: t('common:registration.sucessTitle'),
+        description: t('common:registration.sucessMessage'),
+      });
+      navigate('/');
+    },
+  });
+
+  return { fillDataOAuth: mutateAsync, isSuccess, isPending };
 };
