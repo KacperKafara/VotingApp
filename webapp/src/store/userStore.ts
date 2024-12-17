@@ -30,6 +30,7 @@ export const getActiveRole = (roles: string[]): string =>
 
 const LSToken = localStorage.getItem('token');
 const LSRefreshToken = localStorage.getItem('refreshToken');
+const LSUseOAuth = localStorage.getItem('useOAuth');
 
 const decodedLSToken = LSToken === null ? undefined : decodeJwt(LSToken!);
 
@@ -38,11 +39,12 @@ export const useUserStore = create<UserStore>((set) => ({
   refreshToken: LSRefreshToken === null ? undefined : LSRefreshToken,
   id: LSToken === null ? undefined : decodedLSToken!.sub,
   roles: LSToken === null ? undefined : decodedLSToken!.authorities,
-  useOAuth: undefined,
+  useOAuth: LSUseOAuth === null ? undefined : LSUseOAuth === 'true',
   setToken: (token: string, useOAuth?: boolean) =>
     set(() => {
       const payload = decodeJwt(token);
       localStorage.setItem('token', token);
+      localStorage.setItem('useOAuth', useOAuth?.toString() || 'false');
       return {
         token,
         id: payload.sub,
@@ -61,6 +63,7 @@ export const useUserStore = create<UserStore>((set) => ({
     set(() => {
       localStorage.removeItem('token');
       localStorage.removeItem('refreshToken');
+      localStorage.removeItem('useOAuth');
       return {
         token: undefined,
         refreshToken: undefined,
