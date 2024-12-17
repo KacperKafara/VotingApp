@@ -43,5 +43,6 @@
   "scanThisCodeToLogin": "Scan this code in the authentication app to log in next time.",
   "deactivate2FADialog": "Deactivate two-factor authentication",
   "deactivate2FA": "Deactivate two-factor authentication",
-  "deactivate2FADescription": "Are you sure you want to deactivate two-factor authentication?"
+  "deactivate2FADescription": "Are you sure you want to deactivate two-factor authentication?",
+  "noFailedLogins": "No failed logins"
 }

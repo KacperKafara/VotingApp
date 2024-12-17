@@ -43,5 +43,6 @@
   "scanThisCodeToLogin": "Zeskanuj ten kod w aplikacji do uwierzytelniania aby móc zalogować się następnym razem.",
   "deactivate2FADialog": "Dezaktywuj dwuetapowe uwierzytelnianie",
   "deactivate2FA": "Dezaktywuj dwuetapowe uwierzytelnianie",
-  "deactivate2FADescription": "Czy na pewno chcesz dezaktywować dwuetapowe uwierzytelnianie?"
+  "deactivate2FADescription": "Czy na pewno chcesz dezaktywować dwuetapowe uwierzytelnianie?",
+  "noFailedLogins": "Brak nieudanych logowań"
 }

@@ -1,5 +1,5 @@
 import ChangePasswordDialog from '@/components/ChangePasswordDialog';
-import ConfirmDialog from '@/components/ConfirmDialog';
+import ConfirmDialogTriggerLess from '@/components/ConfirmDialogTriggerLess';
 import EditProfile from '@/components/EditProfile';
 import QRCodeDialog from '@/components/QRCodeDialog';
 import { Button } from '@/components/ui/button';
@@ -30,21 +30,22 @@ const PersonalData: FC<PersonalDataProps> = ({
   tag_value,
 }) => {
   const { t } = useTranslation('profile');
+  const [activate2FAOpen, setActivate2FAOpen] = useState(false);
+  const [deactivate2FAOpen, setDeactivate2FAOpen] = useState(false);
+  const [createRoleRequestOpen, setCreateRoleRequestOpen] = useState(false);
   const [editProfileOpen, setEditProfileOpen] = useState(false);
   const [changePasswordDialogOpen, setChangePasswordDialogOpen] =
     useState(false);
   const [displayQRCodeVotingOpen, setDisplayQRCodeVotingOpen] = useState(false);
   const [displayQRCodeAuthorisationOpen, setDisplayQRCodeAuthorisationOpen] =
     useState(false);
-  const { createRoleRequest, isPending } = useCreateRoleRequest();
-  const { update2FA, isLoading, isSuccess } = useUpdate2FA();
+  const { createRoleRequest } = useCreateRoleRequest();
+  const { update2FA } = useUpdate2FA();
   const { useOAuth } = useUserStore();
 
   const activate2FA = async () => {
     await update2FA(true);
-    if (isSuccess) {
-      setDisplayQRCodeAuthorisationOpen(true);
-    }
+    setDisplayQRCodeAuthorisationOpen(true);
   };
 
   return (
@@ -127,30 +128,14 @@ const PersonalData: FC<PersonalDataProps> = ({
               >
                 {t('displayQRCodeForAuthorisation')}
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <ConfirmDialog
-                  className="w-full px-2 py-1.5 text-sm outline-none"
-                  variant="ghost"
-                  isLoading={isLoading}
-                  buttonText={t('deactivate2FADialog')}
-                  dialogTitle={t('deactivate2FA')}
-                  dialogDescription={t('deactivate2FADescription')}
-                  confirmAction={() => update2FA(false)}
-                />
+              <DropdownMenuItem onClick={() => setDeactivate2FAOpen(true)}>
+                {t('deactivate2FADialog')}
               </DropdownMenuItem>
             </>
           )}
           {!user.active2fa && (
-            <DropdownMenuItem asChild>
-              <ConfirmDialog
-                // className="w-full px-2 py-1.5 text-sm outline-none"
-                variant="ghost"
-                isLoading={isLoading}
-                buttonText={t('activate2FADialog')}
-                dialogTitle={t('activate2FA')}
-                dialogDescription={t('activate2FADescription')}
-                confirmAction={activate2FA}
-              />
+            <DropdownMenuItem onClick={() => setActivate2FAOpen(true)}>
+              {t('activate2FADialog')}
             </DropdownMenuItem>
           )}
           {user.roles.includes('VOTER') ? (
@@ -164,22 +149,35 @@ const PersonalData: FC<PersonalDataProps> = ({
           ) : user.roles.includes('USER') &&
             !user.roles.includes('VOTER') &&
             !user.activeRoleRequest ? (
-            <DropdownMenuItem asChild>
-              <ConfirmDialog
-                className="w-full px-2 py-1.5 text-sm outline-none"
-                variant="ghost"
-                isLoading={isPending}
-                buttonText={t('createRoleRequest')}
-                dialogTitle={t('send')}
-                dialogDescription={t('sendDescription')}
-                confirmAction={createRoleRequest}
-              />
+            <DropdownMenuItem onClick={() => setCreateRoleRequestOpen(true)}>
+              {t('createRoleRequest')}
             </DropdownMenuItem>
           ) : (
             <></>
           )}
         </DropdownMenuContent>
       </DropdownMenu>
+      <ConfirmDialogTriggerLess
+        open={deactivate2FAOpen}
+        onOpenChange={() => setDeactivate2FAOpen(!deactivate2FAOpen)}
+        dialogTitle={t('deactivate2FA')}
+        dialogDescription={t('deactivate2FADescription')}
+        confirmAction={() => update2FA(false)}
+      />
+      <ConfirmDialogTriggerLess
+        open={createRoleRequestOpen}
+        onOpenChange={() => setCreateRoleRequestOpen(!createRoleRequestOpen)}
+        dialogTitle={t('send')}
+        dialogDescription={t('sendDescription')}
+        confirmAction={createRoleRequest}
+      />
+      <ConfirmDialogTriggerLess
+        open={activate2FAOpen}
+        onOpenChange={() => setActivate2FAOpen(!activate2FAOpen)}
+        dialogTitle={t('activate2FA')}
+        dialogDescription={t('activate2FADescription')}
+        confirmAction={activate2FA}
+      />
       <EditProfile
         open={editProfileOpen}
         onOpenChange={() => setEditProfileOpen(!editProfileOpen)}

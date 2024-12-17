@@ -33,9 +33,11 @@ const LastLoginData: FC<LastLoginDataProps> = ({ user, className }) => {
               {t('lastFailedLogin')}
             </span>
             <p>
-              {new Date(user.lastFailedLogin).toLocaleDateString(
-                navigator.language || 'pl-PL'
-              )}
+              {user.lastFailedLogin != undefined
+                ? new Date(user.lastFailedLogin).toLocaleDateString(
+                    navigator.language || 'pl-PL'
+                  )
+                : t('noFailedLogins')}
             </p>
           </div>
         </div>

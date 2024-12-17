@@ -47,9 +47,13 @@ const QRCodeDialog: FC<QRCodeDialogProps> = ({
     };
 
     if (open) {
-      fetchQRCode();
+      try {
+        fetchQRCode();
+      } catch {
+        onOpenChange();
+      }
     }
-  }, [api, kind, open]);
+  }, [api, kind, onOpenChange, open]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
