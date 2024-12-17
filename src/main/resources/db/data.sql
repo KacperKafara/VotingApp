@@ -79,8 +79,8 @@ INSERT INTO public.users_roles (user_id, roles_id)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1042', 'b7a8dedb-bccc-4461-9b28-b60b5bf83e7f');
 
 -- User 6
-INSERT INTO public.users (id, username, password, created_at, updated_at, verified, blocked, failed_login_attempts, version, language)
-VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1043', 'tjohnson', '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en');
+INSERT INTO public.users (id, username, password, created_at, updated_at, verified, blocked, failed_login_attempts, version, language, authorisation_totp_secret)
+VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1043', 'tjohnson', '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en', 'kBC0ff7aSM3XyYWjGpKD5K2tjj87NRHBo7ZiGvAqK0byFS6ZtSwSTMdg9Ma5lm24');
 
 INSERT INTO public.personal_data (first_name, last_name, phone_number, birth_date, user_id, email, gender_id)
 VALUES ('Tom', 'Johnson', '+48123456784', '2006-06-06', '5e642d0a-94d4-4a4f-8760-cd6d63cd1043', 'tjohnson@localhost.com', 'aeead59f-a7c5-4570-bbc7-bd9eae859c20');

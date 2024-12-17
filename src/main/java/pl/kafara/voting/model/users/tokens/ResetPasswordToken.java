@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import pl.kafara.voting.model.users.User;
 
 import java.time.Instant;
-import java.util.StringJoiner;
 
 @Entity
 @NoArgsConstructor
