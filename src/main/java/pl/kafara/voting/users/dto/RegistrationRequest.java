@@ -20,8 +20,10 @@ public record RegistrationRequest(
         @NotBlank
         String lastName,
         @NotBlank
+        @Pattern(regexp = "^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}$")
         String phoneNumber,
         @NotNull
+        @Past
         LocalDateTime birthDate,
         @Min(0)
         @Max(2)

@@ -37,7 +37,7 @@ public class RefreshTokenIT extends IntegrationTestConfiguration {
 
     @Test
     @DataSet(value = "/dataset/users.json", strategy = SeedStrategy.REFRESH)
-    public void refreshToken_WhenTokenIsInvalid_return400() {
+    public void refreshToken_WhenTokenIsInvalid_return401() {
         String refreshToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJWb3RpbmdBcHAiLCJzdWIiOiI1ZTY0MmQwYS05NGQ0LTRhNGYtODc2MC1jZDZkNjNjZDEwMjIiLCJpYXQiOjE3MzQ0NjU5ODgsImV4cCI6MTgyMDg2MjM4OH0.qsf-FxjPElHF0uBOrbaHjPnNd-pHRg-GGCReskNGQrM";
         SensitiveData sensitiveData = new SensitiveData(refreshToken);
 
