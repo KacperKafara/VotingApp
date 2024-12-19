@@ -1,0 +1,88 @@
+{
+  "users": [
+    {
+      "id": "f77cf369-337e-4bfd-bc85-aa7d63fa244b",
+      "username": "user1",
+      "password": "$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.",
+      "created_at": "2021-01-01 00:00:00",
+      "updated_at": "2021-01-01 00:00:00",
+      "verified": true,
+      "blocked": false,
+      "failed_login_attempts": 0,
+      "version": 1,
+      "language": "en",
+      "authorisation_totp_secret": "lQgCvY17bN2lKxjy/EGI7Xxcn0mLxdyJRG9uZ6VLcwvyFS6ZtSwSTMdg9Ma5lm24"
+    },
+    {
+      "id": "f77cf369-337e-4bfd-bc85-aa7d63fa244c",
+      "username": "user2",
+      "password": "$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.",
+      "created_at": "2021-01-01 00:00:00",
+      "updated_at": "2021-01-01 00:00:00",
+      "verified": true,
+      "blocked": true,
+      "failed_login_attempts": 0,
+      "version": 1,
+      "language": "en"
+    },
+    {
+      "id": "f77cf369-337e-4bfd-bc85-aa7d63fa244d",
+      "username": "user3",
+      "password": "$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.",
+      "created_at": "2021-01-01 00:00:00",
+      "updated_at": "2021-01-01 00:00:00",
+      "verified": true,
+      "blocked": false,
+      "failed_login_attempts": 0,
+      "version": 1,
+      "language": "en"
+    }
+  ],
+  "users_roles": [
+    {
+      "user_id": "f77cf369-337e-4bfd-bc85-aa7d63fa244b",
+      "roles_id": "b91d7195-69a1-4073-9c95-52ceefd93cb7"
+    },
+    {
+      "user_id": "f77cf369-337e-4bfd-bc85-aa7d63fa244c",
+      "roles_id": "b7a8dedb-bccc-4461-9b28-b60b5bf83e7f"
+    },
+    {
+      "user_id": "f77cf369-337e-4bfd-bc85-aa7d63fa244d",
+      "roles_id": "b91d7195-69a1-4073-9c95-52ceefd93cb7"
+    },
+    {
+      "user_id": "f77cf369-337e-4bfd-bc85-aa7d63fa244d",
+      "roles_id": "c07e7fce-134c-4004-bd70-b1e3a576a23b"
+    }
+  ],
+  "personal_data": [
+    {
+      "first_name": "John",
+      "last_name": "Doe",
+      "phone_number": "1234567890",
+      "birth_date": "1990-01-01",
+      "user_id": "f77cf369-337e-4bfd-bc85-aa7d63fa244b",
+      "email": "test@test.com",
+      "gender_id": "cc8e8196-1bd8-4be6-a8b4-a1dc1973a7eb"
+    },
+    {
+      "first_name": "Jane",
+      "last_name": "Doe",
+      "phone_number": "1234567899",
+      "birth_date": "1990-01-01",
+      "user_id": "f77cf369-337e-4bfd-bc85-aa7d63fa244c",
+      "email": "abcd@abcd.com",
+      "gender_id": "cc8e8196-1bd8-4be6-a8b4-a1dc1973a7eb"
+    },
+    {
+      "first_name": "John",
+      "last_name": "Smith",
+      "phone_number": "1234567898",
+      "birth_date": "1990-01-01",
+      "user_id": "f77cf369-337e-4bfd-bc85-aa7d63fa244d",
+      "email": "eeee@eee.com",
+      "gender_id": "cc8e8196-1bd8-4be6-a8b4-a1dc1973a7eb"
+    }
+  ]
+}

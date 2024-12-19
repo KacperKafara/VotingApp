@@ -28,6 +28,7 @@ public class UserMessages {
     public static final String TOTP_AUTHORISATION_ALREADY_ACTIVE = "2FA already active";
     public static final String MFA_REQUIRED = "MFA required";
     public static final String OAUTH_TOKEN_VERIFICATION_FAILED = "OAuth token verification failed";
+    public static final String ROLE_REQUEST_ALREADY_RESOLVED = "Role request already resolved";
 
     private UserMessages() {
     }

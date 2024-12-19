@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.kafara.voting.exceptions.NotFoundException;
 import pl.kafara.voting.exceptions.user.ResolveOwnRequestException;
+import pl.kafara.voting.exceptions.user.RoleRequestException;
 import pl.kafara.voting.exceptions.user.YouAreVoterException;
 import pl.kafara.voting.model.users.User;
 import pl.kafara.voting.users.dto.VoterRoleRequestListResponse;
@@ -54,7 +55,7 @@ public class VoterRoleRequestController {
             User user = voterRoleRequestService.acceptRequest(id);
             emailService.sendVoterRoleRequestAcceptedEmail(user.getEmail(), user.getUsername(), user.getLanguage());
             return ResponseEntity.ok().build();
-        } catch (ResolveOwnRequestException e) {
+        } catch (ResolveOwnRequestException | RoleRequestException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
     }
@@ -66,7 +67,7 @@ public class VoterRoleRequestController {
             User user = voterRoleRequestService.rejectRequest(id);
             emailService.sendVoterRoleRequestRejectedEmail(user.getEmail(), user.getUsername(), user.getLanguage());
             return ResponseEntity.ok().build();
-        } catch (ResolveOwnRequestException e) {
+        } catch (ResolveOwnRequestException | RoleRequestException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
     }

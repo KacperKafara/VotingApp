@@ -40,6 +40,7 @@ public class UserExceptionCodes {
     public static final String TOTP_AUTHORISATION_ALREADY_ACTIVE = "TOTP_AUTHORISATION_ALREADY_ACTIVE";
     public static final String MFA_REQUIRED = "MFA_REQUIRED";
     public static final String OAUTH_TOKEN_VERIFICATION_FAILED = "OAUTH_TOKEN_VERIFICATION_FAILED";
+    public static final String ROLE_REQUEST_ALREADY_RESOLVED = "ROLE_REQUEST_ALREADY_RESOLVED";
 
     private UserExceptionCodes() {
     }

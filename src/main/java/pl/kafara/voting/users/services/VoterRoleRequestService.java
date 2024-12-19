@@ -14,6 +14,7 @@ import pl.kafara.voting.exceptions.NotFoundException;
 import pl.kafara.voting.exceptions.exceptionCodes.UserExceptionCodes;
 import pl.kafara.voting.exceptions.messages.UserMessages;
 import pl.kafara.voting.exceptions.user.ResolveOwnRequestException;
+import pl.kafara.voting.exceptions.user.RoleRequestException;
 import pl.kafara.voting.exceptions.user.YouAreVoterException;
 import pl.kafara.voting.model.users.*;
 import pl.kafara.voting.users.dto.VoterRoleRequestListResponse;
@@ -68,11 +69,14 @@ public class VoterRoleRequestService {
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {NotFoundException.class, ResolveOwnRequestException.class})
-    public User acceptRequest(UUID id) throws NotFoundException, ResolveOwnRequestException {
+    public User acceptRequest(UUID id) throws NotFoundException, ResolveOwnRequestException, RoleRequestException {
         DecodedJWT jwt =  JWT.decode((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         UUID currentId = UUID.fromString(jwt.getSubject());
         VoterRoleRequest roleRequest = roleRequestRepository.findById(id).orElseThrow(() ->
                 new NotFoundException(UserMessages.ROLE_REQUEST_NOT_FOUND, UserExceptionCodes.ROLE_REQUEST_NOT_FOUND));
+        if (roleRequest.getResolution() != RoleRequestResolution.PENDING)
+            throw new RoleRequestException(UserMessages.ROLE_REQUEST_ALREADY_RESOLVED, UserExceptionCodes.ROLE_REQUEST_ALREADY_RESOLVED);
+
         User user = roleRequest.getUser();
         Role role = roleRepository.findByName(UserRoleEnum.VOTER).orElseThrow(() ->
                 new NotFoundException(UserMessages.ROLE_NOT_FOUND, UserExceptionCodes.ROLE_NOT_FOUND));
@@ -88,11 +92,14 @@ public class VoterRoleRequestService {
     }
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public User rejectRequest(UUID id) throws NotFoundException, ResolveOwnRequestException {
+    public User rejectRequest(UUID id) throws NotFoundException, ResolveOwnRequestException, RoleRequestException {
         DecodedJWT jwt =  JWT.decode((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         UUID currentId = UUID.fromString(jwt.getSubject());
         VoterRoleRequest roleRequest = roleRequestRepository.findById(id).orElseThrow(() ->
                 new NotFoundException(UserMessages.ROLE_REQUEST_NOT_FOUND, UserExceptionCodes.ROLE_REQUEST_NOT_FOUND));
+
+        if(roleRequest.getResolution() != RoleRequestResolution.PENDING)
+            throw new RoleRequestException(UserMessages.ROLE_REQUEST_ALREADY_RESOLVED, UserExceptionCodes.ROLE_REQUEST_ALREADY_RESOLVED);
 
         if (currentId.equals(roleRequest.getUser().getId()))
             throw new ResolveOwnRequestException(UserMessages.REJECT_OWN_REQUEST_ROLE, UserExceptionCodes.REJECT_OWN_REQUEST_ROLE);
