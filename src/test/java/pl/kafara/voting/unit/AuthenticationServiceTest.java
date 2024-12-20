@@ -15,16 +15,12 @@ import pl.kafara.voting.users.repositories.UserRepository;
 import pl.kafara.voting.users.services.AuthenticationService;
 import pl.kafara.voting.users.services.TokenService;
 import pl.kafara.voting.util.JwtService;
-import pl.kafara.voting.util.SensitiveData;
 
-import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)

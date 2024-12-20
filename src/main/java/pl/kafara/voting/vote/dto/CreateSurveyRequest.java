@@ -18,6 +18,7 @@ public record CreateSurveyRequest(
         @Future
         @NotNull
         LocalDateTime endDate,
+        @NotNull
         SurveyKind surveyKind
 ) {
 }
