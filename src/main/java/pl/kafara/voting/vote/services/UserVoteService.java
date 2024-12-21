@@ -7,17 +7,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.kafara.voting.exceptions.NotFoundException;
+import pl.kafara.voting.exceptions.SurveyException;
 import pl.kafara.voting.exceptions.VotingOrSurveyNotActiveException;
 import pl.kafara.voting.exceptions.exceptionCodes.SurveyExceptionCodes;
 import pl.kafara.voting.exceptions.exceptionCodes.VotingExceptionCodes;
 import pl.kafara.voting.exceptions.messages.SurveyMessages;
 import pl.kafara.voting.exceptions.messages.VotingMessages;
 import pl.kafara.voting.model.users.User;
-import pl.kafara.voting.model.vote.ParliamentaryClub;
-import pl.kafara.voting.model.vote.UserVoteResult;
-import pl.kafara.voting.model.vote.Voting;
-import pl.kafara.voting.model.vote.VotingOption;
+import pl.kafara.voting.model.vote.*;
 import pl.kafara.voting.model.vote.survey.Survey;
+import pl.kafara.voting.model.vote.survey.SurveyKind;
 import pl.kafara.voting.model.vote.survey.UserVoteOtherSurvey;
 import pl.kafara.voting.model.vote.survey.UserVoteParliamentaryClub;
 import pl.kafara.voting.model.vote.userVotes.UserVoteOnList;
@@ -45,8 +44,13 @@ public class UserVoteService {
 
     @PreAuthorize("hasRole('VOTER')")
     @CacheEvict(value = "latestSurvey", key="'latest'", condition = "#surveyId != null")
-    public void voteParliamentaryClub(UUID surveyId, String parliamentaryClubId, User user) throws NotFoundException, VotingOrSurveyNotActiveException {
+    public void voteParliamentaryClub(UUID surveyId, String parliamentaryClubId, User user) throws NotFoundException, VotingOrSurveyNotActiveException, SurveyException {
         Survey survey = surveyService.getSurveyById(surveyId);
+
+        if (survey.getSurveyKind() != SurveyKind.PARLIAMENTARY_CLUB) {
+            throw new SurveyException(SurveyMessages.SURVEY_KIND_NOT_PARLIAMENTARY_CLUB, SurveyExceptionCodes.SURVEY_KIND_NOT_PARLIAMENTARY_CLUB);
+
+        }
 
         if (survey.getEndDate().isBefore(LocalDateTime.now())) {
             throw new VotingOrSurveyNotActiveException(SurveyMessages.SURVEY_NOT_ACTIVE, SurveyExceptionCodes.SURVEY_NOT_ACTIVE);
@@ -61,8 +65,12 @@ public class UserVoteService {
 
     @PreAuthorize("hasRole('VOTER')")
     @CacheEvict(value = "latestSurvey", key="'latest'", condition = "#surveyId != null")
-    public void voteOtherSurvey(UUID surveyId, UserVoteResult userVoteResult, User user) throws NotFoundException, VotingOrSurveyNotActiveException {
+    public void voteOtherSurvey(UUID surveyId, UserVoteResult userVoteResult, User user) throws NotFoundException, VotingOrSurveyNotActiveException, SurveyException {
         Survey survey = surveyService.getSurveyById(surveyId);
+
+        if (survey.getSurveyKind() != SurveyKind.OTHER) {
+            throw new SurveyException(SurveyMessages.SURVEY_KIND_NOT_OTHER, SurveyExceptionCodes.SURVEY_KIND_NOT_OTHER);
+        }
 
         if (survey.getEndDate().isBefore(LocalDateTime.now())) {
             throw new VotingOrSurveyNotActiveException(SurveyMessages.SURVEY_NOT_ACTIVE, SurveyExceptionCodes.SURVEY_NOT_ACTIVE);
@@ -72,8 +80,12 @@ public class UserVoteService {
     }
 
     @PreAuthorize("hasRole('VOTER')")
-    public void voteVoting(UUID votingId, UserVoteResult userVoteResult, User user) throws NotFoundException, VotingOrSurveyNotActiveException {
+    public void voteVoting(UUID votingId, UserVoteResult userVoteResult, User user) throws NotFoundException, VotingOrSurveyNotActiveException, SurveyException {
         Voting voting = votingService.getVotingById(votingId);
+
+        if (!voting.getVotingOptions().isEmpty() || voting.getKind() == VotingKind.ON_LIST) {
+            throw new SurveyException(VotingMessages.VOTING_ON_LIST, VotingExceptionCodes.VOTING_ON_LIST);
+        }
 
         if (voting.getEndDate().isBefore(LocalDateTime.now())) {
             throw new VotingOrSurveyNotActiveException(VotingMessages.VOTING_NOT_ACTIVE, VotingExceptionCodes.VOTING_NOT_ACTIVE);
@@ -83,8 +95,12 @@ public class UserVoteService {
     }
 
     @PreAuthorize("hasRole('VOTER')")
-    public void voteOnList(UUID votingId, UUID votingOptionId, User user) throws NotFoundException, VotingOrSurveyNotActiveException {
+    public void voteOnList(UUID votingId, UUID votingOptionId, User user) throws NotFoundException, VotingOrSurveyNotActiveException, SurveyException {
         Voting voting = votingService.getVotingById(votingId);
+
+        if (voting.getVotingOptions().isEmpty() || voting.getKind() != VotingKind.ON_LIST) {
+            throw new SurveyException(VotingMessages.VOTING_NOT_ON_LIST, VotingExceptionCodes.VOTING_NOT_ON_LIST);
+        }
 
         if (voting.getEndDate().isBefore(LocalDateTime.now())) {
             throw new VotingOrSurveyNotActiveException(VotingMessages.VOTING_NOT_ACTIVE, VotingExceptionCodes.VOTING_NOT_ACTIVE);

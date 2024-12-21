@@ -18,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.kafara.voting.exceptions.NotFoundException;
+import pl.kafara.voting.exceptions.SurveyException;
 import pl.kafara.voting.exceptions.TotpException;
 import pl.kafara.voting.exceptions.VotingOrSurveyNotActiveException;
 import pl.kafara.voting.exceptions.exceptionCodes.SurveyExceptionCodes;
@@ -81,7 +82,7 @@ public class VotingController {
 
     @PostMapping("/{id}/vote")
     @PreAuthorize("hasRole('VOTER')")
-    public ResponseEntity<Void> vote(@PathVariable UUID id, @RequestBody CreateUserVoteRequest request) throws NotFoundException {
+    public ResponseEntity<Void> vote(@PathVariable UUID id, @Validated @RequestBody CreateUserVoteRequest request) throws NotFoundException {
         DecodedJWT jwt = JWT.decode((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         UUID userId = UUID.fromString(jwt.getSubject());
         User user = userService.getUserById(userId);
@@ -92,13 +93,13 @@ public class VotingController {
             UUID voteResult = UUID.fromString(request.voteResult());
             userVoteService.voteOnList(id, voteResult, user);
         } catch (IllegalArgumentException ignored) {
-            UserVoteResult voteResult = UserVoteResult.fromString(request.voteResult());
             try {
+                UserVoteResult voteResult = UserVoteResult.fromString(request.voteResult());
                 userVoteService.voteVoting(id, voteResult, user);
-            } catch (VotingOrSurveyNotActiveException e) {
+            } catch (VotingOrSurveyNotActiveException | SurveyException | IllegalArgumentException e) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
             }
-        } catch (Exception e) {
+        } catch (VotingOrSurveyNotActiveException | SurveyException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
 

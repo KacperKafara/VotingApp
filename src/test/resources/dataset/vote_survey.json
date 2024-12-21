@@ -1,0 +1,44 @@
+{
+  "surveys": [
+    {
+      "id": "fcc88562-b6a0-4e0b-87d5-2e890cd2e37b",
+      "title": "Survey test other",
+      "description": "Survey test other description",
+      "created_at": "2021-06-01 00:00:00",
+      "updated_at": "2021-06-01 00:00:00",
+      "version": 1,
+      "end_date": "2123-06-01 00:00:00",
+      "survey_kind": "OTHER"
+    },
+    {
+      "id": "fcc88562-b6a0-4e0b-87d5-2e890cd2e37d",
+      "title": "Survey test otherr",
+      "description": "Survey test other descriptionn",
+      "created_at": "2021-06-01 00:00:00",
+      "updated_at": "2021-06-01 00:00:00",
+      "version": 1,
+      "end_date": "2123-06-01 00:00:00",
+      "survey_kind": "OTHER"
+    },
+    {
+      "id": "fcc88562-b6a0-4e0b-87d5-2e890cd2e37c",
+      "title": "Survey test parliamentary",
+      "description": "Survey test parliamentary description",
+      "created_at": "2021-06-01 00:00:00",
+      "updated_at": "2021-06-01 00:00:00",
+      "version": 1,
+      "end_date": "2123-06-01 00:00:00",
+      "survey_kind": "PARLIAMENTARY_CLUB"
+    }
+  ],
+  "parliamentary_clubs": [
+    {
+      "id": "PC",
+      "email": "dfgdfg@sdgsd.com",
+      "fax": "123456789",
+      "members_count": 20,
+      "name": "Parliamentary Club",
+      "phone": "+48123456789"
+    }
+  ]
+}

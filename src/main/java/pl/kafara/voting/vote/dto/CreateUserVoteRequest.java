@@ -11,9 +11,8 @@ public record CreateUserVoteRequest(
         @Length(min = 6, max = 6)
         @Pattern(regexp = "\\d{6}")
         String totp,
+        @NotBlank
         String voteResult
-
-
 ) {
         @Override
         public String toString() {

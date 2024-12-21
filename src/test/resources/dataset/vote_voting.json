@@ -1,0 +1,90 @@
+{
+  "sittings": [
+    {
+      "number": 1,
+      "title": "Sitting 1"
+    },
+    {
+      "number": 2,
+      "title": "Sitting 2"
+    }
+  ],
+  "votings": [
+    {
+      "id": "757847a7-58eb-4930-8351-2301c54d7914",
+      "voting_number": 1,
+      "sitting_number": 1,
+      "sitting_day": 3,
+      "date": "2019-01-01 00:00:00",
+      "kind": "ELECTRONIC",
+      "title": "Voting 1",
+      "description": "Description 1",
+      "topic": "Topic 1",
+      "end_date": "2123-06-01 00:00:00",
+      "created_at": "2019-01-01 00:00:00",
+      "updated_at": "2019-01-01 00:00:00",
+      "version": 1
+    },
+    {
+      "id": "757847a7-58eb-4930-8351-2301c54d7915",
+      "voting_number": 2,
+      "sitting_number": 1,
+      "sitting_day": 3,
+      "date": "2019-01-01 00:00:00",
+      "kind": "ELECTRONIC",
+      "title": "Voting 2",
+      "description": "Description 2",
+      "topic": "Topic 2",
+      "end_date": "2123-06-01 00:00:00",
+      "created_at": "2019-01-01 00:00:00",
+      "updated_at": "2019-01-01 00:00:00",
+      "version": 1
+    },
+    {
+      "id": "757847a7-58eb-4930-8351-2301c54d7916",
+      "voting_number": 3,
+      "sitting_number": 2,
+      "sitting_day": 3,
+      "date": "2019-01-01 00:00:00",
+      "kind": "ELECTRONIC",
+      "title": "Voting 3",
+      "description": "Description 3",
+      "topic": "Topic 3",
+      "end_date": "2022-06-01 00:00:00",
+      "created_at": "2019-01-01 00:00:00",
+      "updated_at": "2019-01-01 00:00:00",
+      "version": 1
+    },
+    {
+      "id": "757847a7-58eb-4930-8351-2301c54d7917",
+      "voting_number": 4,
+      "sitting_number": 2,
+      "sitting_day": 3,
+      "date": "2019-01-01 00:00:00",
+      "kind": "ON_LIST",
+      "title": "Voting 4",
+      "description": "Description 4",
+      "topic": "Topic 4",
+      "end_date": "2123-06-01 00:00:00",
+      "created_at": "2019-01-01 00:00:00",
+      "updated_at": "2019-01-01 00:00:00",
+      "version": 1
+    }
+  ],
+  "voting_options": [
+    {
+      "id": "757847a7-58eb-4930-8351-2301c54d7920",
+      "option": "Option 1",
+      "option_index": 1,
+      "votes": 0,
+      "voting_id": "757847a7-58eb-4930-8351-2301c54d7917"
+    },
+    {
+      "id": "757847a7-58eb-4930-8351-2301c54d7921",
+      "option": "Option 2",
+      "option_index": 2,
+      "votes": 0,
+      "voting_id": "757847a7-58eb-4930-8351-2301c54d7917"
+    }
+  ]
+}
