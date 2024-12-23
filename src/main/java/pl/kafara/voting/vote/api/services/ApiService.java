@@ -35,7 +35,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 @Transactional(propagation = Propagation.NEVER)
-@ConditionalOnProperty(name = "spring.tests", havingValue = "false", matchIfMissing = true)
+@ConditionalOnProperty(name = "sejm.sync", havingValue = "true", matchIfMissing = true)
 @DependsOn(value = {"flywayConfig", "loggingAspect"})
 public class ApiService {
 
@@ -55,10 +55,10 @@ public class ApiService {
 
     @PostConstruct
     public void init() {
-//        updateParliamentaryClubList();
-//        updateEnvoyList();
-//        updateSittingList();
-//        updateVotingList();
+        updateParliamentaryClubList();
+        updateEnvoyList();
+        updateSittingList();
+        updateVotingList();
     }
 
     @Scheduled(cron = "0 5 0 */2 * *")

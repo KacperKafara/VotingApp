@@ -6,34 +6,95 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: voting_app
     restart: no
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "voting_app"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
     ports:
       - "5432:5432"
     volumes:
       - /tmp/data:/var/lib/postgresql/data
     networks:
-      - docker-network
+      - database-network
+
   cache:
     image: redis:7.4-alpine3.20
     ports:
       - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
     networks:
-      - docker-network
+      - redis-network
 
-  spring-app:
+  smtp4dev:
+    image: rnwood/smtp4dev:3.6.0
+    ports:
+      - "5000:80"
+      - "25:25"
+    restart: no
+    networks:
+      - smtp-network
+
+  backend:
     build:
       context: ..
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/DockerfileBackend
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/voting_app
+      SPRING_MAIL_HOST: smtp4dev
+      SPRING_DATA_REDIS_HOST: cache
+      SPRING_SQL_INIT_MODE: always
+      SPRING_SQL_INIT_DATA_LOCATIONS: classpath:/db/data.sql
+      FLYWAY_MIGRATE: false
+      SEJM_SYNC: false
+      APP_URL: http://localhost
     restart: no
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/v1/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 999999
+      start_period: 30s
     depends_on:
-      - database
-      - cache
+      cache:
+        condition: service_healthy
+      database:
+        condition: service_healthy
+      smtp4dev:
+        condition: service_started
     ports:
       - "8080:8080"
     networks:
-      - docker-network
+      - database-network
+      - redis-network
+      - proxy-network
+      - smtp-network
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: docker/DockerfileFrontend
+    restart: no
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "80:80"
+    networks:
+      - proxy-network
 
 networks:
-  docker-network:
+  database-network:
+    driver: bridge
+  proxy-network:
+    driver: bridge
+  redis-network:
+    driver: bridge
+  smtp-network:
     driver: bridge

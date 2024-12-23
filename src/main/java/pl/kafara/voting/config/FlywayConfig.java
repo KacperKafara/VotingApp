@@ -10,7 +10,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @DependsOn("entityManagerFactory")
-@ConditionalOnProperty(name = "spring.tests", havingValue = "false", matchIfMissing = true)
+@ConditionalOnProperty(name = "flyway.migrate", havingValue = "true", matchIfMissing = true)
 public class FlywayConfig {
 
     @Autowired
@@ -18,7 +18,7 @@ public class FlywayConfig {
         Flyway.configure()
                 .baselineOnMigrate(true)
                 .dataSource(dataSource)
-                .load();
-//                .migrate();
+                .load()
+                .migrate();
     }
 }
