@@ -11,16 +11,25 @@ import StartVotingDialog from './StartVotingDialog';
 const VotingDetailsPage: FC = () => {
   const { id } = useParams<{ id: string }>();
   const [startVotingDialogOpen, setStartVotingDialogOpen] = useState(false);
-  const { data, isLoading, isError } = useVotingDetails(id!);
+  const { data: voting, isLoading, isError } = useVotingDetails(id!);
   const { t } = useTranslation('voting');
 
-  if (isLoading || isError || data === undefined) {
+  if (
+    isLoading ||
+    isError ||
+    voting === undefined ||
+    voting.data === undefined
+  ) {
     return (
       <div className="flex h-full items-center justify-center">
         <LoadingIcon />
       </div>
     );
   }
+
+  const etag = voting.headers.etag as string;
+
+  const data = voting.data;
 
   return (
     <div className="flex min-h-full w-full flex-col items-center justify-center p-3">
@@ -137,6 +146,7 @@ const VotingDetailsPage: FC = () => {
               open={startVotingDialogOpen}
               onOpenChange={setStartVotingDialogOpen}
               votingId={data.id}
+              tag_value={etag.substring(1, etag.length - 1)}
             />
           </div>
         </div>

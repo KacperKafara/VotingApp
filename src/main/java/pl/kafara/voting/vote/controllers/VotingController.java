@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,17 +18,16 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import pl.kafara.voting.exceptions.NotFoundException;
-import pl.kafara.voting.exceptions.SurveyException;
-import pl.kafara.voting.exceptions.TotpException;
-import pl.kafara.voting.exceptions.VotingOrSurveyNotActiveException;
+import pl.kafara.voting.exceptions.*;
 import pl.kafara.voting.exceptions.exceptionCodes.SurveyExceptionCodes;
 import pl.kafara.voting.exceptions.messages.GenericMessages;
 import pl.kafara.voting.model.users.User;
 import pl.kafara.voting.model.vote.UserVoteResult;
+import pl.kafara.voting.model.vote.Voting;
 import pl.kafara.voting.model.vote.VotingOption;
 import pl.kafara.voting.users.services.UserService;
 import pl.kafara.voting.util.AESUtils;
+import pl.kafara.voting.util.JwsService;
 import pl.kafara.voting.util.filteringCriterias.VotingListFilteringCriteria;
 import pl.kafara.voting.vote.dto.*;
 import pl.kafara.voting.vote.mapper.VotingMapper;
@@ -48,6 +48,7 @@ public class VotingController {
     private final CodeVerifier codeVerifier;
     private final AESUtils aesUtils;
     private final UserVoteService userVoteService;
+    private final JwsService jwsService;
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('USER')")
@@ -108,9 +109,17 @@ public class VotingController {
 
     @PatchMapping("/{id}")
     @PreAuthorize("hasRole('MODERATOR')")
-    public ResponseEntity<Void> startVoting(@PathVariable UUID id, @Validated @RequestBody ActivateVotingRequest request) throws NotFoundException {
-        votingService.startVoting(id, request.endDate());
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Void> startVoting(@PathVariable UUID id,
+                                            @Validated @RequestBody ActivateVotingRequest request,
+                                            @RequestHeader(HttpHeaders.IF_MATCH) String tagValue) throws NotFoundException {
+        try {
+            votingService.startVoting(id, request.endDate(), tagValue);
+            return ResponseEntity.ok().build();
+        } catch (ApplicationOptimisticLockException e) {
+            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, e.getMessage(), e);
+        } catch (VotingException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
     }
 
     @GetMapping("/{id}/votingOptions")
@@ -127,7 +136,10 @@ public class VotingController {
     @GetMapping("/{id}/details")
     @PreAuthorize("hasRole('MODERATOR')")
     public ResponseEntity<VotingDetailsResponse> getVotingDetails(@PathVariable UUID id) throws NotFoundException {
-        return ResponseEntity.ok(VotingMapper.votingToVotingDetailsResponse(votingService.getVotingById(id)));
+        Voting voting = votingService.getVotingById(id);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.ETAG, jwsService.createToken(voting.getId(), voting.getVersion()))
+                .body(VotingMapper.votingToVotingDetailsResponse(voting));
     }
 
 }

@@ -6,12 +6,15 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import pl.kafara.voting.exceptions.ApplicationOptimisticLockException;
 import pl.kafara.voting.exceptions.NotFoundException;
+import pl.kafara.voting.exceptions.VotingException;
 import pl.kafara.voting.exceptions.exceptionCodes.VotingExceptionCodes;
 import pl.kafara.voting.exceptions.messages.VotingMessages;
 import pl.kafara.voting.model.vote.Sitting;
 import pl.kafara.voting.model.vote.Voting;
 import pl.kafara.voting.model.vote.VotingOption;
+import pl.kafara.voting.util.JwsService;
 import pl.kafara.voting.util.filteringCriterias.VotingListFilteringCriteria;
 import pl.kafara.voting.vote.api.repositories.SittingRepository;
 import pl.kafara.voting.vote.dto.VotingListResponse;
@@ -29,6 +32,7 @@ import java.util.UUID;
 public class VotingService {
     private final VotingRepository votingRepository;
     private final SittingRepository sittingRepository;
+    private final JwsService jwsService;
 
     @PreAuthorize("hasRole('USER')")
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
@@ -82,8 +86,15 @@ public class VotingService {
 
     @PreAuthorize("hasRole('MODERATOR')")
     @Transactional(propagation = Propagation.REQUIRED)
-    public void startVoting(UUID votingId, LocalDateTime endDate) throws NotFoundException {
+    public void startVoting(UUID votingId, LocalDateTime endDate, String tagValue) throws NotFoundException, ApplicationOptimisticLockException, VotingException {
         Voting voting = getVotingById(votingId);
+        if(jwsService.verifySignature(tagValue, voting.getId(), voting.getVersion())){
+            throw new ApplicationOptimisticLockException(VotingMessages.OPTIMISTIC_LOCK_EXCEPTION, VotingExceptionCodes.OPTIMISTIC_LOCK_EXCEPTION);
+        }
+
+        if (voting.getEndDate() != null) {
+            throw new VotingException(VotingMessages.VOTING_ALREADY_ACTIVE, VotingExceptionCodes.VOTING_ALREADY_ACTIVE);
+        }
         voting.setEndDate(endDate);
         votingRepository.save(voting);
     }

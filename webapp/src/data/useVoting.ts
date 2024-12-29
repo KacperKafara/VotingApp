@@ -131,10 +131,26 @@ export const useActivateVoting = () => {
   const queryClient = useQueryClient();
 
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: async ({ id, endDate }: { id: string; endDate: Date }) => {
-      const response = await api.patch(`/votings/${id}`, {
-        endDate: endDate,
-      });
+    mutationFn: async ({
+      id,
+      endDate,
+      if_match,
+    }: {
+      id: string;
+      endDate: Date;
+      if_match: string;
+    }) => {
+      const response = await api.patch(
+        `/votings/${id}`,
+        {
+          endDate: endDate,
+        },
+        {
+          headers: {
+            'If-Match': if_match,
+          },
+        }
+      );
 
       return response.data;
     },
@@ -166,10 +182,10 @@ export const useVotingDetails = (id: string) => {
     queryKey: ['votingDetails', id],
     queryFn: async () => {
       try {
-        const { data } = await api.get<VotingDetailsResponse>(
+        const { data, headers } = await api.get<VotingDetailsResponse>(
           `/votings/${id}/details`
         );
-        return data;
+        return { data, headers };
       } catch (e) {
         return Promise.reject(e);
       }

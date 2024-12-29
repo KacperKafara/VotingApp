@@ -80,7 +80,7 @@ services:
     build:
       context: ..
       dockerfile: docker/DockerfileFrontend
-    restart: no
+    restart: on-failure
     depends_on:
       backend:
         condition: service_healthy

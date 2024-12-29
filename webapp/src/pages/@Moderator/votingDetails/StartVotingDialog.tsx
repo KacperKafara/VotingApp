@@ -34,6 +34,7 @@ interface StartVotingDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   votingId: string;
+  tag_value: string;
 }
 
 const getStartVotingSchema = (t: TFunction<'voting'>) =>
@@ -53,6 +54,7 @@ const StartVotingDialog: FC<StartVotingDialogProps> = ({
   open,
   onOpenChange,
   votingId,
+  tag_value,
 }) => {
   const { t } = useTranslation('voting');
   const { activateVoting, isLoading } = useActivateVoting();
@@ -69,7 +71,11 @@ const StartVotingDialog: FC<StartVotingDialogProps> = ({
   });
 
   const onSubmit = form.handleSubmit(async (data) => {
-    await activateVoting({ id: votingId, endDate: data.endDate });
+    await activateVoting({
+      id: votingId,
+      endDate: data.endDate,
+      if_match: tag_value,
+    });
     onOpenChange(false);
   });
 
