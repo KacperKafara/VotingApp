@@ -68,6 +68,7 @@ public abstract class IntegrationTestConfiguration {
             .withCopyToContainer(MountableFile.forHostPath(yamlPath), "/opt/application-tests.yaml")
             .dependsOn(postgres, redis, mail)
             .withEnv("FLYWAY_MIGRATE", "false")
+            .withEnv("SEJM_SYNC", "false")
             .withCopyToContainer(jar, "/opt/app.jar")
             .withCommand("sh", "-c", "java -jar -Dspring.config.location=/opt/application-tests.yaml /opt/app.jar")
             .waitingFor(Wait.forHttp("/api/v1/actuator/health").forPort(8080).forStatusCode(200));
