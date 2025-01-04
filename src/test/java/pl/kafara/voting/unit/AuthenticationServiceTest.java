@@ -1,5 +1,6 @@
 package pl.kafara.voting.unit;
 
+import dev.samstevens.totp.code.CodeVerifier;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -7,16 +8,25 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.kafara.voting.exceptions.NotFoundException;
+import pl.kafara.voting.exceptions.user.AccountNotActiveException;
+import pl.kafara.voting.exceptions.user.InvalidLoginDataException;
+import pl.kafara.voting.exceptions.user.MFARequiredException;
 import pl.kafara.voting.model.users.*;
+import pl.kafara.voting.users.dto.LoginRequest;
 import pl.kafara.voting.users.dto.RegistrationRequest;
 import pl.kafara.voting.users.repositories.GenderRepository;
 import pl.kafara.voting.users.repositories.RoleRepository;
 import pl.kafara.voting.users.repositories.UserRepository;
 import pl.kafara.voting.users.services.AuthenticationService;
 import pl.kafara.voting.users.services.TokenService;
+import pl.kafara.voting.users.services.UserService;
+import pl.kafara.voting.util.AESUtils;
 import pl.kafara.voting.util.JwtService;
+import pl.kafara.voting.util.SensitiveData;
 
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -38,7 +48,12 @@ public class AuthenticationServiceTest {
     TokenService tokenService;
     @Mock
     JwtService jwtService;
-
+    @Mock
+    AESUtils aesUtils;
+    @Mock
+    CodeVerifier codeVerifier;
+    @Mock
+    UserService userService;
     @InjectMocks
     AuthenticationService authenticationService;
 
@@ -62,5 +77,72 @@ public class AuthenticationServiceTest {
         assertThrows(NotFoundException.class, () -> {
             authenticationService.register(registrationRequest);
         });
+    }
+
+    @Test
+    public void Register_Success_ShouldReturnSensitiveData() throws NotFoundException, NoSuchAlgorithmException, NoSuchAlgorithmException {
+        Role role = new Role(UserRoleEnum.USER);
+        Gender gender = new Gender(GenderEnum.MALE);
+        User user = new User();
+        user.setRoles(Set.of(role));
+        user.setGender(gender);
+
+        when(roleRepository.findByName(UserRoleEnum.USER)).thenReturn(Optional.of(role));
+        when(genderRepository.findByName(GenderEnum.fromInt(registrationRequest.gender()))).thenReturn(Optional.of(gender));
+        when(passwordEncoder.encode(registrationRequest.password())).thenReturn("encodedPassword");
+        when(userRepository.save(user)).thenReturn(user);
+        when(tokenService.generateAccountVerificationToken(user)).thenReturn(new SensitiveData("token"));
+
+        SensitiveData result = authenticationService.register(registrationRequest);
+
+        assertNotNull(result);
+        assertEquals("token", result.data());
+    }
+
+    @Test
+    public void Authenticate_InvalidPassword_ShouldThrowInvalidLoginDataException() {
+        User user = new User();
+        user.setUsername("username");
+        user.setPassword("encodedPassword");
+        user.setFailedLoginAttempts(-1);
+        user.setVerified(true);
+        user.setBlocked(false);
+        user.setLastFailedLogin(LocalDateTime.now());
+
+        when(userRepository.findByUsername("username")).thenReturn(Optional.of(user));
+        when(userRepository.save(user)).thenReturn(user);
+        when(passwordEncoder.matches("wrongPassword", "encodedPassword")).thenReturn(false);
+
+        LoginRequest loginRequest = new LoginRequest("username", "wrongPassword", "en");
+
+        assertThrows(InvalidLoginDataException.class, () -> {
+            authenticationService.authenticate(loginRequest);
+        });
+    }
+
+    @Test
+    public void Authenticate_Success_ShouldReturnTokens() throws NotFoundException, AccountNotActiveException, InvalidLoginDataException, MFARequiredException {
+        User user = new User();
+        user.setUsername("username");
+        user.setPassword("encodedPassword");
+        user.setFailedLoginAttempts(-1);
+        user.setBlocked(false);
+        user.setVerified(true);
+        user.setLastFailedLogin(LocalDateTime.now());
+        user.setRoles(Set.of(new Role(UserRoleEnum.USER)));
+
+        when(userRepository.findByUsername("username")).thenReturn(Optional.of(user));
+        when(userRepository.save(user)).thenReturn(user);
+        when(passwordEncoder.matches("password", "encodedPassword")).thenReturn(true);
+        when(jwtService.createToken("username", user.getId(), user.getRoles())).thenReturn("jwtToken");
+        when(jwtService.createRefreshToken(user.getId())).thenReturn("refreshToken");
+
+        LoginRequest loginRequest = new LoginRequest("username", "password", "en");
+
+        Map<String, SensitiveData> result = authenticationService.authenticate(loginRequest);
+
+        assertNotNull(result);
+        assertEquals("jwtToken", result.get("token").data());
+        assertEquals("refreshToken", result.get("refreshToken").data());
     }
 }
