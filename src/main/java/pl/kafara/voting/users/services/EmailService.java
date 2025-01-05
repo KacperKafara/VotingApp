@@ -3,7 +3,6 @@ package pl.kafara.voting.users.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.support.ResourceBundleMessageSource;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,7 +44,6 @@ public class EmailService {
         htmlEmailService.createHtmlEmail(email, subject, "resetPassword", templateModel, lang);
     }
 
-    @Async
     public void sendAccountDeletedEmail(List<User> users) {
         for (User user : users) {
             Map<String, Object> templateModel = Map.of(
@@ -88,9 +86,8 @@ public class EmailService {
         htmlEmailService.createHtmlEmail(email, subject, "voterRoleRequestRejected", templateModel, language);
     }
 
-    @Async
     public void sendVerificationReminderEmail(User user, SensitiveData token) {
-        URI uri = URI.create(url + "/resetPassword/" + token.data());
+        URI uri = URI.create(url + "/verify/" + token.data());
         Map<String, Object> templateModel = Map.of(
                 "name", user.getUsername(),
                 "uri", uri

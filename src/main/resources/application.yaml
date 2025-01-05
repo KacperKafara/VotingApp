@@ -15,6 +15,10 @@ spring:
   flyway:
     enabled: false
     baseline-on-migrate: true
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:/db/data.sql
 
   mail:
     host: localhost
@@ -47,7 +51,6 @@ spring:
             auth-uri: https://accounts.google.com/o/oauth2/v2/auth
             token-uri: https://oauth2.googleapis.com/token
 
-
 app:
   url: http://localhost:5173
 
@@ -72,6 +75,10 @@ security:
 
 
 sejm:
+  sync: true
   api:
     url: https://api.sejm.gov.pl/sejm/
   term: term10
+
+flyway:
+  migrate: false

@@ -1,16 +1,16 @@
 package pl.kafara.voting.users.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import org.hibernate.validator.constraints.Length;
+import jakarta.validation.constraints.Size;
 
 import java.util.StringJoiner;
 
 public record ChangePasswordRequest(
         @NotBlank
-        @Length(min = 8, max = 50)
+        @Size(min = 8, max = 50)
         String oldPassword,
         @NotBlank
-        @Length(min = 8, max = 50)
+        @Size(min = 8, max = 50)
         String newPassword
 ) {
     @Override

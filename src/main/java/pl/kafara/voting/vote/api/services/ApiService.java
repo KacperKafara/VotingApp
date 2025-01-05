@@ -35,8 +35,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 @Transactional(propagation = Propagation.NEVER)
+@DependsOn("entityManagerFactory")
 @ConditionalOnProperty(name = "sejm.sync", havingValue = "true", matchIfMissing = true)
-@DependsOn(value = {"flywayConfig", "loggingAspect"})
 public class ApiService {
 
     @Value("${sejm.term}")
@@ -53,15 +53,6 @@ public class ApiService {
     private final LastVotingsUpdateRepository lastVotingsUpdateRepository;
     private final PrintRepository printRepository;
 
-    @PostConstruct
-    public void init() {
-        updateParliamentaryClubList();
-        updateEnvoyList();
-        updateSittingList();
-        updateVotingList();
-    }
-
-    @Scheduled(cron = "0 5 0 */2 * *")
     public void updateParliamentaryClubList() {
         List<ParliamentaryClub> parliamentaryClubs = restClient.get()
                 .uri(term + "/clubs")
@@ -75,7 +66,6 @@ public class ApiService {
         parliamentaryClubRepository.saveAll(parliamentaryClubs);
     }
 
-    @Scheduled(cron = "0 10 0 */2 * *")
     public void updateEnvoyList() {
         List<EnvoyAPI> envoys = restClient.get()
                 .uri(term + "/MP")
@@ -106,7 +96,6 @@ public class ApiService {
         }
     }
 
-    @Scheduled(cron = "0 15 0 */2 * *")
     public void updateSittingList() {
         List<Sitting> sittings = restClient.get()
                 .uri(term + "/proceedings")
@@ -122,7 +111,6 @@ public class ApiService {
         sittingRepository.saveAll(sittings);
     }
 
-    @Scheduled(cron = "0 20 0 */2 * *")
     public void updateVotingList() {
         LastVotingsUpdate lastVotingsUpdate = lastVotingsUpdateRepository.findById(1L);
         List<Sitting> sittings;

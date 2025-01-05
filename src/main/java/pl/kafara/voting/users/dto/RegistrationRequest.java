@@ -1,7 +1,6 @@
 package pl.kafara.voting.users.dto;
 
 import jakarta.validation.constraints.*;
-import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDateTime;
 import java.util.StringJoiner;
@@ -10,7 +9,7 @@ public record RegistrationRequest(
         @NotBlank
         String username,
         @NotBlank
-        @Length(min = 8)
+        @Size(min = 8)
         String password,
         @NotBlank
         @Email

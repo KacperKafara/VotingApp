@@ -2,16 +2,16 @@ package pl.kafara.voting.users.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import org.hibernate.validator.constraints.Length;
+import jakarta.validation.constraints.Size;
 
 import java.util.StringJoiner;
 
 public record LoginRequest(
         @NotBlank
-        @Length(min = 3)
+        @Size(min = 3)
         String username,
         @NotBlank
-        @Length(min = 8)
+        @Size(min = 8)
         String password,
         @NotBlank
         @Pattern(regexp = "pl|en")
