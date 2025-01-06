@@ -96,4 +96,37 @@ public class VerificationServiceTest {
         assertTrue(user.isVerified());
         verify(userRepository, times(1)).save(user);
     }
+
+    @Test
+    public void verify_InvalidToken_ShouldThrowVerificationTokenExpiredException() throws VerificationTokenUsedException, VerificationTokenExpiredException {
+        String token = "invalidToken";
+
+        when(tokenService.validateAccountVerificationToken(token)).thenThrow(VerificationTokenExpiredException.class);
+
+        assertThrows(VerificationTokenExpiredException.class, () -> verificationService.verify(new SensitiveData(token)));
+    }
+
+    @Test
+    public void verify_UserAlreadyVerified_ShouldNotChangeVerificationStatus() throws Exception {
+        String token = "sampleToken";
+        UUID userId = UUID.randomUUID();
+        User user = new User();
+        user.setVerified(true);
+        Field idField = user.getClass().getSuperclass().getDeclaredField("id");
+        idField.setAccessible(true);
+        idField.set(user, userId);
+        AccountVerificationToken accountVerificationToken = new AccountVerificationToken(
+                token,
+                Instant.now().plusSeconds(60),
+                user
+        );
+
+        when(tokenService.validateAccountVerificationToken(token)).thenReturn(accountVerificationToken);
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+        verificationService.verify(new SensitiveData(token));
+
+        assertTrue(user.isVerified());
+        verify(userRepository, times(1)).save(user);
+    }
 }

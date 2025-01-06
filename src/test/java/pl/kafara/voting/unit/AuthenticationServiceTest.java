@@ -1,5 +1,6 @@
 package pl.kafara.voting.unit;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
 import dev.samstevens.totp.code.CodeVerifier;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,12 +9,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.kafara.voting.exceptions.NotFoundException;
+import pl.kafara.voting.exceptions.exceptionCodes.UserExceptionCodes;
 import pl.kafara.voting.exceptions.user.AccountNotActiveException;
 import pl.kafara.voting.exceptions.user.InvalidLoginDataException;
 import pl.kafara.voting.exceptions.user.MFARequiredException;
 import pl.kafara.voting.model.users.*;
 import pl.kafara.voting.users.dto.LoginRequest;
 import pl.kafara.voting.users.dto.RegistrationRequest;
+import pl.kafara.voting.users.dto.TotpLoginRequest;
 import pl.kafara.voting.users.repositories.GenderRepository;
 import pl.kafara.voting.users.repositories.RoleRepository;
 import pl.kafara.voting.users.repositories.UserRepository;
@@ -29,8 +32,10 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -144,5 +149,97 @@ public class AuthenticationServiceTest {
         assertNotNull(result);
         assertEquals("jwtToken", result.get("token").data());
         assertEquals("refreshToken", result.get("refreshToken").data());
+    }
+
+    @Test
+    public void Authenticate_WithSensitiveData_Success_ShouldReturnTokens() throws NotFoundException, AccountNotActiveException {
+        User user = new User();
+        user.setUsername("username");
+        user.setFailedLoginAttempts(0);
+        user.setBlocked(false);
+        user.setVerified(true);
+        user.setRoles(Set.of(new Role(UserRoleEnum.USER)));
+
+        when(userRepository.findByUsername("username")).thenReturn(Optional.of(user));
+        when(userService.getUserByOAuthId("subject")).thenReturn(user);
+        when(userRepository.save(user)).thenReturn(user);
+        when(jwtService.createToken("username", user.getId(), user.getRoles())).thenReturn("jwtToken");
+        when(jwtService.createRefreshToken(user.getId())).thenReturn("refreshToken");
+
+        SensitiveData subject = new SensitiveData("subject");
+
+        Map<String, SensitiveData> result = authenticationService.authenticate(subject);
+
+        assertNotNull(result);
+        assertEquals("jwtToken", result.get("token").data());
+        assertEquals("refreshToken", result.get("refreshToken").data());
+    }
+
+    @Test
+    public void VerifyTotp_InvalidCode_ShouldThrowInvalidLoginDataException() {
+        User user = new User();
+        user.setUsername("username");
+        user.setAuthorisationTotpSecret("encryptedSecret");
+        user.setFailedLoginAttempts(0);
+        user.setBlocked(false);
+        user.setVerified(true);
+
+        when(userRepository.findByUsername("username")).thenReturn(Optional.of(user));
+        when(aesUtils.decrypt("encryptedSecret")).thenReturn("decryptedSecret");
+        when(codeVerifier.isValidCode("decryptedSecret", "invalidTotp")).thenReturn(false);
+
+        TotpLoginRequest loginRequest = new TotpLoginRequest("username", "invalidTotp");
+
+        assertThrows(InvalidLoginDataException.class, () -> {
+            authenticationService.verifyTotp(loginRequest);
+        });
+    }
+
+    @Test
+    public void VerifyTotp_Success_ShouldReturnTokens() throws NotFoundException, InvalidLoginDataException, AccountNotActiveException {
+        User user = new User();
+        user.setUsername("username");
+        user.setAuthorisationTotpSecret("encryptedSecret");
+        user.setFailedLoginAttempts(0);
+        user.setBlocked(false);
+        user.setVerified(true);
+        user.setRoles(Set.of(new Role(UserRoleEnum.USER)));
+
+        when(userRepository.findByUsername("username")).thenReturn(Optional.of(user));
+        when(aesUtils.decrypt("encryptedSecret")).thenReturn("decryptedSecret");
+        when(codeVerifier.isValidCode("decryptedSecret", "validTotp")).thenReturn(true);
+        when(userRepository.save(user)).thenReturn(user);
+        when(jwtService.createToken("username", user.getId(), user.getRoles())).thenReturn("jwtToken");
+        when(jwtService.createRefreshToken(user.getId())).thenReturn("refreshToken");
+
+        TotpLoginRequest loginRequest = new TotpLoginRequest("username", "validTotp");
+
+        Map<String, SensitiveData> result = authenticationService.verifyTotp(loginRequest);
+
+        assertNotNull(result);
+        assertEquals("jwtToken", result.get("token").data());
+        assertEquals("refreshToken", result.get("refreshToken").data());
+    }
+
+    @Test
+    public void Refresh_Success_ShouldReturnTokens() throws NotFoundException {
+        User user = new User();
+        user.setUsername("username");
+        user.setRoles(Set.of(new Role(UserRoleEnum.USER)));
+
+        UUID userId = UUID.randomUUID();
+        DecodedJWT decodedJWT = mock(DecodedJWT.class);
+        when(decodedJWT.getSubject()).thenReturn(userId.toString());
+        when(jwtService.decodeRefreshToken(new SensitiveData("validToken"))).thenReturn(decodedJWT);
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(jwtService.createToken("username", user.getId(), user.getRoles())).thenReturn("jwtToken");
+
+        SensitiveData refreshToken = new SensitiveData("validToken");
+
+        Map<String, SensitiveData> result = authenticationService.refresh(refreshToken);
+
+        assertNotNull(result);
+        assertEquals("jwtToken", result.get("token").data());
+        assertEquals("validToken", result.get("refreshToken").data());
     }
 }

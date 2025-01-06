@@ -178,6 +178,9 @@ public class AuthenticationService {
         if (user.isBlocked())
             throw new AccountNotActiveException(UserMessages.USER_BLOCKED, UserExceptionCodes.USER_BLOCKED);
 
+        if (user.getLastFailedLogin() == null)
+            return user;
+
         if (user.getFailedLoginAttempts() >= maxFailedAttempts && Duration.between(user.getLastFailedLogin(), LocalDateTime.now()).toDays() <= 24)
             throw new AccountNotActiveException(UserMessages.AUTHENTICATION_BLOCKED, UserExceptionCodes.AUTHENTICATION_BLOCKED);
         else if (user.getFailedLoginAttempts() >= maxFailedAttempts)
