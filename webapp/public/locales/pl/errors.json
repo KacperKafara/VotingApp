@@ -42,5 +42,19 @@
   "SITTING_NOT_FOUND": "Nie znaleziono posiedzenia",
   "SURVEY_NOT_FOUND": "Nie znaleziono sondażu",
   "SURVEY_NOT_ACTIVE": "Sondaż nie jest już aktywny",
-  "VOTING_NOT_ACTIVE": "Głosowanie nie jest już aktywne"
+  "VOTING_NOT_ACTIVE": "Głosowanie nie jest już aktywne",
+  "PARLIAMENTARY_CLUB_NOT_FOUND": "Nie znaleziono klubu parlamentarnego",
+  "INVALID_TOTP": "Nieprawidłowy kod TOTP",
+  "VOTING_OPTION_NOT_FOUND": "Nie znaleziono opcji głosowania",
+  "SURVEY_KIND_NOT_PARLIAMENTARY_CLUB": "Nieprawidłoowy typ sondażu",
+  "SURVEY_KIND_NOT_OTHER": "Nieprawidłoowy typ sondażu",
+  "VOTING_ON_LIST": "Nieprawidłowy typ głosowania",
+  "VOTING_NOT_ON_LIST": "Nieprawidłowy typ głosowania",
+  "VOTING_ALREADY_ACTIVE": "Głosowanie jest już aktywne",
+  "ROLE_REQUEST_ALREADY_RESOLVED": "Wniosek o rolę został już rozpatrzony",
+  "OAUTH_TOKEN_VERIFICATION_FAILED": "Weryfikacja twojego konta nie powiodła się. Spróbuj ponownie",
+  "MFA_REQUIRED": "Wymagane uwierzytelnienie dwuetapowe",
+  "TOTP_AUTHORISATION_ALREADY_ACTIVE": "Uwierzytelnienie TOTP jest już aktywne",
+  "FIRST_ACTIVATE_2FA": "Najpierw aktywuj uwierzytelnienie dwuetapowe",
+  "INVALID_REFRESH_TOKEN": ""
 }

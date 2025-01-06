@@ -42,5 +42,19 @@
   "SITTING_NOT_FOUND": "Sitting not found",
   "SURVEY_NOT_FOUND": "Survey not found",
   "SURVEY_NOT_ACTIVE": "Survey is not active",
-  "VOTING_NOT_ACTIVE": "Voting is not active"
+  "VOTING_NOT_ACTIVE": "Voting is not active",
+  "PARLIAMENTARY_CLUB_NOT_FOUND": "Parliamentary club not found",
+  "INVALID_TOTP": "Invalid TOTP",
+  "VOTING_OPTION_NOT_FOUND": "Voting option not found",
+  "SURVEY_KIND_NOT_PARLIAMENTARY_CLUB": "Wrong survey kind",
+  "SURVEY_KIND_NOT_OTHER": "Wrong survey kind",
+  "VOTING_ON_LIST": "Wrong voting kind",
+  "VOTING_NOT_ON_LIST": "Wrong voting kind",
+  "VOTING_ALREADY_ACTIVE": "Voting is already active",
+  "ROLE_REQUEST_ALREADY_RESOLVED": "Role request is already resolved",
+  "OAUTH_TOKEN_VERIFICATION_FAILED": "Your account verification failed, please try again",
+  "MFA_REQUIRED": "MFA required",
+  "TOTP_AUTHORISATION_ALREADY_ACTIVE": "TOTP authentication is already active",
+  "FIRST_ACTIVATE_2FA": "First activate 2FA",
+  "INVALID_REFRESH_TOKEN": ""
 }
