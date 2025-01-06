@@ -1,10 +1,7 @@
 package pl.kafara.voting.model.vote;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import pl.kafara.voting.model.AbstractEntity;
 
 @NoArgsConstructor
@@ -12,6 +9,7 @@ import pl.kafara.voting.model.AbstractEntity;
 @Getter
 @Entity
 @Table(name = "votes")
+@ToString
 @Setter
 public class Vote extends AbstractEntity {
 

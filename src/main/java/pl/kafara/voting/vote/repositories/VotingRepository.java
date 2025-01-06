@@ -1,5 +1,6 @@
 package pl.kafara.voting.vote.repositories;
 
+import lombok.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -42,4 +43,7 @@ public interface VotingRepository extends JpaRepository<Voting, UUID> {
     @Transactional(propagation = Propagation.MANDATORY, readOnly = true)
     @Query("SELECT v FROM Voting v WHERE v.endDate > CURRENT_TIMESTAMP")
     List<Voting> getAllByEndDateAfterNow();
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    @NonNull Voting saveAndFlush(@NonNull Voting voting);
 }

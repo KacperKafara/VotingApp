@@ -1,4 +1,4 @@
-FROM node:20.13.1-alpine3.20 AS build
+FROM node:20.18.1-alpine3.20 AS build
 WORKDIR /app
 COPY ../webapp/package.json package.json
 COPY ../webapp/yarn.lock yarn.lock

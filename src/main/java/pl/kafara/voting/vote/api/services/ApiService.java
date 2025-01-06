@@ -1,6 +1,5 @@
 package pl.kafara.voting.vote.api.services;
 
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,7 +7,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,10 +24,7 @@ import pl.kafara.voting.vote.api.repositories.SittingRepository;
 import pl.kafara.voting.vote.repositories.PrintRepository;
 import pl.kafara.voting.vote.repositories.VotingRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -112,7 +107,7 @@ public class ApiService {
     }
 
     public void updateVotingList() {
-        LastVotingsUpdate lastVotingsUpdate = lastVotingsUpdateRepository.findById(1L);
+        LastVotingsUpdate lastVotingsUpdate = lastVotingsUpdateRepository.findById(1L).orElse(null);
         List<Sitting> sittings;
         if (lastVotingsUpdate != null)
             sittings = sittingRepository.findByNumber(lastVotingsUpdate.getLastSitting().getNumber());
@@ -165,7 +160,6 @@ public class ApiService {
                 votingEntity.setVotes(updateVotes(voting.getVotes(), votingEntity));
                 votingRepository.saveAndFlush(votingEntity);
                 count--;
-
             }
             lastVotingsUpdate.setLastSitting(sitting);
         }

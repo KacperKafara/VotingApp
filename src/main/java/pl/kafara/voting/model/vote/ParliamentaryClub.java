@@ -6,6 +6,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -13,6 +14,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Getter
 @Entity
+@ToString
 @Table(name = "parliamentary_clubs")
 public class ParliamentaryClub implements Serializable {
     @Id

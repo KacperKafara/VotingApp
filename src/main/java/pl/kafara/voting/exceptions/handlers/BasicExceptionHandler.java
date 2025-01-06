@@ -108,7 +108,6 @@ public class BasicExceptionHandler {
     @ExceptionHandler(ResponseStatusException.class)
     ResponseEntity<ExceptionResponse> handleResponseStatusException(ResponseStatusException e) {
         if(e.getStatusCode().equals(HttpStatus.INTERNAL_SERVER_ERROR)) {
-            log.error("Internal Server Error: ", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ExceptionResponse(GenericMessages.INTERNAL_SERVER_ERROR, UserExceptionCodes.INTERNAL_SERVER_ERROR));
         }
