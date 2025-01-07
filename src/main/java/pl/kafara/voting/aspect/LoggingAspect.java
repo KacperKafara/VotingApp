@@ -109,6 +109,7 @@ public class LoggingAspect {
                 obj = jp.proceed();
             } catch (Throwable e) {
                 log.error("Method {}.{} called by {} failed in transaction {}, withUseCaseId {} due {} with message {}", callerClass, callerMethod, username, txId, useCaseId, e.getClass().getName(), e.getMessage());
+                log.error("Exception:", e);
                 throw e;
             }
             String returnValue = parseReturnValue(obj);
@@ -127,6 +128,8 @@ public class LoggingAspect {
             try {
                 obj = jp.proceed();
             } catch (Throwable e) {
+                log.error("Method {}.{} called by {} failed, withUseCaseId {} due {} with message {}", callerClass, callerMethod, username, useCaseId, e.getClass().getName(), e.getMessage());
+                log.error("Exception:", e);
                 throw e;
             }
             String returnValue = parseReturnValue(obj);
