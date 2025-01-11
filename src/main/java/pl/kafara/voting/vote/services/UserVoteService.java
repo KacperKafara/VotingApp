@@ -1,6 +1,7 @@
 package pl.kafara.voting.vote.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -21,12 +22,10 @@ import pl.kafara.voting.model.vote.survey.UserVoteOtherSurvey;
 import pl.kafara.voting.model.vote.survey.UserVoteParliamentaryClub;
 import pl.kafara.voting.model.vote.userVotes.UserVoteOnList;
 import pl.kafara.voting.model.vote.userVotes.UserVoteOther;
-import pl.kafara.voting.vote.dto.OwnVoteResponse;
-import pl.kafara.voting.vote.dto.OwnVotesListResponse;
 import pl.kafara.voting.vote.repositories.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -42,6 +41,9 @@ public class UserVoteService {
     private final OtherSurveyVoteRepository otherSurveyVoteRepository;
     private final UserVoteOtherRepository votingOtherRepository;
 
+    @Value("${sejm.current-term}")
+    private String currentTerm;
+
     @PreAuthorize("hasRole('VOTER')")
     @CacheEvict(value = "latestSurvey", key="'latest'", condition = "#surveyId != null")
     public void voteParliamentaryClub(UUID surveyId, String parliamentaryClubId, User user) throws NotFoundException, VotingOrSurveyNotActiveException, SurveyException {
@@ -56,9 +58,19 @@ public class UserVoteService {
             throw new VotingOrSurveyNotActiveException(SurveyMessages.SURVEY_NOT_ACTIVE, SurveyExceptionCodes.SURVEY_NOT_ACTIVE);
         }
 
-        ParliamentaryClub parliamentaryClub = parliamentaryClubRepository.findById(parliamentaryClubId).orElseThrow(
+        UUID parliamentaryClubIdUUID;
+        try {
+            parliamentaryClubIdUUID = UUID.fromString(parliamentaryClubId);
+        } catch (IllegalArgumentException e) {
+            throw new NotFoundException(SurveyMessages.PARLIAMENTARY_CLUB_NOT_FOUND, SurveyExceptionCodes.PARLIAMENTARY_CLUB_NOT_FOUND);
+        }
+
+        ParliamentaryClub parliamentaryClub = parliamentaryClubRepository.findById(parliamentaryClubIdUUID).orElseThrow(
                 () -> new NotFoundException(SurveyMessages.PARLIAMENTARY_CLUB_NOT_FOUND, SurveyExceptionCodes.PARLIAMENTARY_CLUB_NOT_FOUND)
         );
+
+        if (!Objects.equals(parliamentaryClub.getTerm(), currentTerm))
+            throw new NotFoundException(SurveyMessages.PARLIAMENTARY_CLUB_NOT_FOUND, SurveyExceptionCodes.PARLIAMENTARY_CLUB_NOT_FOUND);
 
         parliamentaryClubVoteRepository.save(new UserVoteParliamentaryClub(survey, user, parliamentaryClub));
     }

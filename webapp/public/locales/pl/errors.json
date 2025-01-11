@@ -56,5 +56,6 @@
   "MFA_REQUIRED": "Wymagane uwierzytelnienie dwuetapowe",
   "TOTP_AUTHORISATION_ALREADY_ACTIVE": "Uwierzytelnienie TOTP jest już aktywne",
   "FIRST_ACTIVATE_2FA": "Najpierw aktywuj uwierzytelnienie dwuetapowe",
-  "INVALID_REFRESH_TOKEN": ""
+  "INVALID_REFRESH_TOKEN": "",
+  "INVALID_ARGUMENT_TYPE": "Nieprawidłowy typ argumentu"
 }

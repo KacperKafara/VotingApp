@@ -21,7 +21,7 @@ import java.util.List;
 public class Voting extends AbstractEntity {
     private int votingNumber;
     @ManyToOne
-    @JoinColumn(name = "sitting_number")
+    @JoinColumn(name = "sitting_id")
     private Sitting sitting;
     private int sittingDay;
     private LocalDateTime date;

@@ -65,7 +65,7 @@ public class VotingController {
             @RequestParam(name = "size", defaultValue = "10") int size,
             @RequestParam(name = "sort", defaultValue = "asc") @Pattern(regexp = "asc|desc") String sort,
             @RequestParam(name = "title", defaultValue = "") String title,
-            @RequestParam(name = "sitting", required = false) Long sitting,
+            @RequestParam(name = "sitting", required = false) UUID sitting,
             @RequestParam(name = "wasActive", defaultValue = "false") boolean wasActive
     ) throws NotFoundException {
         Sort sortBy = Sort.by(Sort.Direction.fromString(sort), "date");

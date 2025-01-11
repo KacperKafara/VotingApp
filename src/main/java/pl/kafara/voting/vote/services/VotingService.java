@@ -17,8 +17,10 @@ import pl.kafara.voting.model.vote.VotingOption;
 import pl.kafara.voting.util.JwsService;
 import pl.kafara.voting.util.filteringCriterias.VotingListFilteringCriteria;
 import pl.kafara.voting.vote.api.repositories.SittingRepository;
+import pl.kafara.voting.vote.dto.SittingResponse;
 import pl.kafara.voting.vote.dto.VotingListResponse;
 import pl.kafara.voting.vote.dto.VotingWithoutVotesResponse;
+import pl.kafara.voting.vote.mapper.SittingMapper;
 import pl.kafara.voting.vote.mapper.VotingMapper;
 import pl.kafara.voting.vote.repositories.VotingRepository;
 
@@ -45,14 +47,14 @@ public class VotingService {
     public VotingListResponse getVotingListFiltered(VotingListFilteringCriteria filteringCriteria) throws NotFoundException {
         Page<Voting> votingPage;
 
-        if(filteringCriteria.getSitting() == null || filteringCriteria.getSitting() == 0) {
+        if(filteringCriteria.getSitting() == null || filteringCriteria.getSitting() == UUID.fromString("00000000-0000-0000-0000-000000000000")) {
             votingPage = votingRepository.getVotingByTitleContains(
                     filteringCriteria.getPageable(),
                     filteringCriteria.getTitle(),
                     filteringCriteria.isWasActive()
             );
         } else {
-            Sitting sitting = sittingRepository.findById(Math.toIntExact(filteringCriteria.getSitting())).orElseThrow(() -> new NotFoundException(VotingMessages.SITTING_NOT_FOUND, VotingExceptionCodes.SITTING_NOT_FOUND));
+            Sitting sitting = sittingRepository.findById(filteringCriteria.getSitting()).orElseThrow(() -> new NotFoundException(VotingMessages.SITTING_NOT_FOUND, VotingExceptionCodes.SITTING_NOT_FOUND));
             votingPage = votingRepository.getVotingByTitleContainsAndSitting(
                     filteringCriteria.getPageable(),
                     filteringCriteria.getTitle(),
@@ -65,8 +67,8 @@ public class VotingService {
                 .map(VotingMapper::votingToVotingWithoutVotesResponse)
                 .toList();
 
-        List<Long> sittingIds = sittingRepository.findAll().stream()
-                .map(Sitting::getNumber)
+        List<SittingResponse> sittingIds = sittingRepository.findAll().stream()
+                .map(SittingMapper::sittingToSittingResponse)
                 .toList();
 
         return new VotingListResponse(

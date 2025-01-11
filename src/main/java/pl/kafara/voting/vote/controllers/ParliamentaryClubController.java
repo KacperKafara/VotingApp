@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.kafara.voting.model.vote.ParliamentaryClub;
+import pl.kafara.voting.vote.dto.ParliamentaryClubResponse;
+import pl.kafara.voting.vote.mapper.ParliamentaryClubMapper;
 import pl.kafara.voting.vote.services.ParliamentaryClubService;
 
 import java.util.List;
@@ -22,10 +24,10 @@ public class ParliamentaryClubController {
 
     @GetMapping
     @PreAuthorize("hasRole('VOTER')")
-    public ResponseEntity<List<String>> getAllExceptIndependent() {
+    public ResponseEntity<List<ParliamentaryClubResponse>> getAllExceptIndependent() {
         List<ParliamentaryClub> parliamentaryClubs = parliamentaryClubService.getAllExceptIndependent();
-        List<String> ids = parliamentaryClubs.stream().map(ParliamentaryClub::getId).toList();
+        List<ParliamentaryClubResponse> clubs = parliamentaryClubs.stream().map(ParliamentaryClubMapper::parliamentaryClubToParliamentaryClubResponse).toList();
 
-        return ResponseEntity.ok(ids);
+        return ResponseEntity.ok(clubs);
     }
 }

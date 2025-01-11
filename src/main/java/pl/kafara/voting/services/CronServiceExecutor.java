@@ -53,7 +53,7 @@ public class CronServiceExecutor {
         }
     }
 
-    @Scheduled(cron = "* * * * * *")
+    @Scheduled(cron = "0 5 0 */2 * *")
     public void executeUpdateParliamentaryClubList() {
         if (apiService == null) return;
         apiService.updateParliamentaryClubList();

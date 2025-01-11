@@ -8,7 +8,7 @@ public class EnvoyMapper {
     public static Envoy update(EnvoyAPI envoyAPI, ParliamentaryClub parliamentaryClub) {
         Envoy envoyToUpdate = new Envoy();
 
-        envoyToUpdate.setId(envoyAPI.getId());
+        envoyToUpdate.setInTermNumber(envoyAPI.getId());
         envoyToUpdate.setClub(parliamentaryClub);
         envoyToUpdate.setFirstName(envoyAPI.getFirstName());
         envoyToUpdate.setLastName(envoyAPI.getLastName());

@@ -6,7 +6,7 @@ interface VotingListFilters {
   pageSize?: number;
   sort?: 'asc' | 'desc';
   title?: string;
-  sitting?: number;
+  sitting?: string;
 }
 
 export const useVotingListFilters = () => {
@@ -36,9 +36,12 @@ export const useVotingListFilters = () => {
         if (filters.title !== undefined) {
           params.set('title', filters.title);
         }
-        if (filters.sitting !== undefined && filters.sitting !== 0) {
-          params.set('sitting', filters.sitting.toString());
-        } else if (filters.sitting === 0) {
+        if (
+          filters.sitting !== undefined &&
+          filters.sitting !== '00000000-0000-0000-0000-000000000000'
+        ) {
+          params.set('sitting', filters.sitting);
+        } else if (filters.sitting === '00000000-0000-0000-0000-000000000000') {
           params.delete('sitting');
         }
         if (filters.sort !== undefined) {

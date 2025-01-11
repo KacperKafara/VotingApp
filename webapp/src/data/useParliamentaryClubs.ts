@@ -1,6 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import useAxiosPrivate from './useAxiosPrivate';
 
+export interface ParliamentaryClubsResponse {
+  id: string;
+  shortName: string;
+}
+
 export const useParliamentaryClubs = (enabled: boolean) => {
   const { api } = useAxiosPrivate();
 
@@ -8,7 +13,9 @@ export const useParliamentaryClubs = (enabled: boolean) => {
     queryKey: ['parliamentaryClubs'],
     queryFn: async () => {
       try {
-        const { data } = await api.get<string[]>('/parliamentary-clubs');
+        const { data } = await api.get<ParliamentaryClubsResponse[]>(
+          '/parliamentary-clubs'
+        );
         return { data };
       } catch (e) {
         return Promise.reject(e);

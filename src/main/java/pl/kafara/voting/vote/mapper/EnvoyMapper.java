@@ -8,7 +8,7 @@ public class EnvoyMapper {
         return new EnvoyResponse(
                 envoy.getFirstName(),
                 envoy.getLastName(),
-                envoy.getClub().getId()
+                envoy.getClub().getShortName()
         );
     }
 

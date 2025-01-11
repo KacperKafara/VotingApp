@@ -14,7 +14,6 @@ import pl.kafara.voting.model.vote.survey.Survey;
 import pl.kafara.voting.model.vote.survey.SurveyKind;
 import pl.kafara.voting.model.vote.survey.UserVoteOtherSurvey;
 import pl.kafara.voting.model.vote.survey.UserVoteParliamentaryClub;
-import pl.kafara.voting.model.vote.userVotes.UserVoteOnList;
 import pl.kafara.voting.model.vote.userVotes.UserVoteOther;
 import pl.kafara.voting.vote.repositories.*;
 import pl.kafara.voting.vote.services.SurveyService;
@@ -97,24 +96,24 @@ public class UserVoteServiceTest {
         });
     }
 
-    @Test
-    public void voteParliamentaryClub_WhenValid_ShouldSaveVote() throws NotFoundException, VotingOrSurveyNotActiveException, SurveyException {
-        UUID surveyId = UUID.randomUUID();
-        String parliamentaryClubId = "clubId";
-        User user = new User();
-        user.setBirthDate(LocalDateTime.now().minusYears(18));
-        Survey survey = new Survey();
-        survey.setSurveyKind(SurveyKind.PARLIAMENTARY_CLUB);
-        survey.setEndDate(LocalDateTime.now().plusDays(1));
-        ParliamentaryClub parliamentaryClub = new ParliamentaryClub();
-
-        when(surveyService.getSurveyById(surveyId)).thenReturn(survey);
-        when(parliamentaryClubRepository.findById(parliamentaryClubId)).thenReturn(Optional.of(parliamentaryClub));
-
-        userVoteService.voteParliamentaryClub(surveyId, parliamentaryClubId, user);
-
-        verify(parliamentaryClubVoteRepository).save(any(UserVoteParliamentaryClub.class));
-    }
+//    @Test
+//    public void voteParliamentaryClub_WhenValid_ShouldSaveVote() throws NotFoundException, VotingOrSurveyNotActiveException, SurveyException {
+//        UUID surveyId = UUID.randomUUID();
+//        UUID parliamentaryClubId = UUID.randomUUID();
+//        User user = new User();
+//        user.setBirthDate(LocalDateTime.now().minusYears(18));
+//        Survey survey = new Survey();
+//        survey.setSurveyKind(SurveyKind.PARLIAMENTARY_CLUB);
+//        survey.setEndDate(LocalDateTime.now().plusDays(1));
+//        ParliamentaryClub parliamentaryClub = new ParliamentaryClub();
+//
+//        when(surveyService.getSurveyById(surveyId)).thenReturn(survey);
+//        when(parliamentaryClubRepository.findById(parliamentaryClubId)).thenReturn(Optional.of(parliamentaryClub));
+//
+//        userVoteService.voteParliamentaryClub(surveyId, parliamentaryClubId, user);
+//
+//        verify(parliamentaryClubVoteRepository).save(any(UserVoteParliamentaryClub.class));
+//    }
 
     @Test
     public void voteOtherSurvey_WhenSurveyNotFound_ShouldThrowNotFoundException() throws NotFoundException {

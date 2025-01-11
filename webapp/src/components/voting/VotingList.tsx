@@ -98,7 +98,7 @@ const VotingListComponent: FC<VotingListProps> = ({ type, wasActive }) => {
               />
               <Select
                 onValueChange={(e) => {
-                  setFilters({ sitting: parseInt(e) });
+                  setFilters({ sitting: e.toString() });
                 }}
                 defaultValue={sitting?.toString()}
               >
@@ -106,10 +106,13 @@ const VotingListComponent: FC<VotingListProps> = ({ type, wasActive }) => {
                   <SelectValue placeholder={t(`sitting`)} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="0">{t('all')}</SelectItem>
+                  <SelectItem value="00000000-0000-0000-0000-000000000000">
+                    {t('all')}
+                  </SelectItem>
                   {data.sittings.map((sitting) => (
-                    <SelectItem key={sitting} value={sitting.toString()}>
-                      {t('sitting')} {sitting}
+                    <SelectItem key={sitting.id} value={sitting.id}>
+                      {t('sitting')} {sitting.number}, {t('term')}{' '}
+                      {sitting.term}
                     </SelectItem>
                   ))}
                 </SelectContent>

@@ -56,5 +56,6 @@
   "MFA_REQUIRED": "MFA required",
   "TOTP_AUTHORISATION_ALREADY_ACTIVE": "TOTP authentication is already active",
   "FIRST_ACTIVATE_2FA": "First activate 2FA",
-  "INVALID_REFRESH_TOKEN": ""
+  "INVALID_REFRESH_TOKEN": "",
+  "INVALID_ARGUMENT_TYPE": "Invalid argument type"
 }

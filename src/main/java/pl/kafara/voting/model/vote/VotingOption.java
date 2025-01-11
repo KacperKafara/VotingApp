@@ -2,8 +2,7 @@ package pl.kafara.voting.model.vote;
 
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.UUID;
+import pl.kafara.voting.model.AbstractEntity;
 
 @Getter
 @Entity
@@ -11,11 +10,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "voting_options")
-public class VotingOption {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+public class VotingOption extends AbstractEntity {
 
     private String option;
     private int optionIndex;

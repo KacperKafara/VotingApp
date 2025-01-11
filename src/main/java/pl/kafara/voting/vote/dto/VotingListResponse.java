@@ -4,7 +4,7 @@ import java.util.List;
 
 public record VotingListResponse (
         List<VotingWithoutVotesResponse> votingList,
-        List<Long> sittings,
+        List<SittingResponse> sittings,
         int totalPages,
         int pageNumber,
         int pageSize

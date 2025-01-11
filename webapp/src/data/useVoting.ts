@@ -31,9 +31,15 @@ export const useVoting = (id: string) => {
   return { isError, isLoading, error, data };
 };
 
+interface Sitting {
+  id: string;
+  term: number;
+  number: number;
+}
+
 interface VotingListResponse {
   votingList: VotingWithoutVotesResponse[];
-  sittings: number[];
+  sittings: Sitting[];
   totalPages: number;
   pageNumber: number;
   pageSize: number;

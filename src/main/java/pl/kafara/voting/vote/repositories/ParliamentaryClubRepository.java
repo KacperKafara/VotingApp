@@ -9,15 +9,20 @@ import pl.kafara.voting.model.vote.ParliamentaryClub;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 @Transactional(propagation = Propagation.REQUIRED)
-public interface ParliamentaryClubRepository extends JpaRepository<ParliamentaryClub, String> {
+public interface ParliamentaryClubRepository extends JpaRepository<ParliamentaryClub, UUID> {
 
     @Transactional(propagation = Propagation.MANDATORY, readOnly = true)
-    List<ParliamentaryClub> findAllByIdNot(String id);
+    List<ParliamentaryClub> findAllByShortNameNotAndTerm(String id, String term);
 
     @NonNull
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    Optional<ParliamentaryClub> findById(@NonNull String id);
+    Optional<ParliamentaryClub> findById(@NonNull UUID id);
+
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    Optional<ParliamentaryClub> findByTermAndShortName(String term, String shortName);
+
 }

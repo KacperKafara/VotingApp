@@ -1,5 +1,6 @@
 package pl.kafara.voting.vote.api.services;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,9 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 import pl.kafara.voting.model.vote.*;
-import pl.kafara.voting.vote.api.mappers.EnvoyMapper;
-import pl.kafara.voting.vote.api.mappers.VoteMapper;
-import pl.kafara.voting.vote.api.mappers.VotingMapper;
+import pl.kafara.voting.vote.api.mappers.*;
 import pl.kafara.voting.vote.api.model.*;
 import pl.kafara.voting.vote.api.repositories.LastVotingsUpdateRepository;
 import pl.kafara.voting.vote.api.repositories.EnvoyRepository;
@@ -35,10 +34,15 @@ import java.util.*;
 public class ApiService {
 
     @Value("${sejm.term}")
-    private String term;
+    private String termValue;
+
+    @Value("${sejm.current-term}")
+    private String currentTerm;
 
     @Value("${sejm.api.url}")
     private String sejmApiUrl;
+
+    private List<String> terms = new ArrayList<>();
 
     private final EnvoyRepository envoyRepository;
     private final SittingRepository sittingRepository;
@@ -48,78 +52,108 @@ public class ApiService {
     private final LastVotingsUpdateRepository lastVotingsUpdateRepository;
     private final PrintRepository printRepository;
 
+    @PostConstruct
+    public void init() {
+        int termNumber = Integer.parseInt(termValue.replace("term", ""));
+        if (termNumber < 8) {
+            throw new IllegalArgumentException("Term number must be greater than 7");
+        }
+        int currentTermNumber = Integer.parseInt(currentTerm.replace("term", ""));
+        for (int i = termNumber; i <= currentTermNumber; i++) {
+            terms.add("term" + i);
+        }
+    }
+
     public void updateParliamentaryClubList() {
-        List<ParliamentaryClub> parliamentaryClubs = restClient.get()
-                .uri(term + "/clubs")
-                .retrieve()
-                .body(new ParameterizedTypeReference<>() {
-                });
+        for (String term : terms) {
+            List<ParliamentaryClubAPI> parliamentaryClubs = restClient.get()
+                    .uri(term + "/clubs")
+                    .retrieve()
+                    .body(new ParameterizedTypeReference<>() {
+                    });
 
-        if (parliamentaryClubs == null)
-            throw new NullPointerException("parliamentaryClubs is null");
+            if (parliamentaryClubs == null)
+                throw new NullPointerException("parliamentaryClubs is null");
 
-        parliamentaryClubRepository.saveAll(parliamentaryClubs);
+            for (ParliamentaryClubAPI parliamentaryClubAPI : parliamentaryClubs) {
+                Optional<ParliamentaryClub> parliamentaryClubOptional = parliamentaryClubRepository.findByTermAndShortName(term, parliamentaryClubAPI.getId());
+                if (parliamentaryClubOptional.isEmpty()) {
+                    parliamentaryClubRepository.save(ParliamentaryClubMapper.mapToParliamentaryClub(parliamentaryClubAPI, term));
+                }
+            }
+        }
     }
 
     public void updateEnvoyList() {
-        List<EnvoyAPI> envoys = restClient.get()
-                .uri(term + "/MP")
-                .retrieve()
-                .body(new ParameterizedTypeReference<>() {
-                });
+        for (String term : terms) {
+            List<EnvoyAPI> envoys = restClient.get()
+                    .uri(term + "/MP")
+                    .retrieve()
+                    .body(new ParameterizedTypeReference<>() {
+                    });
 
-        if (envoys == null)
-            throw new NullPointerException("envoys is null");
+            if (envoys == null)
+                throw new NullPointerException("envoys is null");
 
-        ParliamentaryClub savedClub;
-        for (EnvoyAPI envoyAPI : envoys) {
-            Optional<ParliamentaryClub> parliamentaryClubOptional = parliamentaryClubRepository.findById(envoyAPI.getClub());
-            if (parliamentaryClubOptional.isEmpty()) {
-                ParliamentaryClub parliamentaryClub = restClient.get()
-                        .uri(term + "/clubs/" + envoyAPI.getClub())
-                        .retrieve()
-                        .body(ParliamentaryClub.class);
+            ParliamentaryClub savedClub;
+            for (EnvoyAPI envoyAPI : envoys) {
+                Optional<ParliamentaryClub> parliamentaryClubOptional = parliamentaryClubRepository.findByTermAndShortName(term, envoyAPI.getClub());
+                if (parliamentaryClubOptional.isEmpty()) {
+                    ParliamentaryClubAPI parliamentaryClub = restClient.get()
+                            .uri(term + "/clubs/" + envoyAPI.getClub())
+                            .retrieve()
+                            .body(ParliamentaryClubAPI.class);
 
-                if (parliamentaryClub == null)
-                    continue;
+                    if (parliamentaryClub == null)
+                        continue;
 
-                savedClub = parliamentaryClubRepository.save(parliamentaryClub);
-            } else {
-                savedClub = parliamentaryClubOptional.get();
+                    savedClub = parliamentaryClubRepository.save(ParliamentaryClubMapper.mapToParliamentaryClub(parliamentaryClub, term));
+                } else {
+                    savedClub = parliamentaryClubOptional.get();
+                }
+                if (envoyRepository.findByInTermNumberAndClub(envoyAPI.getId(), savedClub).isEmpty())
+                    envoyRepository.save(EnvoyMapper.update(envoyAPI, savedClub));
             }
-            envoyRepository.save(EnvoyMapper.update(envoyAPI, savedClub));
         }
     }
 
     public void updateSittingList() {
-        List<Sitting> sittings = restClient.get()
-                .uri(term + "/proceedings")
-                .retrieve()
-                .body(new ParameterizedTypeReference<>() {
-                });
+        for (String term : terms) {
+            List<SittingAPI> sittingsApi = restClient.get()
+                    .uri(term + "/proceedings")
+                    .retrieve()
+                    .body(new ParameterizedTypeReference<>() {
+                    });
 
-        if (sittings == null)
-            throw new NullPointerException("sittings is null");
+            if (sittingsApi == null)
+                throw new NullPointerException("sittings is null");
 
-        sittings.removeIf(sitting -> sitting.getNumber() == 0);
+            sittingsApi.removeIf(sitting -> sitting.getNumber() == 0);
 
-        sittingRepository.saveAll(sittings);
+            for (SittingAPI sittingAPI : sittingsApi) {
+                Optional<Sitting> sittingOptional = sittingRepository.findByNumberAndTerm(sittingAPI.getNumber(), term);
+                if (sittingOptional.isEmpty()) {
+                    sittingRepository.save(SittingMapper.toEntity(sittingAPI, term));
+                }
+            }
+        }
     }
 
     public void updateVotingList() {
         LastVotingsUpdate lastVotingsUpdate = lastVotingsUpdateRepository.findById(1L).orElse(null);
         List<Sitting> sittings;
         if (lastVotingsUpdate != null)
-            sittings = sittingRepository.findByNumber(lastVotingsUpdate.getLastSitting().getNumber());
+            sittings = sittingRepository.findByNumber(lastVotingsUpdate.getLastSitting().getNumber(), lastVotingsUpdate.getLastSitting().getTerm());
         else {
             lastVotingsUpdate = new LastVotingsUpdate(1L, null);
             sittings = sittingRepository.findAll();
         }
 
         for (Sitting sitting : sittings) {
+            log.info("Updating votings for sitting: " + sitting.getNumber() + " in term: " + sitting.getTerm());
             int iterator = 0;
             List<Object> objects = restClient.get()
-                    .uri(term + "/votings/" + sitting.getNumber())
+                    .uri(sitting.getTerm() + "/votings/" + sitting.getNumber())
                     .retrieve()
                     .body(new ParameterizedTypeReference<>() {
                     });
@@ -133,7 +167,7 @@ public class ApiService {
 
                 try {
                     votingResult = restClient.get()
-                            .uri(term + "/votings/" + sitting.getNumber() + "/" + ++iterator)
+                            .uri(sitting.getTerm() + "/votings/" + sitting.getNumber() + "/" + ++iterator)
                             .retrieve()
                             .toEntity(VotingAPI.class);
                 } catch (HttpClientErrorException.NotFound e) {
@@ -156,8 +190,8 @@ public class ApiService {
                     votingEntity = VotingMapper.update(voting, sitting, voting.getVotingOptions());
                 else
                     votingEntity = VotingMapper.update(voting, sitting);
-                votingEntity.setPrints(updatePrints(voting.getTitle()));
-                votingEntity.setVotes(updateVotes(voting.getVotes(), votingEntity));
+                votingEntity.setPrints(updatePrints(voting.getTitle(), sitting.getTerm()));
+                votingEntity.setVotes(updateVotes(voting.getVotes(), votingEntity, sitting.getTerm()));
                 votingRepository.saveAndFlush(votingEntity);
                 count--;
             }
@@ -166,20 +200,20 @@ public class ApiService {
         lastVotingsUpdateRepository.save(lastVotingsUpdate);
     }
 
-    protected List<Print> updatePrints(String title) {
+    protected List<Print> updatePrints(String title, String term) {
         List<String> prints = ApiUtils.extractPrints(title);
         List<Print> printsList = new ArrayList<>();
-        for(String print : prints) {
+        for (String print : prints) {
             PrintAPI printApi = restClient.get()
                     .uri(term + "/prints/" + print)
                     .retrieve()
                     .body(PrintAPI.class);
-            if(printApi == null)
+            if (printApi == null)
                 continue;
             String url = sejmApiUrl + term + "/prints/" + print + "/" + print + ".pdf";
-            Optional<Print> printOptional = printRepository.findById(print);
+            Optional<Print> printOptional = printRepository.findByNumberAndTerm(print, term);
             if (printOptional.isEmpty()) {
-                Print savedPrint = printRepository.save(new Print(printApi.getNumber(), printApi.getTitle(), url));
+                Print savedPrint = printRepository.save(new Print(printApi.getNumber(), printApi.getTitle(), url, term));
                 printsList.add(savedPrint);
             } else {
                 printsList.add(printOptional.get());
@@ -188,10 +222,10 @@ public class ApiService {
         return printsList;
     }
 
-    protected List<Vote> updateVotes(List<VoteAPI> votes, Voting voting) {
+    protected List<Vote> updateVotes(List<VoteAPI> votes, Voting voting, String term) {
         List<Vote> votesList = new ArrayList<>();
         for (VoteAPI voteAPI : votes) {
-            Optional<Envoy> envoyOptional = envoyRepository.findById(voteAPI.getMP());
+            Optional<Envoy> envoyOptional = envoyRepository.findByInTermNumberAndTerm(voteAPI.getMP(), term);
             if (envoyOptional.isEmpty())
                 continue;
 

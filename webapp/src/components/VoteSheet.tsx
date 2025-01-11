@@ -12,7 +12,10 @@ import { useTranslation } from 'react-i18next';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from './ui/input-otp';
 import { REGEXP_ONLY_DIGITS } from 'input-otp';
 import { RadioGroup, RadioGroupItem } from './ui/radio-group';
-import { useParliamentaryClubs } from '@/data/useParliamentaryClubs';
+import {
+  ParliamentaryClubsResponse,
+  useParliamentaryClubs,
+} from '@/data/useParliamentaryClubs';
 import { z } from 'zod';
 import { TFunction } from 'i18next';
 import { useForm } from 'react-hook-form';
@@ -70,6 +73,8 @@ const VoteSheet: FC<VoteSheetProps> = ({
   const [posibleVotesOnList, setPosibleVotesOnList] = useState<VotingOption[]>(
     []
   );
+  const [posibleVotesParliamentaryClubs, setPosibleVotesParliamentaryClubs] =
+    useState<ParliamentaryClubsResponse[]>([]);
   const { data, isError } = useParliamentaryClubs(
     kind === 'PARLIAMENTARY_CLUB'
   );
@@ -91,7 +96,7 @@ const VoteSheet: FC<VoteSheetProps> = ({
         'DEFINITELY_NO',
       ]);
     } else if (data && !isError) {
-      setPosibleVotes(data.data);
+      setPosibleVotesParliamentaryClubs(data.data);
     } else if (dataOnList && !isErrorOnList) {
       setPosibleVotesOnList(dataOnList);
     } else {
@@ -121,7 +126,7 @@ const VoteSheet: FC<VoteSheetProps> = ({
                   <FormLabel>{t('sheet.voteOptions')}</FormLabel>
                   <FormControl>
                     <RadioGroup onValueChange={field.onChange}>
-                      {kind !== 'ON_LIST'
+                      {kind !== 'ON_LIST' && kind !== 'PARLIAMENTARY_CLUB'
                         ? posibleVotes.map((vote, index) => (
                             <FormItem
                               key={index}
@@ -130,24 +135,34 @@ const VoteSheet: FC<VoteSheetProps> = ({
                               <FormControl>
                                 <RadioGroupItem value={vote} />
                               </FormControl>
-                              <FormLabel>
-                                {kind === 'PARLIAMENTARY_CLUB'
-                                  ? vote
-                                  : t(`userResults.${vote}`)}
-                              </FormLabel>
+                              <FormLabel>{t(`userResults.${vote}`)}</FormLabel>
                             </FormItem>
                           ))
-                        : posibleVotesOnList.map((vote, index) => (
-                            <FormItem
-                              key={index}
-                              className="flex items-center space-x-2"
-                            >
-                              <FormControl>
-                                <RadioGroupItem value={vote.id} />
-                              </FormControl>
-                              <FormLabel>{vote.option}</FormLabel>
-                            </FormItem>
-                          ))}
+                        : kind === 'PARLIAMENTARY_CLUB'
+                          ? posibleVotesParliamentaryClubs.map(
+                              (vote, index) => (
+                                <FormItem
+                                  key={index}
+                                  className="flex items-center space-x-2"
+                                >
+                                  <FormControl>
+                                    <RadioGroupItem value={vote.id} />
+                                  </FormControl>
+                                  <FormLabel>{vote.shortName}</FormLabel>
+                                </FormItem>
+                              )
+                            )
+                          : posibleVotesOnList.map((vote, index) => (
+                              <FormItem
+                                key={index}
+                                className="flex items-center space-x-2"
+                              >
+                                <FormControl>
+                                  <RadioGroupItem value={vote.id} />
+                                </FormControl>
+                                <FormLabel>{vote.option}</FormLabel>
+                              </FormItem>
+                            ))}
                     </RadioGroup>
                   </FormControl>
                   <FormMessage />

@@ -19,7 +19,7 @@ public class SurveyMapper {
         if(userVote instanceof UserVoteOtherSurvey) {
             result = ((UserVoteOtherSurvey) userVote).getResult().name();
         } else {
-            result = ((UserVoteParliamentaryClub) userVote).getParliamentaryClub().getId() + " - " + ((UserVoteParliamentaryClub) userVote).getParliamentaryClub().getName();
+            result = ((UserVoteParliamentaryClub) userVote).getParliamentaryClub().getShortName();
         }
 
         return new UserVoteResponse(

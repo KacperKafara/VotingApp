@@ -9,15 +9,20 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.kafara.voting.model.vote.Sitting;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 @Transactional(propagation = Propagation.REQUIRED)
-public interface SittingRepository extends JpaRepository<Sitting, Integer> {
+public interface SittingRepository extends JpaRepository<Sitting, UUID> {
 
-    @Query("SELECT s FROM Sitting s WHERE s.number >= :lastVotingsUpdateNumber")
+    @Query("SELECT s FROM Sitting s WHERE s.number >= :lastVotingsUpdateNumber and s.term = :term")
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    List<Sitting> findByNumber(Long lastVotingsUpdateNumber);
+    List<Sitting> findByNumber(Long lastVotingsUpdateNumber, String term);
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     @NonNull List<Sitting> findAll();
+
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    Optional<Sitting> findByNumberAndTerm(Long number, String term);
 }

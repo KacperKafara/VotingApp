@@ -2,6 +2,7 @@ package pl.kafara.voting.model.vote;
 
 import jakarta.persistence.*;
 import lombok.*;
+import pl.kafara.voting.model.AbstractEntity;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -10,9 +11,9 @@ import lombok.*;
 @Entity
 @ToString
 @Table(name = "envoys")
-public class Envoy {
-    @Id
-    private Long id;
+public class Envoy extends AbstractEntity {
+
+    private Long inTermNumber;
 
     @ManyToOne
     @JoinColumn(name = "club_id")

@@ -8,14 +8,18 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.kafara.voting.model.vote.Print;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 @Transactional(propagation = Propagation.REQUIRED)
-public interface PrintRepository extends JpaRepository<Print, String> {
+public interface PrintRepository extends JpaRepository<Print, UUID> {
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    @NonNull Optional<Print> findById(@NonNull String id);
+    @NonNull Optional<Print> findById(@NonNull UUID id);
 
     @Transactional(propagation = Propagation.REQUIRED)
     @NonNull Print save(@NonNull Print print);
+
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    Optional<Print> findByNumberAndTerm(String number, String term);
 }
