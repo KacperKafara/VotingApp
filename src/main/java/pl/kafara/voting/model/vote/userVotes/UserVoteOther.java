@@ -1,8 +1,6 @@
 package pl.kafara.voting.model.vote.userVotes;
 
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +18,9 @@ import java.time.Period;
 @Table(name = "user_vote_other_voting")
 @DiscriminatorValue("other_voting")
 public class UserVoteOther extends UserVoteVoting {
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "result", nullable = false)
     private UserVoteResult voteResult;
 
     public UserVoteOther(Voting voting, User user, UserVoteResult voteResult) {

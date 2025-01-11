@@ -1,0 +1,176 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+abstract class AbstractEntity {
+    -id: UUID
+    -version: Long
+    -createdAt: LocalDateTime
+    -updatedAt: LocalDateTime
+}
+
+'Głosy
+
+enum UserVoteResult {
+    DEFINITELY_YES
+    YES
+    I_DONT_KNOW
+    NO
+    DEFINITELY_NO
+}
+
+'Głosy głosowanie
+
+abstract class UserVoteVoting {
+    -age: int
+    -user: User
+    -gender: Gender
+    -voting: Voting
+}
+
+class UserVoteOnList {
+    -votingOption: VotingOption
+}
+
+class UserVoteOther {
+    -userVoteResult: UserVoteResult
+}
+
+UserVoteOther --> UserVoteResult
+UserVoteOnList --|> UserVoteVoting
+UserVoteOther --|> UserVoteVoting
+
+'Głosy sondaż
+
+abstract class UserVoteSurvey {
+    -age: int
+    -user: User
+    -gender: Gender
+    -survey: Survey
+}
+
+class UserVoteParliamentaryClub {
+    -parliamentaryClub: ParliamentaryClub
+}
+
+class UserVoteOtherSurvey {
+    -userVoteResult: UserVoteResult
+}
+
+UserVoteOtherSurvey --> UserVoteResult
+UserVoteParliamentaryClub --|> UserVoteSurvey
+UserVoteOtherSurvey --|> UserVoteSurvey
+
+'Sondaż
+
+class Survey {
+    -title: String
+    -description: String
+    -endDate: LocalDateTime
+    -surveyKind: SurveyKind
+}
+
+enum SurveyKind {
+    PARLIAMENTARY_CLUB
+    OTHER
+}
+
+Survey ---> SurveyKind
+UserVoteSurvey *-- Survey
+UserVoteSurvey *-- User
+UserVoteSurvey *-- Gender
+
+UserVoteVoting *-- User
+UserVoteVoting *-- Gender
+
+'Tokeny
+
+abstract class SafeToken {
+    -token: String
+    -expirationDate: LocalDateTime
+    -user: User
+}
+
+class AccountVerificationToken {
+    {static} EXPIRATION_TIME: int
+}
+
+class ResetPasswordToken {
+    {static} EXPIRATION_TIME: int
+}
+
+ResetPasswordToken --|> SafeToken
+AccountVerificationToken --|> SafeToken
+
+'Użytkownik
+
+class Gender {
+    -name: GenderEnum
+}
+
+enum GenderEnum {
+    MALE
+    FEMALE
+    OTHER
+}
+
+class Role {
+    -name: UserRoleEnum
+}
+
+enum UserRoleEnum {
+    ADMINISTRATOR
+    MODERATOR
+    USER
+    VOTER
+}
+
+enum RoleRequestResolution {
+    ACCEPTED
+    REJECTED
+    PENDING
+}
+
+class User {
+    -username: String
+    -password: String
+    -firstName: String
+    -lastName: String
+    -phoneNumber: String
+    -birthDate: LocalDateTime
+    -email: String
+    -gender: Gender
+    -language: String
+    -totpSecret: String
+    -authorisationTotpSecret: String
+    -voterRoleRequest: VoterRoleRequest
+    -verified: boolean
+    -blocked: boolean
+    -failedLoginAttempts: int
+    -lastLogin: LocalDateTime
+    -lastFailedLogin: LocalDateTime
+    -oAuthId: String
+    -roles: Set<Role>
+}
+
+class VoterRoleRequest {
+    -resolution: RoleRequestResolution
+    -requestDate: LocalDateTime
+    -user: User
+}
+
+enum RoleRequestResolution {
+    ACCEPTED
+    REJECTED
+    PENDING
+}
+
+User "1" --* "0..1" SafeToken
+User "*" *-- "1" Gender
+User "*" *-- "1..4" Role
+User "1" --* "0..1" VoterRoleRequest
+Gender ---> GenderEnum
+Role ---> UserRoleEnum
+VoterRoleRequest ---> RoleRequestResolution
+
+hide empty members
+@enduml

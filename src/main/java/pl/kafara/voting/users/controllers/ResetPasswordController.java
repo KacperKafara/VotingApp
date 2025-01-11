@@ -3,6 +3,7 @@ package pl.kafara.voting.users.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -32,6 +33,7 @@ public class ResetPasswordController {
     private final TokenService tokenService;
 
     @PostMapping
+    @PreAuthorize("permitAll()")
     public ResponseEntity<Void> resetPassword(@Validated @RequestBody ResetPasswordRequest resetPasswordRequest) throws NotFoundException, NoSuchAlgorithmException {
         try {
             SensitiveData token = userService.resetPassword(resetPasswordRequest.email());
@@ -45,6 +47,7 @@ public class ResetPasswordController {
     }
 
     @PostMapping("/{token}/verify")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<Void> verifyToken(@PathVariable String token) {
         if(tokenService.isResetPasswordTokenValid(token))
             return ResponseEntity.ok().build();
@@ -53,6 +56,7 @@ public class ResetPasswordController {
     }
 
     @PostMapping("/{token}")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<Void> resetPassword(@PathVariable String token, @Validated @RequestBody ResetPasswordFormRequest resetPasswordRequest) throws NotFoundException {
         if(tokenService.isResetPasswordTokenValid(token)) {
             try {

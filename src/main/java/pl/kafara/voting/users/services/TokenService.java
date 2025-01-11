@@ -1,6 +1,7 @@
 package pl.kafara.voting.users.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +30,7 @@ public class TokenService {
     private final AccountVerificationTokenRepository accountVerificationTokenRepository;
     private final ResetPasswordTokenRepository resetPasswordTokenRepository;
 
+    @PreAuthorize("permitAll()")
     public SensitiveData generateAccountVerificationToken(User user) throws NoSuchAlgorithmException {
         SensitiveData token = generateSafeToken();
         accountVerificationTokenRepository.deleteByUserId(user.getId());
@@ -36,6 +38,7 @@ public class TokenService {
         return new SensitiveData(accountVerificationTokenRepository.save(accountVerificationToken).getToken());
     }
 
+    @PreAuthorize("permitAll()")
     public SafeToken validateAccountVerificationToken(String token) throws VerificationTokenUsedException, VerificationTokenExpiredException {
         SafeToken accountVerificationToken = accountVerificationTokenRepository.findByToken(token)
                 .orElseThrow(() -> new VerificationTokenUsedException(UserMessages.ACCOUNT_VERIFICATION_TOKEN_USED, UserExceptionCodes.ACCOUNT_VERIFICATION_TOKEN_USED));

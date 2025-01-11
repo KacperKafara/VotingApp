@@ -9,8 +9,6 @@ import org.springframework.transaction.support.TransactionSynchronization;
 public class TransactionSynchronizationLogger implements TransactionSynchronization {
     private final String txId;
 
-
-
     @Override
     public void afterCompletion(int status) {
         String statusString = switch (status) {

@@ -29,7 +29,7 @@ public class User extends AbstractEntity implements Serializable {
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    Set<Role> roles = new HashSet<>();
+    private Set<Role> roles = new HashSet<>();
 
     @Column(name = "first_name", table = "personal_data", nullable = false)
     private String firstName;

@@ -11,7 +11,6 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Configuration
 public class MailSenderConfig {
-
     @Bean
     ITemplateResolver htmlTemplateResolver() {
         SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
@@ -29,5 +28,4 @@ public class MailSenderConfig {
         templateEngine.setTemplateEngineMessageSource(messageSource);
         return templateEngine;
     }
-
 }

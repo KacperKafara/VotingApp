@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
+import pl.kafara.voting.exceptions.SendEmailException;
 
 import java.util.Locale;
 import java.util.Map;
@@ -30,7 +31,7 @@ public class HtmlEmailService {
             helper.setText(htmlContent, true);
             mailSender.send(message);
         } catch (MessagingException e) {
-            throw new RuntimeException(e);
+            throw new SendEmailException(e);
         }
     }
 
