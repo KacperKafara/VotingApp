@@ -200,7 +200,7 @@ public class VoteSurveyIT extends IntegrationTestConfiguration {
     public void voteParliamentaryClub_EverythingIsOk_ShouldReturn200() throws CodeGenerationException {
         long timePeriod = timeProvider.getTime() / 30;
         String code = codeGenerator.generate(key, timePeriod);
-        CreateUserVoteRequest createUserVoteRequest = new CreateUserVoteRequest(code, "fcc88562-b6a0-4e0b-87d5-2e890cd2e37e");
+        CreateUserVoteRequest createUserVoteRequest = new CreateUserVoteRequest(code, "fcc88562-b6a0-4e0b-87d5-2e890cd2e37f");
 
         given()
                 .contentType("application/json")

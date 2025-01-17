@@ -17,7 +17,6 @@ import java.util.List;
 public class ParliamentaryClubService {
     private final ParliamentaryClubRepository parliamentaryClubRepository;
 
-    //TODO: Poprawić
     @Value("${sejm.current-term}")
     private String currentTerm;
 

@@ -69,7 +69,6 @@ public class UserService {
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void modifyUserRoles(UUID id, Set<UserRoleEnum> roles, String tagValue) throws NotFoundException, UserMustHaveAtLeastOneRoleException, ApplicationOptimisticLockException {
-
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.USER_NOT_FOUND));
 
         if (jwsService.verifySignature(tagValue, user.getId(), user.getVersion())) {
@@ -93,6 +92,7 @@ public class UserService {
         if (hasVoterRole && rolesEntities.contains(userRole)) {
             user.getRoles().add(voterRole);
         }
+        userRepository.save(user);
     }
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")

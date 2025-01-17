@@ -8,6 +8,8 @@ abstract class AbstractEntity {
     -updatedAt: LocalDateTime
 }
 
+note bottom of AbstractEntity: "Wszystkie klasy poza LastVotingsUpdate dzidziczą po tej klasie" as N1
+
 'Głosy
 
 enum UserVoteResult {
@@ -53,7 +55,7 @@ class UserVoteParliamentaryClub {
 }
 
 class UserVoteOtherSurvey {
-    -userVoteResult: UserVoteResult
+    -result: UserVoteResult
 }
 
 UserVoteOtherSurvey --> UserVoteResult
@@ -75,12 +77,12 @@ enum SurveyKind {
 }
 
 Survey ---> SurveyKind
-UserVoteSurvey *-- Survey
-UserVoteSurvey *-- User
-UserVoteSurvey *-- Gender
+UserVoteSurvey "1" *-- "*" Survey
+UserVoteSurvey "1" *-- "*" User
+UserVoteSurvey "1" *-- "*" Gender
 
-UserVoteVoting *-- User
-UserVoteVoting *-- Gender
+UserVoteVoting "1" *-- "*" User
+UserVoteVoting "1" *-- "*" Gender
 
 'Tokeny
 
@@ -164,6 +166,91 @@ enum RoleRequestResolution {
     PENDING
 }
 
+class Envoy {
+    -inTermNumber: Long
+    -club: ParliamentaryClub
+    -firstName: String
+    -lastName: String
+    -email: String
+    -numberOfVotes: int
+    -districtName: String
+    -active: boolean
+}
+
+class LastVotingsUpdate {
+    -id: Long
+    -lastSitting: Sitting
+}
+
+class ParliamentaryClub {
+    -shortName: String
+    -term: String
+    -email: String
+    -fax: String
+    -membersCount: Integer
+    -name: String
+    -phone: String
+}
+
+class Print {
+    -number: String
+    -title: String
+    -url: String
+    -term: String
+    -votings: List<Voting>
+}
+
+class Sitting {
+    -number: Long
+    -title: String
+    -term: String
+}
+
+class Vote {
+    -envoy: Envoy
+    -vote: VoteResult
+    -club: String
+    -votingOption: VotingOption
+    -voting: Voting
+}
+
+enum VoteResult {
+    YES
+    NO
+    ABSTAIN
+    ABSENT
+    VOTE_VALID
+}
+
+class Voting {
+    -votingNumber: int
+    -sitting: Sitting
+    -sittingDay: int
+    -date: LocalDateTime
+    -votingOptions: List<VotingOption>
+    -votes: List<Vote>
+    -userVotes: List<UserVoteVoting>
+    -kind: VotingKind
+    -endDate: LocalDateTime
+    -title: String
+    -description: String
+    -topic: String
+    -prints: List<Print>
+}
+
+enum VotingKind {
+    ELECTRONIC
+    TRADITIONAL
+    ON_LIST
+}
+
+class VotingOption {
+    -option: String
+    -optionIndex: int
+    -votes: int
+    -voting: Voting
+}
+
 User "1" --* "0..1" SafeToken
 User "*" *-- "1" Gender
 User "*" *-- "1..4" Role
@@ -171,6 +258,19 @@ User "1" --* "0..1" VoterRoleRequest
 Gender ---> GenderEnum
 Role ---> UserRoleEnum
 VoterRoleRequest ---> RoleRequestResolution
+
+Print "*" -- "*"  Voting
+Vote "1" *-- "1" Envoy
+Vote --> VoteResult
+Vote "1" *-- "0..1" VotingOption
+Vote "*" *-- "1" Voting
+VotingOption "0..*" *-- "1" Voting
+VotingKind <-- Voting
+Sitting "*" --* "1" Voting
+Envoy "1" *-- "1" ParliamentaryClub
+LastVotingsUpdate "1" *-- "1" Sitting
+Voting "*" --* "1" UserVoteVoting
+
 
 hide empty members
 @enduml

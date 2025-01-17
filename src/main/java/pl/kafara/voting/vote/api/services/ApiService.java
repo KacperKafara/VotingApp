@@ -170,7 +170,7 @@ public class ApiService {
                             .uri(sitting.getTerm() + "/votings/" + sitting.getNumber() + "/" + ++iterator)
                             .retrieve()
                             .toEntity(VotingAPI.class);
-                } catch (HttpClientErrorException.NotFound e) {
+                } catch (Exception e) {
                     continue;
                 }
 
@@ -192,7 +192,11 @@ public class ApiService {
                     votingEntity = VotingMapper.update(voting, sitting);
                 votingEntity.setPrints(updatePrints(voting.getTitle(), sitting.getTerm()));
                 votingEntity.setVotes(updateVotes(voting.getVotes(), votingEntity, sitting.getTerm()));
-                votingRepository.saveAndFlush(votingEntity);
+                try {
+                    votingRepository.saveAndFlush(votingEntity);
+                } catch (Throwable e) {
+                    log.error("Error while saving voting: {} {}", votingEntity.getSittingDay(), votingEntity.getVotingNumber());
+                }
                 count--;
             }
             lastVotingsUpdate.setLastSitting(sitting);
@@ -204,17 +208,27 @@ public class ApiService {
         List<String> prints = ApiUtils.extractPrints(title);
         List<Print> printsList = new ArrayList<>();
         for (String print : prints) {
-            PrintAPI printApi = restClient.get()
-                    .uri(term + "/prints/" + print)
-                    .retrieve()
-                    .body(PrintAPI.class);
+            PrintAPI printApi;
+            try {
+                printApi = restClient.get()
+                        .uri(term + "/prints/" + print)
+                        .retrieve()
+                        .body(PrintAPI.class);
+            } catch (Exception ignored) {
+                continue;
+            }
             if (printApi == null)
                 continue;
             String url = sejmApiUrl + term + "/prints/" + print + "/" + print + ".pdf";
             Optional<Print> printOptional = printRepository.findByNumberAndTerm(print, term);
             if (printOptional.isEmpty()) {
-                Print savedPrint = printRepository.save(new Print(printApi.getNumber(), printApi.getTitle(), url, term));
-                printsList.add(savedPrint);
+                try {
+                    Print savedPrint = printRepository.save(new Print(printApi.getNumber(), printApi.getTitle(), url, term));
+                    printsList.add(savedPrint);
+                } catch (Throwable ignored) {
+                    log.error("Error while saving print: {} {}", printApi.getNumber(), printApi.getTitle());
+                }
+
             } else {
                 printsList.add(printOptional.get());
             }
