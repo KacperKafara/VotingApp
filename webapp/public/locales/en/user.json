@@ -39,5 +39,9 @@
     "blockUser": "Block user",
     "blockDescription": "Are you sure that you want to block user?",
     "unBlockDescription": "Are you sure that you want to unblock user?"
+  },
+  "parliamentaryClub": {
+    "successTitle": "Success",
+    "successDescription": "Your preferred parliamentary club has been updated successfully"
   }
 }

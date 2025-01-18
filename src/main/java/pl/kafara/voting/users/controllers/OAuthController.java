@@ -96,7 +96,9 @@ public class OAuthController {
                     return ResponseEntity.ok(data);
                 }
                 LoginResponse loginResponse = new LoginResponse(data.get("token").data(), data.get("refreshToken").data());
-                return ResponseEntity.ok(loginResponse);
+                if (data.get("etag").data() == null)
+                    return ResponseEntity.ok(loginResponse);
+                return ResponseEntity.status(HttpStatus.OK).eTag(data.get("etag").data()).body(loginResponse);
             } catch (AccountNotActiveException e) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
             }
@@ -121,12 +123,12 @@ public class OAuthController {
 
         if (
                 user.getUsername() == null ||
-                user.getEmail() == null ||
-                user.getFirstName() == null ||
-                user.getLastName() == null ||
-                user.getPhoneNumber() == null ||
-                user.getBirthDate() == null ||
-                genderEnum == null
+                        user.getEmail() == null ||
+                        user.getFirstName() == null ||
+                        user.getLastName() == null ||
+                        user.getPhoneNumber() == null ||
+                        user.getBirthDate() == null ||
+                        genderEnum == null
         ) {
             return ResponseEntity.unprocessableEntity().body(new FillDataDTO(
                     response.idToken(),

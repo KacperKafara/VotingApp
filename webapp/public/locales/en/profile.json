@@ -44,5 +44,13 @@
   "deactivate2FADialog": "Deactivate two-factor authentication",
   "deactivate2FA": "Deactivate two-factor authentication",
   "deactivate2FADescription": "Are you sure you want to deactivate two-factor authentication?",
-  "noFailedLogins": "No failed logins"
+  "noFailedLogins": "No failed logins",
+  "parliamentaryClub": {
+    "update": "Parliamentary club support",
+    "dialogTitle": "Parliamentary club support",
+    "dialogDescription": "Pick a club that you can identify with. You can change your choice at any time.",
+    "noClub": "Does not identify with any club",
+    "options": "Possible options",
+    "submit": "Submit"
+  }
 }

@@ -22,8 +22,8 @@ public class UserVoteParliamentaryClub extends UserVoteSurvey {
     @JoinColumn(name = "parliamentary_club_id", updatable = false)
     private ParliamentaryClub parliamentaryClub;
 
-    public UserVoteParliamentaryClub(Survey survey, User user, ParliamentaryClub parliamentaryClub) {
-        super(user, Period.between(user.getBirthDate().toLocalDate(), LocalDateTime.now().toLocalDate()).getYears(), user.getGender(), survey);
+    public UserVoteParliamentaryClub(Survey survey, User user, ParliamentaryClub parliamentaryClub, ParliamentaryClub userParliamentaryClub) {
+        super(user, Period.between(user.getBirthDate().toLocalDate(), LocalDateTime.now().toLocalDate()).getYears(), user.getGender(), survey, userParliamentaryClub);
         this.parliamentaryClub = parliamentaryClub;
     }
 }

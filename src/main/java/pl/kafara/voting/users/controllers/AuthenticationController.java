@@ -2,18 +2,15 @@ package pl.kafara.voting.users.controllers;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.server.ResponseStatusException;
 import pl.kafara.voting.exceptions.NotFoundException;
 import pl.kafara.voting.exceptions.exceptionCodes.UserExceptionCodes;
@@ -43,7 +40,9 @@ public class AuthenticationController {
         try {
             Map<String, SensitiveData> data = authenticationService.authenticate(loginRequest);
             LoginResponse loginResponse = new LoginResponse(data.get("token").data(), data.get("refreshToken").data());
-            return ResponseEntity.ok(loginResponse);
+            if(data.get("etag").data() == null)
+                return ResponseEntity.ok(loginResponse);
+            return ResponseEntity.status(HttpStatus.OK).eTag(data.get("etag").data()).body(loginResponse);
         } catch (AccountNotActiveException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         } catch (InvalidLoginDataException | NotFoundException e) {
@@ -59,7 +58,9 @@ public class AuthenticationController {
         try {
             Map<String, SensitiveData> data = authenticationService.verifyTotp(loginRequest);
             LoginResponse loginResponse = new LoginResponse(data.get("token").data(), data.get("refreshToken").data());
-            return ResponseEntity.ok(loginResponse);
+            if(data.get("etag").data() == null)
+                return ResponseEntity.ok(loginResponse);
+            return ResponseEntity.status(HttpStatus.OK).eTag(data.get("etag").data()).body(loginResponse);
         } catch (AccountNotActiveException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         } catch (InvalidLoginDataException | NotFoundException e) {

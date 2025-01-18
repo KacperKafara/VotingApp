@@ -18,10 +18,7 @@ import pl.kafara.voting.exceptions.NotFoundException;
 import pl.kafara.voting.exceptions.user.TotpAuthorisationException;
 import pl.kafara.voting.exceptions.user.WrongPasswordException;
 import pl.kafara.voting.model.users.User;
-import pl.kafara.voting.users.dto.Change2FaStateRequest;
-import pl.kafara.voting.users.dto.ChangePasswordRequest;
-import pl.kafara.voting.users.dto.UpdateUserDataRequest;
-import pl.kafara.voting.users.dto.UserResponse;
+import pl.kafara.voting.users.dto.*;
 import pl.kafara.voting.users.mapper.UserMapper;
 import pl.kafara.voting.users.services.UserService;
 import pl.kafara.voting.util.JwsService;
@@ -39,7 +36,7 @@ public class MeController {
     @PatchMapping("/password")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> changePassword(@Validated @RequestBody ChangePasswordRequest password) throws NotFoundException {
-        DecodedJWT jwt =  JWT.decode((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        DecodedJWT jwt = JWT.decode((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         UUID id = UUID.fromString(jwt.getSubject());
         try {
             userService.changePassword(password, id);
@@ -52,7 +49,7 @@ public class MeController {
     @PatchMapping("/2fa")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> change2FaState(@Validated @RequestBody Change2FaStateRequest request) {
-        DecodedJWT jwt =  JWT.decode((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        DecodedJWT jwt = JWT.decode((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         UUID id = UUID.fromString(jwt.getSubject());
         try {
             userService.change2FaState(id, request.active());
@@ -65,7 +62,7 @@ public class MeController {
     @GetMapping
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<UserResponse> getMe() throws NotFoundException {
-        DecodedJWT jwt =  JWT.decode((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        DecodedJWT jwt = JWT.decode((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         UUID id = UUID.fromString(jwt.getSubject());
         User user = userService.getUserById(id);
         return ResponseEntity
@@ -79,9 +76,22 @@ public class MeController {
     public ResponseEntity<UserResponse> updateMe(@Validated @RequestBody UpdateUserDataRequest userData,
                                                  @RequestHeader(HttpHeaders.IF_MATCH) String tagValue) throws NotFoundException {
         try {
-            DecodedJWT jwt =  JWT.decode((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+            DecodedJWT jwt = JWT.decode((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
             UUID id = UUID.fromString(jwt.getSubject());
             return ResponseEntity.ok(UserMapper.mapToUserResponse(userService.updateUser(userData, id, tagValue)));
+        } catch (ApplicationOptimisticLockException e) {
+            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, e.getMessage(), e);
+        }
+    }
+
+    @PatchMapping("/parliamentaryClub")
+    @PreAuthorize("hasRole('VOTER')")
+    public ResponseEntity<UserResponse> updateParliamentaryClub(@RequestBody UpdateParliamentaryClubRequest requestData,
+                                                                @RequestHeader(HttpHeaders.IF_MATCH) String tagValue) throws NotFoundException {
+        try {
+            DecodedJWT jwt = JWT.decode((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+            UUID id = UUID.fromString(jwt.getSubject());
+            return ResponseEntity.ok(UserMapper.mapToUserResponse(userService.updateParliamentaryClub(id, requestData.parliamentaryClubId(), tagValue)));
         } catch (ApplicationOptimisticLockException e) {
             throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, e.getMessage(), e);
         }

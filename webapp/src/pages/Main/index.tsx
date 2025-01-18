@@ -1,15 +1,33 @@
 import LoadingIcon from '@/components/loading';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useLatestSurvey } from '@/data/useSurvey';
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import SurveyResultChart from '@/components/survey/SurveyResultChart';
 import SurveyResultChartByGender from '@/components/survey/SurveyResultChartByGender';
 import { useTranslation } from 'react-i18next';
 import SurveyResultChartByAge from '@/components/survey/SurveyResultChartByAge';
+import UpdateParliamentaryClubDialog from '@/components/UpdateParliamentaryClub';
 
 const MainPage: FC = () => {
   const { data, isLoading, isError } = useLatestSurvey();
   const { t } = useTranslation('survey');
+  const [updateParliamentaryClubDialog, setUpdateParliamentaryClubDialog] =
+    useState({
+      open: false,
+      etag: '',
+    });
+
+  useEffect(() => {
+    if (
+      !isLoading &&
+      localStorage.getItem('etag-parliamentary-club') !== null
+    ) {
+      setUpdateParliamentaryClubDialog({
+        open: true,
+        etag: localStorage.getItem('etag-parliamentary-club') as string,
+      });
+    }
+  }, [isLoading]);
 
   if (isLoading || isError || data === undefined) {
     return (
@@ -55,6 +73,18 @@ const MainPage: FC = () => {
           </Card>
         </div>
       </div>
+      {updateParliamentaryClubDialog.open && (
+        <UpdateParliamentaryClubDialog
+          open={updateParliamentaryClubDialog.open}
+          etag={updateParliamentaryClubDialog.etag}
+          onOpenChange={() =>
+            setUpdateParliamentaryClubDialog({
+              open: false,
+              etag: '',
+            })
+          }
+        />
+      )}
     </div>
   );
 };

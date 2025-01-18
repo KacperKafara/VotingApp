@@ -44,5 +44,13 @@
   "deactivate2FADialog": "Dezaktywuj dwuetapowe uwierzytelnianie",
   "deactivate2FA": "Dezaktywuj dwuetapowe uwierzytelnianie",
   "deactivate2FADescription": "Czy na pewno chcesz dezaktywować dwuetapowe uwierzytelnianie?",
-  "noFailedLogins": "Brak nieudanych logowań"
+  "noFailedLogins": "Brak nieudanych logowań",
+  "parliamentaryClub": {
+    "update": "Poparcie klubu parlamentarnego",
+    "dialogTitle": "Poparcie klubu parlamentarnego",
+    "dialogDescription": "Wybierz klub, z którym możesz się utożsamiać. Możesz zmienić swoje wybory w dowolnym momencie.",
+    "noClub": "Nie identyfikuje się z żadnym klubem",
+    "options": "Możliwe opcje",
+    "submit": "Zatwierdź"
+  }
 }

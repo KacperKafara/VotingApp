@@ -3,6 +3,7 @@ package pl.kafara.voting.users.services;
 import dev.samstevens.totp.secret.SecretGenerator;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,6 +18,7 @@ import pl.kafara.voting.exceptions.messages.UserMessages;
 import pl.kafara.voting.exceptions.user.*;
 import pl.kafara.voting.model.users.*;
 import pl.kafara.voting.model.users.tokens.SafeToken;
+import pl.kafara.voting.model.vote.ParliamentaryClub;
 import pl.kafara.voting.users.dto.*;
 import pl.kafara.voting.users.mapper.UserMapper;
 import pl.kafara.voting.users.repositories.GenderRepository;
@@ -27,6 +29,7 @@ import pl.kafara.voting.util.filteringCriterias.FilteringCriteria;
 import pl.kafara.voting.util.JwsService;
 import pl.kafara.voting.util.SensitiveData;
 import pl.kafara.voting.util.filteringCriterias.UsersFilteringCriteria;
+import pl.kafara.voting.vote.repositories.ParliamentaryClubRepository;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
@@ -43,6 +46,10 @@ public class UserService {
     private final JwsService jwsService;
     private final AESUtils aesUtils;
     private final SecretGenerator secretGenerator;
+    private final ParliamentaryClubRepository parliamentaryClubRepository;
+
+    @Value("${sejm.current-term}")
+    private String currentTerm;
 
     public SensitiveData resetPassword(String email) throws NotFoundException, AccountNotActiveException, NoSuchAlgorithmException {
         User user = userRepository.findByEmail(email).orElseThrow(
@@ -68,6 +75,7 @@ public class UserService {
     }
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {ApplicationOptimisticLockException.class})
     public void modifyUserRoles(UUID id, Set<UserRoleEnum> roles, String tagValue) throws NotFoundException, UserMustHaveAtLeastOneRoleException, ApplicationOptimisticLockException {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.USER_NOT_FOUND));
 
@@ -96,6 +104,7 @@ public class UserService {
     }
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {ApplicationOptimisticLockException.class})
     public User block(UUID id, String tagValue) throws NotFoundException, ApplicationOptimisticLockException {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.USER_NOT_FOUND));
         if (jwsService.verifySignature(tagValue, user.getId(), user.getVersion())) {
@@ -106,6 +115,7 @@ public class UserService {
     }
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {ApplicationOptimisticLockException.class})
     public User unblock(UUID id, String tagValue) throws NotFoundException, ApplicationOptimisticLockException {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.USER_NOT_FOUND));
         if (jwsService.verifySignature(tagValue, user.getId(), user.getVersion())) {
@@ -166,6 +176,7 @@ public class UserService {
     }
 
     @PreAuthorize("isAuthenticated()")
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {ApplicationOptimisticLockException.class})
     public User updateUser(UpdateUserDataRequest userData, UUID id, String tagValue) throws NotFoundException, ApplicationOptimisticLockException {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.USER_NOT_FOUND));
         Gender gender = genderRepository.findByName(GenderEnum.valueOf(userData.gender())).orElseThrow(() -> new NotFoundException(GenericMessages.NOT_FOUND, UserExceptionCodes.NOT_FOUND));
@@ -183,6 +194,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @PreAuthorize("isAuthenticated()")
     public void change2FaState(UUID id, boolean active) throws NotFoundException, TotpAuthorisationException {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.USER_NOT_FOUND));
         if (!active) {
@@ -195,5 +207,21 @@ public class UserService {
 
         user.setAuthorisationTotpSecret(aesUtils.encrypt(secretGenerator.generate()));
         userRepository.save(user);
+    }
+
+    @PreAuthorize("hasRole('VOTER')")
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {ApplicationOptimisticLockException.class})
+    public User updateParliamentaryClub(UUID userId, UUID parliamentaryClubId, String tagValue) throws NotFoundException, ApplicationOptimisticLockException {
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.USER_NOT_FOUND));
+        if (jwsService.verifySignature(tagValue, user.getId(), user.getVersion())) {
+            throw new ApplicationOptimisticLockException(UserMessages.OPTIMISTIC_LOCK, UserExceptionCodes.USER_OPTIMISTIC_LOCK);
+        }
+
+        ParliamentaryClub parliamentaryClub = parliamentaryClubRepository.findById(parliamentaryClubId).orElseThrow(() -> new NotFoundException(UserMessages.PARLIAMENTARY_CLUB_NOT_FOUND, UserExceptionCodes.PARLIAMENTARY_CLUB_NOT_FOUND));
+        if (!Objects.equals(parliamentaryClub.getTerm(), currentTerm) && !parliamentaryClub.getId().equals(UUID.fromString("00000000-0000-0000-0000-000000000000")))
+            throw new NotFoundException(UserMessages.PARLIAMENTARY_CLUB_NOT_FOUND, UserExceptionCodes.PARLIAMENTARY_CLUB_NOT_FOUND);
+
+        user.setParliamentaryClub(parliamentaryClub);
+        return userRepository.save(user);
     }
 }

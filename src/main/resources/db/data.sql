@@ -1,3 +1,8 @@
+INSERT INTO public.parliamentary_clubs (id, created_at, version, updated_at, email, fax, members_count, name, phone,
+                                        short_name, term)
+VALUES ('00000000-0000-0000-0000-000000000000', now(), 1, now(), 'notdefined@notdefined.com', null, 0, 'Not defined',
+        null, 'ND', 'term0');
+
 INSERT INTO public.roles (id, name, created_at, updated_at, version)
 VALUES ('b91d7195-69a1-4073-9c95-52ceefd93cb7', 'USER', now(), now(), 1);
 INSERT INTO public.roles (id, name, created_at, updated_at, version)
@@ -15,9 +20,9 @@ INSERT INTO public.genders (id, name, created_at, updated_at, version)
 VALUES ('aeead59f-a7c5-4570-bbc7-bd9eae859c20', 'OTHER', now(), now(), 1);
 
 INSERT INTO public.users (id, username, password, created_at, updated_at, verified, blocked, failed_login_attempts,
-                          version, language, totp_secret)
+                          version, language, totp_secret, parliamentary_club_id)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1038', 'user', '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.',
-        now(), now(), true, false, 0, 1, 'en', 'lQgCvY17bN2lKxjy/EGI7Xxcn0mLxdyJRG9uZ6VLcwvyFS6ZtSwSTMdg9Ma5lm24');
+        now(), now(), true, false, 0, 1, 'en', 'lQgCvY17bN2lKxjy/EGI7Xxcn0mLxdyJRG9uZ6VLcwvyFS6ZtSwSTMdg9Ma5lm24', '00000000-0000-0000-0000-000000000000');
 INSERT INTO public.personal_data (first_name, last_name, phone_number, birth_date, user_id, email, gender_id)
 VALUES ('User', 'User', '+48123456789',
         '2001-01-01', '5e642d0a-94d4-4a4f-8760-cd6d63cd1038', 'admin@localhost.com',
@@ -313,37 +318,37 @@ VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1058', 'Survey 1', 'Survey 1 descriptio
 
 -- Survey votes
 
-INSERT INTO public.user_vote_survey (id, survey_id, user_id, created_at, updated_at, version, vote_type, age, gender_id)
+INSERT INTO public.user_vote_survey (id, survey_id, user_id, created_at, updated_at, version, vote_type, age, gender_id, parliamentary_club_id)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1065', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059',
         '5e642d0a-94d4-4a4f-8760-cd6d63cd1039', now(), now(), 1, 'other_survey', 17,
-        'cc8e8196-1bd8-4be6-a8b4-a1dc1973a7eb'),
+        'cc8e8196-1bd8-4be6-a8b4-a1dc1973a7eb', '00000000-0000-0000-0000-000000000000'),
        ('5e642d0a-94d4-4a4f-8760-cd6d63cd1066', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059',
         '5e642d0a-94d4-4a4f-8760-cd6d63cd1040', now(), now(), 1, 'other_survey', 18,
-        'cc8e8196-1bd8-4be6-a8b4-a1dc1973a7eb'),
+        'cc8e8196-1bd8-4be6-a8b4-a1dc1973a7eb', '00000000-0000-0000-0000-000000000000'),
        ('5e642d0a-94d4-4a4f-8760-cd6d63cd1067', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059',
         '5e642d0a-94d4-4a4f-8760-cd6d63cd1041', now(), now(), 1, 'other_survey', 34,
-        'cc8e8196-1bd8-4be6-a8b4-a1dc1973a7eb'),
+        'cc8e8196-1bd8-4be6-a8b4-a1dc1973a7eb', '00000000-0000-0000-0000-000000000000'),
        ('5e642d0a-94d4-4a4f-8760-cd6d63cd1068', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059',
         '5e642d0a-94d4-4a4f-8760-cd6d63cd1042', now(), now(), 1, 'other_survey', 60,
-        '10f41829-09d2-48d0-af87-761fe5e9e6d2'),
+        '10f41829-09d2-48d0-af87-761fe5e9e6d2', '00000000-0000-0000-0000-000000000000'),
        ('5e642d0a-94d4-4a4f-8760-cd6d63cd1069', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059',
         '5e642d0a-94d4-4a4f-8760-cd6d63cd1043', now(), now(), 1, 'other_survey', 45,
-        'aeead59f-a7c5-4570-bbc7-bd9eae859c20'),
+        'aeead59f-a7c5-4570-bbc7-bd9eae859c20', '00000000-0000-0000-0000-000000000000'),
        ('5e642d0a-94d4-4a4f-8760-cd6d63cd1070', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059',
         '5e642d0a-94d4-4a4f-8760-cd6d63cd1044', now(), now(), 1, 'other_survey', 25,
-        'aeead59f-a7c5-4570-bbc7-bd9eae859c20'),
+        'aeead59f-a7c5-4570-bbc7-bd9eae859c20', '00000000-0000-0000-0000-000000000000'),
        ('5e642d0a-94d4-4a4f-8760-cd6d63cd1071', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059',
         '5e642d0a-94d4-4a4f-8760-cd6d63cd1045', now(), now(), 1, 'other_survey', 30,
-        '10f41829-09d2-48d0-af87-761fe5e9e6d2'),
+        '10f41829-09d2-48d0-af87-761fe5e9e6d2', '00000000-0000-0000-0000-000000000000'),
        ('5e642d0a-94d4-4a4f-8760-cd6d63cd1072', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059',
         '5e642d0a-94d4-4a4f-8760-cd6d63cd1046', now(), now(), 1, 'other_survey', 38,
-        '10f41829-09d2-48d0-af87-761fe5e9e6d2'),
+        '10f41829-09d2-48d0-af87-761fe5e9e6d2', '00000000-0000-0000-0000-000000000000'),
        ('5e642d0a-94d4-4a4f-8760-cd6d63cd1073', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059',
         '5e642d0a-94d4-4a4f-8760-cd6d63cd1047', now(), now(), 1, 'other_survey', 50,
-        '10f41829-09d2-48d0-af87-761fe5e9e6d2'),
+        '10f41829-09d2-48d0-af87-761fe5e9e6d2', '00000000-0000-0000-0000-000000000000'),
        ('5e642d0a-94d4-4a4f-8760-cd6d63cd1074', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059',
         '5e642d0a-94d4-4a4f-8760-cd6d63cd1048', now(), now(), 1, 'other_survey', 27,
-        '10f41829-09d2-48d0-af87-761fe5e9e6d2');
+        '10f41829-09d2-48d0-af87-761fe5e9e6d2', '00000000-0000-0000-0000-000000000000');
 
 INSERT INTO public.user_vote_other_survey (id, result)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1065', 'DEFINITELY_YES'),

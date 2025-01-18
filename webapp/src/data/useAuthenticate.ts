@@ -16,6 +16,7 @@ interface LoginRequest {
 export interface LoginResponse {
   token: string;
   refreshToken: string;
+  parliamentaryClub?: string;
 }
 
 export const useAuthenticate = () => {
@@ -28,7 +29,7 @@ export const useAuthenticate = () => {
         '/authenticate',
         data
       );
-      return response.data;
+      return { data: response.data, headers: response.headers };
     },
     onError: (error: AxiosError) => {
       toast({

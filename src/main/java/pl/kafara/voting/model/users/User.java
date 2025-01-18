@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import pl.kafara.voting.model.AbstractEntity;
+import pl.kafara.voting.model.vote.ParliamentaryClub;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -55,6 +56,10 @@ public class User extends AbstractEntity implements Serializable {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
     private VoterRoleRequest voterRoleRequest;
+
+    @ManyToOne
+    @JoinColumn(name = "parliamentary_club_id")
+    private ParliamentaryClub parliamentaryClub;
 
     @Column(name = "verified", nullable = false)
     private boolean verified = false;

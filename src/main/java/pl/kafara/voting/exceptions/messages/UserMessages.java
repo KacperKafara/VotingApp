@@ -29,6 +29,7 @@ public class UserMessages {
     public static final String MFA_REQUIRED = "MFA required";
     public static final String OAUTH_TOKEN_VERIFICATION_FAILED = "OAuth token verification failed";
     public static final String ROLE_REQUEST_ALREADY_RESOLVED = "Role request already resolved";
+    public static final String PARLIAMENTARY_CLUB_NOT_FOUND = "Parliamentary club not found";
 
     private UserMessages() {
     }

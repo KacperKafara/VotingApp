@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import pl.kafara.voting.model.users.User;
+import pl.kafara.voting.model.vote.ParliamentaryClub;
 import pl.kafara.voting.model.vote.Voting;
 import pl.kafara.voting.model.vote.VotingOption;
 
@@ -23,8 +24,8 @@ public class UserVoteOnList extends UserVoteVoting {
     @JoinColumn(name = "voting_option_id")
     private VotingOption votingOption;
 
-    public UserVoteOnList(Voting voting, User user, VotingOption votingOption) {
-        super(user, Period.between(user.getBirthDate().toLocalDate(), LocalDateTime.now().toLocalDate()).getYears(), user.getGender(), voting);
+    public UserVoteOnList(Voting voting, User user, VotingOption votingOption, ParliamentaryClub userParliamentaryClub) {
+        super(user, Period.between(user.getBirthDate().toLocalDate(), LocalDateTime.now().toLocalDate()).getYears(), user.getGender(), voting, userParliamentaryClub);
         this.votingOption = votingOption;
     }
 }

@@ -65,7 +65,7 @@ const LoginForm: FC<LoginFormProps> = ({ className }) => {
   });
 
   const onSubmit = form.handleSubmit(async ({ username, password }) => {
-    const result = await authenticate({
+    const { data: result, headers } = await authenticate({
       username,
       password,
       language: i18next.language,
@@ -82,11 +82,19 @@ const LoginForm: FC<LoginFormProps> = ({ className }) => {
 
     setToken('token' in result ? result.token : '', undefined);
     setRefreshToken('refreshToken' in result ? result.refreshToken : '');
+    if (headers.etag) {
+      localStorage.setItem(
+        'etag-parliamentary-club',
+        headers.etag.substring(1, headers.etag.length - 1)
+      );
+    }
     const unsubscribe = useUserStore.subscribe((state) => {
       const roles = state.roles;
       if (roles) {
-        navigate(`/${roleMapping[getActiveRole(roles)]}`);
-        unsubscribe();
+        setTimeout(() => {
+          navigate(`/${roleMapping[getActiveRole(roles)]}`);
+          unsubscribe();
+        }, 500);
       }
     });
   });

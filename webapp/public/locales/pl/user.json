@@ -39,5 +39,9 @@
     "blockUser": "Zablokuj użytkownika",
     "blockDescription": "Czy na pewno chcesz zablokować tego użytkownika?",
     "unBlockDescription": "Czy na pewno chcesz odblokować tego użytkownika?"
+  },
+  "parliamentaryClub": {
+    "successTitle": "Sukces",
+    "successDescription": "Twój preferowany klub parlamentarny został zaktualizowany pomyślnie"
   }
 }

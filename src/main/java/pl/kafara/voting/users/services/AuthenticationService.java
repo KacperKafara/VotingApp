@@ -4,7 +4,6 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import dev.samstevens.totp.code.CodeVerifier;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,7 +29,6 @@ import pl.kafara.voting.util.JwtService;
 import pl.kafara.voting.util.SensitiveData;
 
 import java.security.NoSuchAlgorithmException;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
@@ -50,13 +48,12 @@ public class AuthenticationService {
     private final AESUtils aesUtils;
     private final CodeVerifier codeVerifier;
     private final UserService userService;
-
-    @Value("${security.max-failed-attempts:3}")
-    private int maxFailedAttempts;
+    private final AuthenticationServiceUtils authenticationServiceUtils;
 
     @PreAuthorize("permitAll()")
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {Exception.class})
     public Map<String, SensitiveData> authenticate(LoginRequest loginRequest) throws NotFoundException, AccountNotActiveException, InvalidLoginDataException, MFARequiredException {
-        User user = checkIsUserVerifiedOrBlocked(loginRequest.username());
+        User user = authenticationServiceUtils.checkIsUserVerifiedOrBlocked(loginRequest.username());
 
         if (!passwordEncoder.matches(loginRequest.password(), user.getPassword())) {
             user.setFailedLoginAttempts(user.getFailedLoginAttempts() + 1);
@@ -74,21 +71,16 @@ public class AuthenticationService {
         user.setLanguage(loginRequest.language());
         user.setFailedLoginAttempts(0);
         user.setLastLogin(LocalDateTime.now());
-        userRepository.save(user);
+        User savedUser = userRepository.saveAndFlush(user);
 
-        String jwtToken = jwtService.createToken(user.getUsername(), user.getId(), user.getRoles());
-        String refreshToken = jwtService.createRefreshToken(user.getId());
-
-        return Map.of(
-                "token", new SensitiveData(jwtToken),
-                "refreshToken", new SensitiveData(refreshToken)
-        );
+        return authenticationServiceUtils.generateTokens(savedUser);
     }
 
     @PreAuthorize("permitAll()")
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {Exception.class})
     public Map<String, SensitiveData> authenticate(SensitiveData subject) throws NotFoundException, AccountNotActiveException {
         User user = userService.getUserByOAuthId(subject.data());
-        checkIsUserVerifiedOrBlocked(user.getUsername());
+        authenticationServiceUtils.checkIsUserVerifiedOrBlocked(user.getUsername());
 
         if (user.getAuthorisationTotpSecret() != null) {
             return Map.of(
@@ -98,18 +90,13 @@ public class AuthenticationService {
 
         user.setFailedLoginAttempts(0);
         user.setLastLogin(LocalDateTime.now());
-        userRepository.save(user);
-        String jwtToken = jwtService.createToken(user.getUsername(), user.getId(), user.getRoles());
-        String refreshToken = jwtService.createRefreshToken(user.getId());
-        return Map.of(
-                "token", new SensitiveData(jwtToken),
-                "refreshToken", new SensitiveData(refreshToken)
-        );
+        User savedUser = userRepository.saveAndFlush(user);
+        return authenticationServiceUtils.generateTokens(savedUser);
     }
 
     @PreAuthorize("permitAll()")
     public Map<String, SensitiveData> verifyTotp(TotpLoginRequest loginRequest) throws NotFoundException, InvalidLoginDataException, AccountNotActiveException {
-        User user = checkIsUserVerifiedOrBlocked(loginRequest.username());
+        User user = authenticationServiceUtils.checkIsUserVerifiedOrBlocked(loginRequest.username());
 
         if (!codeVerifier.isValidCode(aesUtils.decrypt(user.getAuthorisationTotpSecret()), loginRequest.totp())) {
             throw new InvalidLoginDataException(UserMessages.INVALID_CREDENTIALS, UserExceptionCodes.INVALID_CREDENTIALS);
@@ -117,14 +104,8 @@ public class AuthenticationService {
 
         user.setFailedLoginAttempts(0);
         user.setLastLogin(LocalDateTime.now());
-        userRepository.save(user);
-        String jwtToken = jwtService.createToken(user.getUsername(), user.getId(), user.getRoles());
-        String refreshToken = jwtService.createRefreshToken(user.getId());
-
-        return Map.of(
-                "token", new SensitiveData(jwtToken),
-                "refreshToken", new SensitiveData(refreshToken)
-        );
+        User savedUser = userRepository.saveAndFlush(user);
+        return authenticationServiceUtils.generateTokens(savedUser);
     }
 
     @PreAuthorize("permitAll()")
@@ -166,26 +147,5 @@ public class AuthenticationService {
                 "token", new SensitiveData(jwtToken),
                 "refreshToken", refreshToken
         );
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    protected User checkIsUserVerifiedOrBlocked(String username) throws NotFoundException, AccountNotActiveException {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.INVALID_CREDENTIALS));
-
-        if (!user.isVerified())
-            throw new AccountNotActiveException(UserMessages.USER_NOT_VERIFIED, UserExceptionCodes.USER_NOT_VERIFIED);
-        if (user.isBlocked())
-            throw new AccountNotActiveException(UserMessages.USER_BLOCKED, UserExceptionCodes.USER_BLOCKED);
-
-        if (user.getLastFailedLogin() == null)
-            return user;
-
-        if (user.getFailedLoginAttempts() >= maxFailedAttempts && Duration.between(user.getLastFailedLogin(), LocalDateTime.now()).toDays() <= 24)
-            throw new AccountNotActiveException(UserMessages.AUTHENTICATION_BLOCKED, UserExceptionCodes.AUTHENTICATION_BLOCKED);
-        else if (user.getFailedLoginAttempts() >= maxFailedAttempts)
-            user.setFailedLoginAttempts(0);
-
-        return userRepository.save(user);
     }
 }

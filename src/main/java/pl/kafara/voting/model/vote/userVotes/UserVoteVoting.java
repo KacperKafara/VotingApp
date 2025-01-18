@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import pl.kafara.voting.model.AbstractEntity;
 import pl.kafara.voting.model.users.Gender;
 import pl.kafara.voting.model.users.User;
+import pl.kafara.voting.model.vote.ParliamentaryClub;
 import pl.kafara.voting.model.vote.Voting;
 
 @Entity
@@ -24,7 +25,7 @@ import pl.kafara.voting.model.vote.Voting;
 public abstract class UserVoteVoting extends AbstractEntity {
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private User user;
 
     @Column(nullable = false, updatable = false)
@@ -34,6 +35,10 @@ public abstract class UserVoteVoting extends AbstractEntity {
     private Gender gender;
 
     @ManyToOne
-    @JoinColumn(name = "voting_id", nullable = false)
+    @JoinColumn(name = "voting_id", nullable = false, updatable = false)
     private Voting voting;
+
+    @ManyToOne
+    @JoinColumn(name = "parliamentary_club_id", nullable = false, updatable = false)
+    private ParliamentaryClub parliamentaryClub;
 }

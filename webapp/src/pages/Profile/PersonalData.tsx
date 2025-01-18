@@ -10,6 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import UpdateParliamentaryClubDialog from '@/components/UpdateParliamentaryClub';
 import { useUpdate2FA } from '@/data/useProfile';
 import { useCreateRoleRequest } from '@/data/useRoleRequest';
 import { cn } from '@/lib/utils';
@@ -42,6 +43,13 @@ const PersonalData: FC<PersonalDataProps> = ({
   const { createRoleRequest } = useCreateRoleRequest();
   const { update2FA } = useUpdate2FA();
   const { useOAuth } = useUserStore();
+  const [
+    updateParliamentaryClubDialogOpen,
+    setUpdateParliamentaryClubDialogOpen,
+  ] = useState({
+    open: false,
+    etag: tag_value,
+  });
 
   const activate2FA = async () => {
     await update2FA(true);
@@ -139,13 +147,25 @@ const PersonalData: FC<PersonalDataProps> = ({
             </DropdownMenuItem>
           )}
           {user.roles.includes('VOTER') ? (
-            <DropdownMenuItem
-              onClick={() => {
-                setDisplayQRCodeVotingOpen(!displayQRCodeVotingOpen);
-              }}
-            >
-              {t('displayQRCodeForVoting')}
-            </DropdownMenuItem>
+            <>
+              <DropdownMenuItem
+                onClick={() =>
+                  setUpdateParliamentaryClubDialogOpen({
+                    open: !updateParliamentaryClubDialogOpen.open,
+                    etag: tag_value,
+                  })
+                }
+              >
+                {t('parliamentaryClub.update')}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  setDisplayQRCodeVotingOpen(!displayQRCodeVotingOpen);
+                }}
+              >
+                {t('displayQRCodeForVoting')}
+              </DropdownMenuItem>
+            </>
           ) : user.roles.includes('USER') &&
             !user.roles.includes('VOTER') &&
             !user.activeRoleRequest ? (
@@ -177,6 +197,16 @@ const PersonalData: FC<PersonalDataProps> = ({
         dialogTitle={t('activate2FA')}
         dialogDescription={t('activate2FADescription')}
         confirmAction={activate2FA}
+      />
+      <UpdateParliamentaryClubDialog
+        open={updateParliamentaryClubDialogOpen.open}
+        etag={updateParliamentaryClubDialogOpen.etag}
+        onOpenChange={() =>
+          setUpdateParliamentaryClubDialogOpen({
+            open: !updateParliamentaryClubDialogOpen.open,
+            etag: tag_value,
+          })
+        }
       />
       <EditProfile
         open={editProfileOpen}

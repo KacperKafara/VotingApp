@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import pl.kafara.voting.model.vote.ParliamentaryClub;
 import pl.kafara.voting.model.vote.UserVoteResult;
 import pl.kafara.voting.model.users.User;
 
@@ -21,8 +22,8 @@ public class UserVoteOtherSurvey extends UserVoteSurvey {
     @Column(name = "result", nullable = false)
     private UserVoteResult result;
 
-    public UserVoteOtherSurvey(Survey survey, User user, UserVoteResult result) {
-        super(user, Period.between(user.getBirthDate().toLocalDate(), LocalDateTime.now().toLocalDate()).getYears(), user.getGender(), survey);
+    public UserVoteOtherSurvey(Survey survey, User user, UserVoteResult result, ParliamentaryClub userParliamentaryClub) {
+        super(user, Period.between(user.getBirthDate().toLocalDate(), LocalDateTime.now().toLocalDate()).getYears(), user.getGender(), survey, userParliamentaryClub);
         this.result = result;
     }
 }

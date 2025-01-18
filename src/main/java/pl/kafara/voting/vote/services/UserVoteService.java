@@ -51,7 +51,6 @@ public class UserVoteService {
 
         if (survey.getSurveyKind() != SurveyKind.PARLIAMENTARY_CLUB) {
             throw new SurveyException(SurveyMessages.SURVEY_KIND_NOT_PARLIAMENTARY_CLUB, SurveyExceptionCodes.SURVEY_KIND_NOT_PARLIAMENTARY_CLUB);
-
         }
 
         if (survey.getEndDate().isBefore(LocalDateTime.now())) {
@@ -72,7 +71,7 @@ public class UserVoteService {
         if (!Objects.equals(parliamentaryClub.getTerm(), currentTerm))
             throw new NotFoundException(SurveyMessages.PARLIAMENTARY_CLUB_NOT_FOUND, SurveyExceptionCodes.PARLIAMENTARY_CLUB_NOT_FOUND);
 
-        parliamentaryClubVoteRepository.save(new UserVoteParliamentaryClub(survey, user, parliamentaryClub));
+        parliamentaryClubVoteRepository.save(new UserVoteParliamentaryClub(survey, user, parliamentaryClub, user.getParliamentaryClub()));
     }
 
     @PreAuthorize("hasRole('VOTER')")
@@ -88,7 +87,7 @@ public class UserVoteService {
             throw new VotingOrSurveyNotActiveException(SurveyMessages.SURVEY_NOT_ACTIVE, SurveyExceptionCodes.SURVEY_NOT_ACTIVE);
         }
 
-        otherSurveyVoteRepository.save(new UserVoteOtherSurvey(survey, user, userVoteResult));
+        otherSurveyVoteRepository.save(new UserVoteOtherSurvey(survey, user, userVoteResult, user.getParliamentaryClub()));
     }
 
     @PreAuthorize("hasRole('VOTER')")
@@ -103,7 +102,7 @@ public class UserVoteService {
             throw new VotingOrSurveyNotActiveException(VotingMessages.VOTING_NOT_ACTIVE, VotingExceptionCodes.VOTING_NOT_ACTIVE);
         }
 
-        votingOtherRepository.save(new UserVoteOther(voting, user, userVoteResult));
+        votingOtherRepository.save(new UserVoteOther(voting, user, userVoteResult, user.getParliamentaryClub()));
     }
 
     @PreAuthorize("hasRole('VOTER')")
@@ -122,6 +121,6 @@ public class UserVoteService {
                 () -> new NotFoundException(SurveyMessages.VOTING_OPTION_NOT_FOUND, SurveyExceptionCodes.VOTING_OPTION_NOT_FOUND)
         );
 
-        userVoteOnListRepository.save(new UserVoteOnList(voting, user, votingOption));
+        userVoteOnListRepository.save(new UserVoteOnList(voting, user, votingOption, user.getParliamentaryClub()));
     }
 }
