@@ -30,7 +30,8 @@
   "headers": {
     "result": "Result",
     "resultByGender": "Votes by gender",
-    "resultByAge": "Votes by age"
+    "resultByAge": "Votes by age",
+    "resultByClub": "Votes by parliamentary club support"
   },
   "sheet": {
     "vote": "Vote!",
@@ -61,5 +62,6 @@
   "FEMALE": "Female",
   "OTHER": "Other",
   "vote": "Vote",
-  "totalVotes": "Total votes"
+  "totalVotes": "Total votes",
+  "ND": "Not defined"
 }

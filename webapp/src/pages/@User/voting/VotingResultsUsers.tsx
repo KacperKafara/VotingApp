@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import VotingResultChartByGender from '@/components/voting/VotingResultChartByGender';
 import VotingResultChartUser from '@/components/voting/VotingResultChartUser';
+import VotingResultChartUserByClub from '@/components/voting/VotingResultChartUserByClub';
 import VotingResultsChartByAge from '@/components/voting/VotingResultsChartByAge';
 import { VotingResponse } from '@/types/voting';
 import { FC } from 'react';
@@ -37,6 +38,14 @@ const VotingResultsUsers: FC<VotingResultsUsersProps> = ({ data }) => {
         </CardHeader>
         <CardContent>
           <VotingResultsChartByAge data={data} tFunction={t} />
+        </CardContent>
+      </Card>
+      <Card className="col-span-1 md:col-span-2">
+        <CardHeader>
+          <CardTitle>{t('headers.resultUsersByClub')}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <VotingResultChartUserByClub data={data} tFunction={t} />
         </CardContent>
       </Card>
     </div>

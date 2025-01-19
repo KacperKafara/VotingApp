@@ -30,7 +30,8 @@
   "headers": {
     "result": "Wynik",
     "resultByGender": "Głosy według płci",
-    "resultByAge": "Głosy według wieku"
+    "resultByAge": "Głosy według wieku",
+    "resultByClub": "Głosy według poparcia klubu parlamentarnego"
   },
   "sheet": {
     "vote": "Oddaj swój głos!",
@@ -61,5 +62,6 @@
   "FEMALE": "Kobieta",
   "OTHER": "Inna",
   "vote": "Zagłosuj",
-  "totalVotes": "Liczba głosów"
+  "totalVotes": "Liczba głosów",
+  "ND": "Nieokreślono"
 }

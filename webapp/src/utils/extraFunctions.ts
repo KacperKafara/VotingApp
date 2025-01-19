@@ -1,5 +1,5 @@
 import { ChartConfig } from '@/components/ui/chart';
-import { UserVote } from '@/types/survey';
+import { SurveyResponse, UserVote } from '@/types/survey';
 import { VoteResponse, VotingResponse } from '@/types/voting';
 import { TFunction } from 'i18next';
 import uniqolor from 'uniqolor';
@@ -127,6 +127,96 @@ export const generateChartDataForVotingByClub = (
     uniqueLabels.splice(index, 1);
     uniqueLabels.push(t('ABSENT'));
   }
+
+  const chartConfig: ChartConfig = uniqueLabels.reduce(
+    (result, label, index) => {
+      result[label] = {
+        label,
+        color: uniqolor(index * 10, { format: 'hsl' }).color,
+      };
+      return result;
+    },
+    {} as ChartConfig
+  );
+
+  return { chartData, chartConfig };
+};
+
+export const generateChartDataForSurveyByClub = (
+  data: SurveyResponse,
+  t: TFunction
+) => {
+  const voteCounts: Record<string, Record<string, number>> = {};
+
+  data.results.forEach((result) => {
+    const value = t(`userResults.${result.voteResult}`);
+    voteCounts[result.parliamentaryClub] =
+      voteCounts[result.parliamentaryClub] || {};
+    voteCounts[result.parliamentaryClub][value] =
+      (voteCounts[result.parliamentaryClub][value] || 0) + 1;
+  });
+
+  if (voteCounts['ND']) {
+    voteCounts[t('ND')] = voteCounts['ND'];
+    delete voteCounts['ND'];
+  }
+
+  const chartData = Object.entries(voteCounts).map(([key, value]) => ({
+    name: key,
+    ...value,
+  }));
+
+  const uniqueLabels = Array.from(
+    new Set(
+      chartData.flatMap((item) =>
+        Object.keys(item).filter((key) => key !== 'name')
+      )
+    )
+  );
+
+  const chartConfig: ChartConfig = uniqueLabels.reduce(
+    (result, label, index) => {
+      result[label] = {
+        label,
+        color: uniqolor(index * 10, { format: 'hsl' }).color,
+      };
+      return result;
+    },
+    {} as ChartConfig
+  );
+
+  return { chartData, chartConfig };
+};
+
+export const generateChartDataForVotingUserByClub = (
+  data: VotingResponse,
+  t: TFunction
+) => {
+  const voteCounts: Record<string, Record<string, number>> = {};
+
+  data.userVotes.forEach((vote) => {
+    const value =
+      data.kind === 'ON_LIST'
+        ? vote.voteResult
+        : t(`userResults.${vote.voteResult}`);
+    voteCounts[vote.parliamentaryClub] =
+      voteCounts[vote.parliamentaryClub] || {};
+    voteCounts[vote.parliamentaryClub][value] =
+      (voteCounts[vote.parliamentaryClub][value] || 0) + 1;
+  });
+
+  const chartData = Object.entries(voteCounts).map(([key, value]) => ({
+    name: key,
+    ...value,
+  }));
+
+  const uniqueLabels = Array.from(
+    new Set(
+      chartData.flatMap((item) =>
+        Object.keys(item).filter((key) => key !== 'name')
+      )
+    )
+  );
 
   const chartConfig: ChartConfig = uniqueLabels.reduce(
     (result, label, index) => {

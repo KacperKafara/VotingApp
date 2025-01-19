@@ -14,7 +14,8 @@ public class VotingMapper {
         return new UserVoteResponse(
                 userVoteOnList.getGender().getName().name(),
                 userVoteOnList.getAge(),
-                userVoteOnList.getVotingOption().getOption()
+                userVoteOnList.getVotingOption().getOption(),
+                userVoteOnList.getUser().getParliamentaryClub().getShortName()
         );
     }
 
@@ -22,7 +23,8 @@ public class VotingMapper {
         return new UserVoteResponse(
                 userVoteOther.getGender().getName().name(),
                 userVoteOther.getAge(),
-                userVoteOther.getVoteResult().name()
+                userVoteOther.getVoteResult().name(),
+                userVoteOther.getUser().getParliamentaryClub().getShortName()
         );
     }
 

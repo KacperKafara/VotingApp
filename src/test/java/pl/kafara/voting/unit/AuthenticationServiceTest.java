@@ -187,7 +187,6 @@ public class AuthenticationServiceTest {
         when(authenticationServiceUtils.checkIsUserVerifiedOrBlocked(user.getUsername())).thenReturn(user);
         when(aesUtils.decrypt("encryptedSecret")).thenReturn("decryptedSecret");
         when(codeVerifier.isValidCode("decryptedSecret", "validTotp")).thenReturn(true);
-        when(userRepository.save(user)).thenReturn(user);
         when(authenticationServiceUtils.generateTokens(any())).thenReturn(Map.of(
                 "token", new SensitiveData("jwtToken"),
                 "refreshToken", new SensitiveData("refreshToken"),

@@ -1,6 +1,7 @@
 import LoadingIcon from '@/components/loading';
 import SurveyResultChart from '@/components/survey/SurveyResultChart';
 import SurveyResultChartByAge from '@/components/survey/SurveyResultChartByAge';
+import SurveyResultChartByClub from '@/components/survey/SurveyResultChartByClub';
 import SurveyResultChartByGender from '@/components/survey/SurveyResultChartByGender';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,6 +9,7 @@ import VoteSheet from '@/components/VoteSheet';
 import { useCreateVote, useSurvey } from '@/data/useSurvey';
 import { useUserStore } from '@/store/userStore';
 import { UsetRolesWithPrefix } from '@/types/roles';
+import { SurveyKinds } from '@/types/survey';
 import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -76,6 +78,16 @@ const SurveyPage: FC = () => {
               <SurveyResultChartByAge data={data} tFunction={t} />
             </CardContent>
           </Card>
+          {data.surveyKind !== SurveyKinds.parliamentaryClub && (
+            <Card className="col-span-1 md:col-span-2">
+              <CardHeader>
+                <CardTitle>{t('headers.resultByClub')}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <SurveyResultChartByClub data={data} tFunction={t} />
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
       {roles?.includes(UsetRolesWithPrefix.voter) &&

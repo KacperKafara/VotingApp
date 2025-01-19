@@ -19,7 +19,8 @@
     "resultByEnvoys": "Jak głosowali posłowie",
     "resultUsers": "Jak głosowali użytkownicy",
     "resultUsersByGender": "Jak głosowali użytkownicy wg płci",
-    "resultUsersByAge": "Jak głosowali użytkownicy wg wieku"
+    "resultUsersByAge": "Jak głosowali użytkownicy wg wieku",
+    "resultUsersByClub": "Głosy według poparcia klubu parlamentarnego"
   },
   "envoyName": "Poseł",
   "title": "Tytuł",

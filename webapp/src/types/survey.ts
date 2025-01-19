@@ -16,6 +16,7 @@ export interface UserVote {
   gender: 'MALE' | 'FEMALE' | 'OTHER';
   age: number;
   voteResult: string;
+  parliamentaryClub: string;
 }
 
 export interface SurveyResponse {

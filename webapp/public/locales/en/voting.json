@@ -19,7 +19,8 @@
     "resultByEnvoys": "How envoys voted",
     "resultUsers": "How users voted",
     "resultUsersByGender": "How users vote by gender",
-    "resultUsersByAge": "How users vote by age"
+    "resultUsersByAge": "How users vote by age",
+    "resultUsersByClub": "Votes by parliamentary club support"
   },
   "envoyName": "Envoy",
   "title": "Title",

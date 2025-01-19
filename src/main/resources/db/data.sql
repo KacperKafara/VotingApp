@@ -22,7 +22,8 @@ VALUES ('aeead59f-a7c5-4570-bbc7-bd9eae859c20', 'OTHER', now(), now(), 1);
 INSERT INTO public.users (id, username, password, created_at, updated_at, verified, blocked, failed_login_attempts,
                           version, language, totp_secret, parliamentary_club_id)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1038', 'user', '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.',
-        now(), now(), true, false, 0, 1, 'en', 'lQgCvY17bN2lKxjy/EGI7Xxcn0mLxdyJRG9uZ6VLcwvyFS6ZtSwSTMdg9Ma5lm24', '00000000-0000-0000-0000-000000000000');
+        now(), now(), true, false, 0, 1, 'en', 'lQgCvY17bN2lKxjy/EGI7Xxcn0mLxdyJRG9uZ6VLcwvyFS6ZtSwSTMdg9Ma5lm24',
+        '00000000-0000-0000-0000-000000000000');
 INSERT INTO public.personal_data (first_name, last_name, phone_number, birth_date, user_id, email, gender_id)
 VALUES ('User', 'User', '+48123456789',
         '2001-01-01', '5e642d0a-94d4-4a4f-8760-cd6d63cd1038', 'admin@localhost.com',
@@ -64,114 +65,122 @@ VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1039', 'b91d7195-69a1-4073-9c95-52ceefd
 
 -- User 3
 INSERT INTO public.users (id, username, password, created_at, updated_at, verified, blocked, failed_login_attempts,
-                          version, language)
+                          version, language, parliamentary_club_id)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1040', 'asmith',
-        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en');
+        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en', '00000000-0000-0000-0000-000000000000');
 
 INSERT INTO public.personal_data (first_name, last_name, phone_number, birth_date, user_id, email, gender_id)
 VALUES ('Anna', 'Smith', '+48123456781', '2003-03-03', '5e642d0a-94d4-4a4f-8760-cd6d63cd1040', 'asmith@localhost.com',
         'cc8e8196-1bd8-4be6-a8b4-a1dc1973a7eb');
 
 INSERT INTO public.users_roles (user_id, roles_id)
-VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1040', 'b7a8dedb-bccc-4461-9b28-b60b5bf83e7f');
+VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1040', 'b91d7195-69a1-4073-9c95-52ceefd93cb7'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1040', 'c07e7fce-134c-4004-bd70-b1e3a576a23b');
 
 -- User 4
 INSERT INTO public.users (id, username, password, created_at, updated_at, verified, blocked, failed_login_attempts,
-                          version, language)
+                          version, language, parliamentary_club_id)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1041', 'rbrown',
-        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en');
+        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en', '00000000-0000-0000-0000-000000000000');
 
 INSERT INTO public.personal_data (first_name, last_name, phone_number, birth_date, user_id, email, gender_id)
 VALUES ('Robert', 'Brown', '+48123456782', '2004-04-04', '5e642d0a-94d4-4a4f-8760-cd6d63cd1041', 'rbrown@localhost.com',
         'cc8e8196-1bd8-4be6-a8b4-a1dc1973a7eb');
 
 INSERT INTO public.users_roles (user_id, roles_id)
-VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1041', '4d877c20-ebe9-4a7b-92e5-785873f277fe');
+VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1041', 'b91d7195-69a1-4073-9c95-52ceefd93cb7'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1041', 'c07e7fce-134c-4004-bd70-b1e3a576a23b');
 
 -- User 5
 INSERT INTO public.users (id, username, password, created_at, updated_at, verified, blocked, failed_login_attempts,
-                          version, language)
+                          version, language, parliamentary_club_id)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1042', 'lwilson',
-        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en');
+        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en', '00000000-0000-0000-0000-000000000000');
 
 INSERT INTO public.personal_data (first_name, last_name, phone_number, birth_date, user_id, email, gender_id)
 VALUES ('Laura', 'Wilson', '+48123456783', '2005-05-05', '5e642d0a-94d4-4a4f-8760-cd6d63cd1042',
         'lwilson@localhost.com', '10f41829-09d2-48d0-af87-761fe5e9e6d2');
 
 INSERT INTO public.users_roles (user_id, roles_id)
-VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1042', 'b7a8dedb-bccc-4461-9b28-b60b5bf83e7f');
+VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1042', 'b91d7195-69a1-4073-9c95-52ceefd93cb7'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1042', 'c07e7fce-134c-4004-bd70-b1e3a576a23b');
 
 -- User 6
 INSERT INTO public.users (id, username, password, created_at, updated_at, verified, blocked, failed_login_attempts,
-                          version, language, authorisation_totp_secret)
+                          version, language, authorisation_totp_secret, parliamentary_club_id)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1043', 'tjohnson',
         '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en',
-        'kBC0ff7aSM3XyYWjGpKD5K2tjj87NRHBo7ZiGvAqK0byFS6ZtSwSTMdg9Ma5lm24');
+        'kBC0ff7aSM3XyYWjGpKD5K2tjj87NRHBo7ZiGvAqK0byFS6ZtSwSTMdg9Ma5lm24', '00000000-0000-0000-0000-000000000000');
 
 INSERT INTO public.personal_data (first_name, last_name, phone_number, birth_date, user_id, email, gender_id)
 VALUES ('Tom', 'Johnson', '+48123456784', '2006-06-06', '5e642d0a-94d4-4a4f-8760-cd6d63cd1043',
         'tjohnson@localhost.com', 'aeead59f-a7c5-4570-bbc7-bd9eae859c20');
 
 INSERT INTO public.users_roles (user_id, roles_id)
-VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1043', 'b91d7195-69a1-4073-9c95-52ceefd93cb7');
+VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1043', 'b91d7195-69a1-4073-9c95-52ceefd93cb7'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1043', 'c07e7fce-134c-4004-bd70-b1e3a576a23b');
 
 -- User 7
 INSERT INTO public.users (id, username, password, created_at, updated_at, verified, blocked, failed_login_attempts,
-                          version, language)
+                          version, language, parliamentary_club_id)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1044', 'mgonzalez',
-        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en');
+        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en', '00000000-0000-0000-0000-000000000000');
 
 INSERT INTO public.personal_data (first_name, last_name, phone_number, birth_date, user_id, email, gender_id)
 VALUES ('Maria', 'Gonzalez', '+48123456785', '2007-07-07', '5e642d0a-94d4-4a4f-8760-cd6d63cd1044',
         'mgonzalez@localhost.com', 'aeead59f-a7c5-4570-bbc7-bd9eae859c20');
 
 INSERT INTO public.users_roles (user_id, roles_id)
-VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1044', '4d877c20-ebe9-4a7b-92e5-785873f277fe');
+VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1044', 'b91d7195-69a1-4073-9c95-52ceefd93cb7'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1044', 'c07e7fce-134c-4004-bd70-b1e3a576a23b');
 
 -- User 8
 INSERT INTO public.users (id, username, password, created_at, updated_at, verified, blocked, failed_login_attempts,
-                          version, language)
+                          version, language, parliamentary_club_id)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1045', 'mlee', '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.',
-        now(), now(), true, false, 0, 1, 'en');
+        now(), now(), true, false, 0, 1, 'en', '00000000-0000-0000-0000-000000000000');
 
 INSERT INTO public.personal_data (first_name, last_name, phone_number, birth_date, user_id, email, gender_id)
 VALUES ('Michael', 'Lee', '+48123456786', '2008-08-08', '5e642d0a-94d4-4a4f-8760-cd6d63cd1045', 'mlee@localhost.com',
         '10f41829-09d2-48d0-af87-761fe5e9e6d2');
 
 INSERT INTO public.users_roles (user_id, roles_id)
-VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1045', 'b91d7195-69a1-4073-9c95-52ceefd93cb7');
+VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1045', 'b91d7195-69a1-4073-9c95-52ceefd93cb7'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1045', 'c07e7fce-134c-4004-bd70-b1e3a576a23b');
 
 -- User 9
 INSERT INTO public.users (id, username, password, created_at, updated_at, verified, blocked, failed_login_attempts,
-                          version, language)
+                          version, language, parliamentary_club_id)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1046', 'kclark',
-        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en');
+        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en', '00000000-0000-0000-0000-000000000000');
 
 INSERT INTO public.personal_data (first_name, last_name, phone_number, birth_date, user_id, email, gender_id)
 VALUES ('Katherine', 'Clark', '+48123456787', '2009-09-09', '5e642d0a-94d4-4a4f-8760-cd6d63cd1046',
         'kclark@localhost.com', '10f41829-09d2-48d0-af87-761fe5e9e6d2');
 
 INSERT INTO public.users_roles (user_id, roles_id)
-VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1046', 'b91d7195-69a1-4073-9c95-52ceefd93cb7');
+VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1046', 'b91d7195-69a1-4073-9c95-52ceefd93cb7'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1046', 'c07e7fce-134c-4004-bd70-b1e3a576a23b');
 
 -- User 10
 INSERT INTO public.users (id, username, password, created_at, updated_at, verified, blocked, failed_login_attempts,
-                          version, language)
+                          version, language, parliamentary_club_id)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1047', 'mbrown',
-        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en');
+        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en', '00000000-0000-0000-0000-000000000000');
 
 INSERT INTO public.personal_data (first_name, last_name, phone_number, birth_date, user_id, email, gender_id)
 VALUES ('Michael', 'Brown', '+48123456788', '2010-10-10', '5e642d0a-94d4-4a4f-8760-cd6d63cd1047',
         'mbrown@localhost.com', '10f41829-09d2-48d0-af87-761fe5e9e6d2');
 
 INSERT INTO public.users_roles (user_id, roles_id)
-VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1047', '4d877c20-ebe9-4a7b-92e5-785873f277fe');
+VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1047', 'b91d7195-69a1-4073-9c95-52ceefd93cb7'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1047', 'c07e7fce-134c-4004-bd70-b1e3a576a23b');
 
 -- User 11
 INSERT INTO public.users (id, username, password, created_at, updated_at, verified, blocked, failed_login_attempts,
-                          version, language)
+                          version, language, parliamentary_club_id)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1048', 'jwhite',
-        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en');
+        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en', '00000000-0000-0000-0000-000000000000');
 
 INSERT INTO public.personal_data (first_name, last_name, phone_number, birth_date, user_id, email, gender_id)
 VALUES ('Jessica', 'White', '+48987654321', '2011-11-11', '5e642d0a-94d4-4a4f-8760-cd6d63cd1048',
@@ -179,20 +188,22 @@ VALUES ('Jessica', 'White', '+48987654321', '2011-11-11', '5e642d0a-94d4-4a4f-87
 
 INSERT INTO public.users_roles (user_id, roles_id)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1048', 'b91d7195-69a1-4073-9c95-52ceefd93cb7'),
-       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1048', '4d877c20-ebe9-4a7b-92e5-785873f277fe');
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1048', '4d877c20-ebe9-4a7b-92e5-785873f277fe'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1048', 'c07e7fce-134c-4004-bd70-b1e3a576a23b');
 
 -- User 12
 INSERT INTO public.users (id, username, password, created_at, updated_at, verified, blocked, failed_login_attempts,
-                          version, language)
+                          version, language, parliamentary_club_id)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1049', 'ajones',
-        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en');
+        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en', '00000000-0000-0000-0000-000000000000');
 
 INSERT INTO public.personal_data (first_name, last_name, phone_number, birth_date, user_id, email, gender_id)
 VALUES ('Alice', 'Jones', '+48123456790', '2012-12-12', '5e642d0a-94d4-4a4f-8760-cd6d63cd1049', 'ajones@localhost.com',
         '10f41829-09d2-48d0-af87-761fe5e9e6d2');
 
 INSERT INTO public.users_roles (user_id, roles_id)
-VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1049', 'b7a8dedb-bccc-4461-9b28-b60b5bf83e7f');
+VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1049', 'b91d7195-69a1-4073-9c95-52ceefd93cb7'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1049', 'c07e7fce-134c-4004-bd70-b1e3a576a23b');
 
 -- User 13
 INSERT INTO public.users (id, username, password, created_at, updated_at, verified, blocked, failed_login_attempts,
@@ -318,9 +329,10 @@ VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1058', 'Survey 1', 'Survey 1 descriptio
 
 -- Survey votes
 
-INSERT INTO public.user_vote_survey (id, survey_id, user_id, created_at, updated_at, version, vote_type, age, gender_id, parliamentary_club_id)
+INSERT INTO public.user_vote_survey (id, survey_id, user_id, created_at, updated_at, version, vote_type, age, gender_id,
+                                     parliamentary_club_id)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1065', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059',
-        '5e642d0a-94d4-4a4f-8760-cd6d63cd1039', now(), now(), 1, 'other_survey', 17,
+        '5e642d0a-94d4-4a4f-8760-cd6d63cd1049', now(), now(), 1, 'other_survey', 17,
         'cc8e8196-1bd8-4be6-a8b4-a1dc1973a7eb', '00000000-0000-0000-0000-000000000000'),
        ('5e642d0a-94d4-4a4f-8760-cd6d63cd1066', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059',
         '5e642d0a-94d4-4a4f-8760-cd6d63cd1040', now(), now(), 1, 'other_survey', 18,

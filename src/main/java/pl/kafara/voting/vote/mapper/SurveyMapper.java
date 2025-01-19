@@ -25,7 +25,8 @@ public class SurveyMapper {
         return new UserVoteResponse(
                 userVote.getUser().getGender().getName().name(),
                 userVote.getAge(),
-                result
+                result,
+                userVote.getUser().getParliamentaryClub().getShortName()
         );
     }
 
