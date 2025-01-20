@@ -96,10 +96,14 @@ const VotingResultChartByAge: FC<VotingResultChartByAgeProps> = ({
           tickMargin={10}
           axisLine={false}
         />
-        <ChartTooltip
-          cursor={false}
-          content={<ChartTooltipContent indicator="dashed" />}
-        />
+        {data.userVotes.length === 0 ? (
+          <ChartTooltip
+            cursor={false}
+            content={<ChartTooltipContent indicator="dashed" />}
+          />
+        ) : (
+          <ChartTooltip content={<ChartTooltipContent indicator="dashed" />} />
+        )}
         {Object.entries(chartConfig).map(([key, config]) => (
           <Bar key={key} dataKey={key} fill={config.color} radius={4}>
             <LabelList
