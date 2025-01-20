@@ -42,6 +42,7 @@ public class UserExceptionCodes {
     public static final String OAUTH_TOKEN_VERIFICATION_FAILED = "OAUTH_TOKEN_VERIFICATION_FAILED";
     public static final String ROLE_REQUEST_ALREADY_RESOLVED = "ROLE_REQUEST_ALREADY_RESOLVED";
     public static final String PARLIAMENTARY_CLUB_NOT_FOUND = "PARLIAMENTARY_CLUB_NOT_FOUND";
+    public static final String CANT_RESET_PASSWORD = "CANT_RESET_PASSWORD_OAUTH";
 
     private UserExceptionCodes() {
     }

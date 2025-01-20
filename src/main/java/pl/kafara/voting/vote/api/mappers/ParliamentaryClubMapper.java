@@ -17,6 +17,16 @@ public class ParliamentaryClubMapper {
         );
     }
 
+    public static ParliamentaryClub update(ParliamentaryClub parliamentaryClub, ParliamentaryClubAPI api) {
+        parliamentaryClub.setEmail(api.getEmail());
+        parliamentaryClub.setFax(api.getFax());
+        parliamentaryClub.setMembersCount(api.getMembersCount());
+        parliamentaryClub.setName(api.getName());
+        parliamentaryClub.setPhone(api.getPhone());
+
+        return parliamentaryClub;
+    }
+
     private ParliamentaryClubMapper() {
     }
 }

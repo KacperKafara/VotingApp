@@ -45,6 +45,21 @@ public class ResetPasswordIT extends IntegrationTestConfiguration {
 
     @Test
     @DataSet(value = "/dataset/reset_password_users.json", strategy = SeedStrategy.REFRESH)
+    public void resetPassword_WhenAccountCreatedWithGoogleAccount_Return400() {
+        ResetPasswordRequest resetPasswordRequest = new ResetPasswordRequest("oauth@oauth.com", "pl");
+
+        given()
+                .contentType("application/json")
+                .when()
+                .body(resetPasswordRequest)
+                .post(baseUrl + "/resetPassword")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    @DataSet(value = "/dataset/reset_password_users.json", strategy = SeedStrategy.REFRESH)
     public void resetPassword_TokenVerificationFailed_return400() {
         given()
                 .contentType("application/json")

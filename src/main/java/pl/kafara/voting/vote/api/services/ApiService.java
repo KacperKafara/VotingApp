@@ -42,7 +42,7 @@ public class ApiService {
     @Value("${sejm.api.url}")
     private String sejmApiUrl;
 
-    private List<String> terms = new ArrayList<>();
+    private final List<String> terms = new ArrayList<>();
 
     private final EnvoyRepository envoyRepository;
     private final SittingRepository sittingRepository;
@@ -77,9 +77,10 @@ public class ApiService {
 
             for (ParliamentaryClubAPI parliamentaryClubAPI : parliamentaryClubs) {
                 Optional<ParliamentaryClub> parliamentaryClubOptional = parliamentaryClubRepository.findByTermAndShortName(term, parliamentaryClubAPI.getId());
-                if (parliamentaryClubOptional.isEmpty()) {
+                if (parliamentaryClubOptional.isEmpty())
                     parliamentaryClubRepository.save(ParliamentaryClubMapper.mapToParliamentaryClub(parliamentaryClubAPI, term));
-                }
+                else
+                    parliamentaryClubRepository.save(ParliamentaryClubMapper.update(parliamentaryClubOptional.get(), parliamentaryClubAPI));
             }
         }
     }
@@ -111,8 +112,11 @@ public class ApiService {
                 } else {
                     savedClub = parliamentaryClubOptional.get();
                 }
-                if (envoyRepository.findByInTermNumberAndClub(envoyAPI.getId(), savedClub).isEmpty())
+                Optional<Envoy> envoyOptional = envoyRepository.findByInTermNumberAndTerm(envoyAPI.getId(), term);
+                if (envoyOptional.isEmpty())
                     envoyRepository.save(EnvoyMapper.update(envoyAPI, savedClub));
+                else
+                    envoyRepository.save(EnvoyMapper.update(envoyOptional.get(), envoyAPI, savedClub));
             }
         }
     }

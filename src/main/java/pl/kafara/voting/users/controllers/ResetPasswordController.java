@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import pl.kafara.voting.exceptions.NotFoundException;
 import pl.kafara.voting.exceptions.messages.GenericMessages;
 import pl.kafara.voting.exceptions.user.AccountNotActiveException;
+import pl.kafara.voting.exceptions.user.CantResetPasswordException;
 import pl.kafara.voting.exceptions.user.VerificationTokenExpiredException;
 import pl.kafara.voting.exceptions.user.VerificationTokenUsedException;
 import pl.kafara.voting.users.dto.ResetPasswordFormRequest;
@@ -43,6 +44,8 @@ public class ResetPasswordController {
             return ResponseEntity.ok().build();
         } catch (AccountNotActiveException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        } catch (CantResetPasswordException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
     }
 

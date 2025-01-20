@@ -19,4 +19,16 @@ public class EnvoyMapper {
 
         return envoyToUpdate;
     }
+
+    public static Envoy update(Envoy envoy, EnvoyAPI envoyAPI, ParliamentaryClub parliamentaryClub) {
+        envoy.setClub(parliamentaryClub);
+        envoy.setFirstName(envoyAPI.getFirstName());
+        envoy.setLastName(envoyAPI.getLastName());
+        envoy.setNumberOfVotes(envoyAPI.getNumberOfVotes());
+        envoy.setEmail(envoyAPI.getEmail());
+        envoy.setDistrictName(envoyAPI.getDistrictName());
+        envoy.setActive(envoyAPI.isActive());
+
+        return envoy;
+    }
 }

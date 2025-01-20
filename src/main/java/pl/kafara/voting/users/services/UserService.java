@@ -51,10 +51,13 @@ public class UserService {
     @Value("${sejm.current-term}")
     private String currentTerm;
 
-    public SensitiveData resetPassword(String email) throws NotFoundException, AccountNotActiveException, NoSuchAlgorithmException {
+    public SensitiveData resetPassword(String email) throws NotFoundException, AccountNotActiveException, NoSuchAlgorithmException, CantResetPasswordException {
         User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new NotFoundException(UserMessages.USER_NOT_FOUND, UserExceptionCodes.USER_WITH_EMAIL_NOT_FOUND)
         );
+
+        if (user.getOAuthId() != null)
+            throw new CantResetPasswordException(UserMessages.CANT_RESET_PASSWORD, UserExceptionCodes.CANT_RESET_PASSWORD);
 
         if (user.isBlocked())
             throw new AccountNotActiveException(UserMessages.USER_BLOCKED, UserExceptionCodes.USER_BLOCKED);
