@@ -13,12 +13,12 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Setter
 @Getter
-@Entity
 @ToString
+@Entity
 @Table(
         name = "parliamentary_clubs",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"shortName", "term"})
+                @UniqueConstraint(columnNames = {"short_name", "term"})
         }
 )
 public class ParliamentaryClub extends AbstractEntity implements Serializable {

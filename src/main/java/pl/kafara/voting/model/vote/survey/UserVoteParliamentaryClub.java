@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import pl.kafara.voting.model.users.User;
 import pl.kafara.voting.model.vote.ParliamentaryClub;
 
@@ -22,8 +21,8 @@ public class UserVoteParliamentaryClub extends UserVoteSurvey {
     @JoinColumn(name = "parliamentary_club_id", updatable = false)
     private ParliamentaryClub parliamentaryClub;
 
-    public UserVoteParliamentaryClub(Survey survey, User user, ParliamentaryClub parliamentaryClub, ParliamentaryClub userParliamentaryClub) {
-        super(user, Period.between(user.getBirthDate().toLocalDate(), LocalDateTime.now().toLocalDate()).getYears(), user.getGender(), survey, userParliamentaryClub);
+    public UserVoteParliamentaryClub(Survey survey, User user, ParliamentaryClub parliamentaryClub) {
+        super(user, Period.between(user.getBirthDate().toLocalDate(), LocalDateTime.now().toLocalDate()).getYears(), user.getGender(), survey);
         this.parliamentaryClub = parliamentaryClub;
     }
 }

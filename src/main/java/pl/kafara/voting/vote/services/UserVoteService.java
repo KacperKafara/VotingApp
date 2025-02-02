@@ -71,7 +71,7 @@ public class UserVoteService {
         if (!Objects.equals(parliamentaryClub.getTerm(), currentTerm))
             throw new NotFoundException(SurveyMessages.PARLIAMENTARY_CLUB_NOT_FOUND, SurveyExceptionCodes.PARLIAMENTARY_CLUB_NOT_FOUND);
 
-        parliamentaryClubVoteRepository.save(new UserVoteParliamentaryClub(survey, user, parliamentaryClub, user.getParliamentaryClub()));
+        parliamentaryClubVoteRepository.save(new UserVoteParliamentaryClub(survey, user, parliamentaryClub));
     }
 
     @PreAuthorize("hasRole('VOTER')")

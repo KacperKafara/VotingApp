@@ -15,7 +15,7 @@ public class VotingMapper {
                 userVoteOnList.getGender().getName().name(),
                 userVoteOnList.getAge(),
                 userVoteOnList.getVotingOption().getOption(),
-                userVoteOnList.getUser().getParliamentaryClub().getShortName()
+                userVoteOnList.getParliamentaryClub().getShortName()
         );
     }
 
@@ -24,7 +24,7 @@ public class VotingMapper {
                 userVoteOther.getGender().getName().name(),
                 userVoteOther.getAge(),
                 userVoteOther.getVoteResult().name(),
-                userVoteOther.getUser().getParliamentaryClub().getShortName()
+                userVoteOther.getParliamentaryClub().getShortName()
         );
     }
 

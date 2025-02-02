@@ -16,17 +16,19 @@ public class SurveyMapper {
 
     public static UserVoteResponse userVoteToUserVoteResponse(UserVoteSurvey userVote) {
         String result;
+        String userParliamentaryClub = null;
         if(userVote instanceof UserVoteOtherSurvey) {
             result = ((UserVoteOtherSurvey) userVote).getResult().name();
+            userParliamentaryClub = ((UserVoteOtherSurvey) userVote).getParliamentaryClub().getShortName();
         } else {
             result = ((UserVoteParliamentaryClub) userVote).getParliamentaryClub().getShortName();
         }
 
         return new UserVoteResponse(
-                userVote.getUser().getGender().getName().name(),
+                userVote.getGender().getName().name(),
                 userVote.getAge(),
                 result,
-                userVote.getUser().getParliamentaryClub().getShortName()
+                userParliamentaryClub
         );
     }
 

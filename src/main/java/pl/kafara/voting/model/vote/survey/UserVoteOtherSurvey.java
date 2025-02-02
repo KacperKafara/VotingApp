@@ -22,8 +22,13 @@ public class UserVoteOtherSurvey extends UserVoteSurvey {
     @Column(name = "result", nullable = false)
     private UserVoteResult result;
 
+    @ManyToOne
+    @JoinColumn(name = "parliamentary_club_id", nullable = false, updatable = false)
+    private ParliamentaryClub parliamentaryClub;
+
     public UserVoteOtherSurvey(Survey survey, User user, UserVoteResult result, ParliamentaryClub userParliamentaryClub) {
-        super(user, Period.between(user.getBirthDate().toLocalDate(), LocalDateTime.now().toLocalDate()).getYears(), user.getGender(), survey, userParliamentaryClub);
+        super(user, Period.between(user.getBirthDate().toLocalDate(), LocalDateTime.now().toLocalDate()).getYears(), user.getGender(), survey);
         this.result = result;
+        this.parliamentaryClub = userParliamentaryClub;
     }
 }

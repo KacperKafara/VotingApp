@@ -1,5 +1,8 @@
 @startuml
 'https://plantuml.com/class-diagram
+skinparam maxWidth 1200
+skinparam maxHeight 1000
+'skinparam linetype ortho
 
 abstract class AbstractEntity {
     -id: UUID
@@ -8,7 +11,7 @@ abstract class AbstractEntity {
     -updatedAt: LocalDateTime
 }
 
-note bottom of AbstractEntity: "Wszystkie klasy poza LastVotingsUpdate dzidziczą po tej klasie" as N1
+note bottom of AbstractEntity: Wszystkie klasy poza LastVotingsUpdate dzidziczą po tej klasie
 
 'Głosy
 
@@ -27,6 +30,7 @@ abstract class UserVoteVoting {
     -user: User
     -gender: Gender
     -voting: Voting
+    -parliamentaryClub: ParliamentaryClub
 }
 
 class UserVoteOnList {
@@ -40,6 +44,7 @@ class UserVoteOther {
 UserVoteOther --> UserVoteResult
 UserVoteOnList --|> UserVoteVoting
 UserVoteOther --|> UserVoteVoting
+ParliamentaryClub "1" *-- "*" UserVoteVoting
 
 'Głosy sondaż
 
@@ -56,11 +61,13 @@ class UserVoteParliamentaryClub {
 
 class UserVoteOtherSurvey {
     -result: UserVoteResult
+    -parliamentaryClub: ParliamentaryClub
 }
 
 UserVoteOtherSurvey --> UserVoteResult
 UserVoteParliamentaryClub --|> UserVoteSurvey
 UserVoteOtherSurvey --|> UserVoteSurvey
+ParliamentaryClub "1" *-- "*" UserVoteOtherSurvey
 
 'Sondaż
 
@@ -81,7 +88,7 @@ UserVoteSurvey "1" *-- "*" Survey
 UserVoteSurvey "1" *-- "*" User
 UserVoteSurvey "1" *-- "*" Gender
 
-UserVoteVoting "1" *-- "*" User
+UserVoteVoting "1" *-l- "*" User
 UserVoteVoting "1" *-- "*" Gender
 
 'Tokeny
@@ -152,6 +159,7 @@ class User {
     -lastFailedLogin: LocalDateTime
     -oAuthId: String
     -roles: Set<Role>
+    -parliamentaryClub: ParliamentaryClub
 }
 
 class VoterRoleRequest {
@@ -258,6 +266,10 @@ User "1" --* "0..1" VoterRoleRequest
 Gender ---> GenderEnum
 Role ---> UserRoleEnum
 VoterRoleRequest ---> RoleRequestResolution
+
+User "*" --> "0..1" ParliamentaryClub
+UserVoteOnList "1" *-- "1" VotingOption
+UserVoteParliamentaryClub "1" *-- "*" ParliamentaryClub
 
 Print "*" -- "*"  Voting
 Vote "1" *-- "1" Envoy

@@ -67,7 +67,8 @@ VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1039', 'b91d7195-69a1-4073-9c95-52ceefd
 INSERT INTO public.users (id, username, password, created_at, updated_at, verified, blocked, failed_login_attempts,
                           version, language, parliamentary_club_id)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1040', 'asmith',
-        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en', '00000000-0000-0000-0000-000000000000');
+        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en',
+        '00000000-0000-0000-0000-000000000000');
 
 INSERT INTO public.personal_data (first_name, last_name, phone_number, birth_date, user_id, email, gender_id)
 VALUES ('Anna', 'Smith', '+48123456781', '2003-03-03', '5e642d0a-94d4-4a4f-8760-cd6d63cd1040', 'asmith@localhost.com',
@@ -81,7 +82,8 @@ VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1040', 'b91d7195-69a1-4073-9c95-52ceefd
 INSERT INTO public.users (id, username, password, created_at, updated_at, verified, blocked, failed_login_attempts,
                           version, language, parliamentary_club_id)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1041', 'rbrown',
-        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en', '00000000-0000-0000-0000-000000000000');
+        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en',
+        '00000000-0000-0000-0000-000000000000');
 
 INSERT INTO public.personal_data (first_name, last_name, phone_number, birth_date, user_id, email, gender_id)
 VALUES ('Robert', 'Brown', '+48123456782', '2004-04-04', '5e642d0a-94d4-4a4f-8760-cd6d63cd1041', 'rbrown@localhost.com',
@@ -95,7 +97,8 @@ VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1041', 'b91d7195-69a1-4073-9c95-52ceefd
 INSERT INTO public.users (id, username, password, created_at, updated_at, verified, blocked, failed_login_attempts,
                           version, language, parliamentary_club_id)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1042', 'lwilson',
-        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en', '00000000-0000-0000-0000-000000000000');
+        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en',
+        '00000000-0000-0000-0000-000000000000');
 
 INSERT INTO public.personal_data (first_name, last_name, phone_number, birth_date, user_id, email, gender_id)
 VALUES ('Laura', 'Wilson', '+48123456783', '2005-05-05', '5e642d0a-94d4-4a4f-8760-cd6d63cd1042',
@@ -124,7 +127,8 @@ VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1043', 'b91d7195-69a1-4073-9c95-52ceefd
 INSERT INTO public.users (id, username, password, created_at, updated_at, verified, blocked, failed_login_attempts,
                           version, language, parliamentary_club_id)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1044', 'mgonzalez',
-        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en', '00000000-0000-0000-0000-000000000000');
+        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en',
+        '00000000-0000-0000-0000-000000000000');
 
 INSERT INTO public.personal_data (first_name, last_name, phone_number, birth_date, user_id, email, gender_id)
 VALUES ('Maria', 'Gonzalez', '+48123456785', '2007-07-07', '5e642d0a-94d4-4a4f-8760-cd6d63cd1044',
@@ -152,7 +156,8 @@ VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1045', 'b91d7195-69a1-4073-9c95-52ceefd
 INSERT INTO public.users (id, username, password, created_at, updated_at, verified, blocked, failed_login_attempts,
                           version, language, parliamentary_club_id)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1046', 'kclark',
-        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en', '00000000-0000-0000-0000-000000000000');
+        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en',
+        '00000000-0000-0000-0000-000000000000');
 
 INSERT INTO public.personal_data (first_name, last_name, phone_number, birth_date, user_id, email, gender_id)
 VALUES ('Katherine', 'Clark', '+48123456787', '2009-09-09', '5e642d0a-94d4-4a4f-8760-cd6d63cd1046',
@@ -166,7 +171,8 @@ VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1046', 'b91d7195-69a1-4073-9c95-52ceefd
 INSERT INTO public.users (id, username, password, created_at, updated_at, verified, blocked, failed_login_attempts,
                           version, language, parliamentary_club_id)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1047', 'mbrown',
-        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en', '00000000-0000-0000-0000-000000000000');
+        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en',
+        '00000000-0000-0000-0000-000000000000');
 
 INSERT INTO public.personal_data (first_name, last_name, phone_number, birth_date, user_id, email, gender_id)
 VALUES ('Michael', 'Brown', '+48123456788', '2010-10-10', '5e642d0a-94d4-4a4f-8760-cd6d63cd1047',
@@ -180,7 +186,8 @@ VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1047', 'b91d7195-69a1-4073-9c95-52ceefd
 INSERT INTO public.users (id, username, password, created_at, updated_at, verified, blocked, failed_login_attempts,
                           version, language, parliamentary_club_id)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1048', 'jwhite',
-        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en', '00000000-0000-0000-0000-000000000000');
+        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en',
+        '00000000-0000-0000-0000-000000000000');
 
 INSERT INTO public.personal_data (first_name, last_name, phone_number, birth_date, user_id, email, gender_id)
 VALUES ('Jessica', 'White', '+48987654321', '2011-11-11', '5e642d0a-94d4-4a4f-8760-cd6d63cd1048',
@@ -195,7 +202,8 @@ VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1048', 'b91d7195-69a1-4073-9c95-52ceefd
 INSERT INTO public.users (id, username, password, created_at, updated_at, verified, blocked, failed_login_attempts,
                           version, language, parliamentary_club_id)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1049', 'ajones',
-        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en', '00000000-0000-0000-0000-000000000000');
+        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', now(), now(), true, false, 0, 1, 'en',
+        '00000000-0000-0000-0000-000000000000');
 
 INSERT INTO public.personal_data (first_name, last_name, phone_number, birth_date, user_id, email, gender_id)
 VALUES ('Alice', 'Jones', '+48123456790', '2012-12-12', '5e642d0a-94d4-4a4f-8760-cd6d63cd1049', 'ajones@localhost.com',
@@ -329,50 +337,49 @@ VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1058', 'Survey 1', 'Survey 1 descriptio
 
 -- Survey votes
 
-INSERT INTO public.user_vote_survey (id, survey_id, user_id, created_at, updated_at, version, vote_type, age, gender_id,
-                                     parliamentary_club_id)
+INSERT INTO public.user_vote_survey (id, survey_id, user_id, created_at, updated_at, version, vote_type, age, gender_id)
 VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1065', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059',
         '5e642d0a-94d4-4a4f-8760-cd6d63cd1049', now(), now(), 1, 'other_survey', 17,
-        'cc8e8196-1bd8-4be6-a8b4-a1dc1973a7eb', '00000000-0000-0000-0000-000000000000'),
+        'cc8e8196-1bd8-4be6-a8b4-a1dc1973a7eb'),
        ('5e642d0a-94d4-4a4f-8760-cd6d63cd1066', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059',
         '5e642d0a-94d4-4a4f-8760-cd6d63cd1040', now(), now(), 1, 'other_survey', 18,
-        'cc8e8196-1bd8-4be6-a8b4-a1dc1973a7eb', '00000000-0000-0000-0000-000000000000'),
+        'cc8e8196-1bd8-4be6-a8b4-a1dc1973a7eb'),
        ('5e642d0a-94d4-4a4f-8760-cd6d63cd1067', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059',
         '5e642d0a-94d4-4a4f-8760-cd6d63cd1041', now(), now(), 1, 'other_survey', 34,
-        'cc8e8196-1bd8-4be6-a8b4-a1dc1973a7eb', '00000000-0000-0000-0000-000000000000'),
+        'cc8e8196-1bd8-4be6-a8b4-a1dc1973a7eb'),
        ('5e642d0a-94d4-4a4f-8760-cd6d63cd1068', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059',
         '5e642d0a-94d4-4a4f-8760-cd6d63cd1042', now(), now(), 1, 'other_survey', 60,
-        '10f41829-09d2-48d0-af87-761fe5e9e6d2', '00000000-0000-0000-0000-000000000000'),
+        '10f41829-09d2-48d0-af87-761fe5e9e6d2'),
        ('5e642d0a-94d4-4a4f-8760-cd6d63cd1069', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059',
         '5e642d0a-94d4-4a4f-8760-cd6d63cd1043', now(), now(), 1, 'other_survey', 45,
-        'aeead59f-a7c5-4570-bbc7-bd9eae859c20', '00000000-0000-0000-0000-000000000000'),
+        'aeead59f-a7c5-4570-bbc7-bd9eae859c20'),
        ('5e642d0a-94d4-4a4f-8760-cd6d63cd1070', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059',
         '5e642d0a-94d4-4a4f-8760-cd6d63cd1044', now(), now(), 1, 'other_survey', 25,
-        'aeead59f-a7c5-4570-bbc7-bd9eae859c20', '00000000-0000-0000-0000-000000000000'),
+        'aeead59f-a7c5-4570-bbc7-bd9eae859c20'),
        ('5e642d0a-94d4-4a4f-8760-cd6d63cd1071', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059',
         '5e642d0a-94d4-4a4f-8760-cd6d63cd1045', now(), now(), 1, 'other_survey', 30,
-        '10f41829-09d2-48d0-af87-761fe5e9e6d2', '00000000-0000-0000-0000-000000000000'),
+        '10f41829-09d2-48d0-af87-761fe5e9e6d2'),
        ('5e642d0a-94d4-4a4f-8760-cd6d63cd1072', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059',
         '5e642d0a-94d4-4a4f-8760-cd6d63cd1046', now(), now(), 1, 'other_survey', 38,
-        '10f41829-09d2-48d0-af87-761fe5e9e6d2', '00000000-0000-0000-0000-000000000000'),
+        '10f41829-09d2-48d0-af87-761fe5e9e6d2'),
        ('5e642d0a-94d4-4a4f-8760-cd6d63cd1073', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059',
         '5e642d0a-94d4-4a4f-8760-cd6d63cd1047', now(), now(), 1, 'other_survey', 50,
-        '10f41829-09d2-48d0-af87-761fe5e9e6d2', '00000000-0000-0000-0000-000000000000'),
+        '10f41829-09d2-48d0-af87-761fe5e9e6d2'),
        ('5e642d0a-94d4-4a4f-8760-cd6d63cd1074', '5e642d0a-94d4-4a4f-8760-cd6d63cd1059',
         '5e642d0a-94d4-4a4f-8760-cd6d63cd1048', now(), now(), 1, 'other_survey', 27,
-        '10f41829-09d2-48d0-af87-761fe5e9e6d2', '00000000-0000-0000-0000-000000000000');
+        '10f41829-09d2-48d0-af87-761fe5e9e6d2');
 
-INSERT INTO public.user_vote_other_survey (id, result)
-VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1065', 'DEFINITELY_YES'),
-       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1066', 'DEFINITELY_YES'),
-       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1067', 'DEFINITELY_YES'),
-       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1068', 'DEFINITELY_YES'),
-       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1069', 'DEFINITELY_YES'),
-       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1070', 'YES'),
-       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1071', 'YES'),
-       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1072', 'I_DONT_KNOW'),
-       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1073', 'NO'),
-       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1074', 'DEFINITELY_NO');
+INSERT INTO public.user_vote_other_survey (id, result, parliamentary_club_id)
+VALUES ('5e642d0a-94d4-4a4f-8760-cd6d63cd1065', 'DEFINITELY_YES', '00000000-0000-0000-0000-000000000000'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1066', 'DEFINITELY_YES', '00000000-0000-0000-0000-000000000000'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1067', 'DEFINITELY_YES', '00000000-0000-0000-0000-000000000000'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1068', 'DEFINITELY_YES', '00000000-0000-0000-0000-000000000000'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1069', 'DEFINITELY_YES', '00000000-0000-0000-0000-000000000000'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1070', 'YES', '00000000-0000-0000-0000-000000000000'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1071', 'YES', '00000000-0000-0000-0000-000000000000'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1072', 'I_DONT_KNOW', '00000000-0000-0000-0000-000000000000'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1073', 'NO', '00000000-0000-0000-0000-000000000000'),
+       ('5e642d0a-94d4-4a4f-8760-cd6d63cd1074', 'DEFINITELY_NO', '00000000-0000-0000-0000-000000000000');
 
 
 INSERT INTO public.voter_role_request (id, user_id, request_date, state, created_at, updated_at, version)
@@ -386,3 +393,29 @@ WHERE id IN (SELECT id
              WHERE sitting_day = 3
              ORDER BY id
              LIMIT 4);
+
+-- INSERT INTO public.user_vote_voting(age, created_at, updated_at, version, gender_id, id, parliamentary_club_id, user_id, voting_id, vote_type)
+-- VALUES (21, now(), now(), 1, 'cc8e8196-1bd8-4be6-a8b4-a1dc1973a7eb', gen_random_uuid(), '00000000-0000-0000-0000-000000000000', '5e642d0a-94d4-4a4f-8760-cd6d63cd1040', '01db935b-f796-47bf-bf93-b5f5e870b599', 'other_voting'),
+--        (32, now(), now(), 1, '10f41829-09d2-48d0-af87-761fe5e9e6d2', gen_random_uuid(), '2d323a67-7903-4881-a082-b748ea47e774', '5e642d0a-94d4-4a4f-8760-cd6d63cd1042', '01db935b-f796-47bf-bf93-b5f5e870b599', 'other_voting'),
+--        (43, now(), now(), 1, 'cc8e8196-1bd8-4be6-a8b4-a1dc1973a7eb', gen_random_uuid(), '2d323a67-7903-4881-a082-b748ea47e774', '5e642d0a-94d4-4a4f-8760-cd6d63cd1041', '01db935b-f796-47bf-bf93-b5f5e870b599', 'other_voting'),
+--        (54, now(), now(), 1, '10f41829-09d2-48d0-af87-761fe5e9e6d2', gen_random_uuid(), '2d323a67-7903-4881-a082-b748ea47e774', '5e642d0a-94d4-4a4f-8760-cd6d63cd1038', '01db935b-f796-47bf-bf93-b5f5e870b599', 'other_voting'),
+--        (25, now(), now(), 1, 'aeead59f-a7c5-4570-bbc7-bd9eae859c20', gen_random_uuid(), 'a9957223-4c60-4a31-aa47-b21de403344e', '5e642d0a-94d4-4a4f-8760-cd6d63cd1047', '01db935b-f796-47bf-bf93-b5f5e870b599', 'other_voting'),
+--        (36, now(), now(), 1, 'aeead59f-a7c5-4570-bbc7-bd9eae859c20', gen_random_uuid(), 'd1651fc4-9c30-4e76-a307-763c7df166de', '5e642d0a-94d4-4a4f-8760-cd6d63cd1048', '01db935b-f796-47bf-bf93-b5f5e870b599', 'other_voting'),
+--        (47, now(), now(), 1, '10f41829-09d2-48d0-af87-761fe5e9e6d2', gen_random_uuid(), 'd1651fc4-9c30-4e76-a307-763c7df166de', '5e642d0a-94d4-4a4f-8760-cd6d63cd1049', '01db935b-f796-47bf-bf93-b5f5e870b599', 'other_voting'),
+--        (48, now(), now(), 1, '10f41829-09d2-48d0-af87-761fe5e9e6d2', gen_random_uuid(), 'd6ac088e-28a0-47d1-a356-0d31a667194d', '5e642d0a-94d4-4a4f-8760-cd6d63cd1045', '01db935b-f796-47bf-bf93-b5f5e870b599', 'other_voting'),
+--        (39, now(), now(), 1, '10f41829-09d2-48d0-af87-761fe5e9e6d2', gen_random_uuid(), 'd6ac088e-28a0-47d1-a356-0d31a667194d', '5e642d0a-94d4-4a4f-8760-cd6d63cd1046', '01db935b-f796-47bf-bf93-b5f5e870b599', 'other_voting'),
+--        (20, now(), now(), 1, '10f41829-09d2-48d0-af87-761fe5e9e6d2', gen_random_uuid(), 'fd9a6be4-93f8-4751-9225-2e0c897b4748', '5e642d0a-94d4-4a4f-8760-cd6d63cd1043', '01db935b-f796-47bf-bf93-b5f5e870b599', 'other_voting'),
+--        (31, now(), now(), 1, '10f41829-09d2-48d0-af87-761fe5e9e6d2', gen_random_uuid(), 'fd9a6be4-93f8-4751-9225-2e0c897b4748', '5e642d0a-94d4-4a4f-8760-cd6d63cd1054', '01db935b-f796-47bf-bf93-b5f5e870b599', 'other_voting');
+--
+-- INSERT INTO public.user_vote_other_voting (id, result)
+-- VALUES ('fabd5549-aea2-4aa4-8d11-3dfb6b846322', 'YES'),
+--        ('308fa18b-3dd7-4ff5-8bb0-4dd1680a2c5d', 'NO'),
+--        ('c031dff1-aa78-487e-a85e-a0be12fa30b6', 'DEFINITELY_NO'),
+--        ('d61c7c9f-29e2-4840-a77d-1b19f1c159a1', 'YES'),
+--        ('15f5b990-c580-4d31-8876-e91cc51e84d9', 'I_DONT_KNOW'),
+--        ('fa06252b-b1e0-4ed5-b274-e271ff6e6472', 'YES'),
+--        ('8ad76e34-26f5-45c3-a33d-d684b6a145fd', 'NO'),
+--        ('64728412-b6db-4c4d-8e12-dcd398a6ab47', 'DEFINITELY_NO'),
+--        ('2efc9e5d-bc63-4d0f-a772-036576f6c205', 'NO'),
+--        ('af559441-f77b-41d2-9a93-7d9270e87384', 'I_DONT_KNOW'),
+--        ('c56b5319-80e2-4340-bdf0-0809949e031d', 'DEFINITELY_NO');
