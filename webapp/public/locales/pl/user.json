@@ -19,6 +19,8 @@
   "MALE": "Mężczyzna",
   "FEMALE": "Kobieta",
   "OTHER": "Inna",
+  "noFailedLogins": "Brak nieudanych logowań",
+  "noSuccessfulLogins": "Brak udanych logowań",
   "roles": {
     "administrator": "Administrator",
     "moderator": "Moderator",

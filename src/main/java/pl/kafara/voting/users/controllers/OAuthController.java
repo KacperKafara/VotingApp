@@ -105,19 +105,23 @@ public class OAuthController {
         }
 
         GoogleProfileData googleProfileData = oAuthUtils.fetchGoogleProfileData(response.accessToken());
-        String gender = googleProfileData.genders()
-                .stream()
-                .filter(g -> g.metadata().primary())
-                .findFirst()
-                .map(GoogleGender::value)
-                .orElse(null);
         GenderEnum genderEnum;
-        if (gender != null && (!gender.equals("male") && !gender.equals("female")))
-            genderEnum = GenderEnum.OTHER;
-        else if (gender != null)
-            genderEnum = GenderEnum.valueOf(gender.toUpperCase());
-        else
+        try {
+            String gender = googleProfileData.genders()
+                    .stream()
+                    .filter(g -> g.metadata().primary())
+                    .findFirst()
+                    .map(GoogleGender::value)
+                    .orElse(null);
+            if (gender != null && (!gender.equals("male") && !gender.equals("female")))
+                genderEnum = GenderEnum.OTHER;
+            else if (gender != null)
+                genderEnum = GenderEnum.valueOf(gender.toUpperCase());
+            else
+                genderEnum = null;
+        } catch (Exception ignored) {
             genderEnum = null;
+        }
 
         User user = RegistrationMapper.googleProfileDataToUser(googleProfileData, subject);
 

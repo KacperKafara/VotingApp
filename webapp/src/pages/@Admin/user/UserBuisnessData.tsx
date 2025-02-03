@@ -39,9 +39,11 @@ const UserBuisnessData: FC<UserBuisnessDataProps> = ({ user, tag_value }) => {
               {t('lastLogin')}
             </span>
             <p>
-              {new Date(user.lastLogin).toLocaleString(
-                navigator.language || 'pl-PL'
-              )}
+              {user.lastLogin != undefined
+                ? new Date(user.lastLogin).toLocaleDateString(
+                    navigator.language || 'pl-PL'
+                  )
+                : t('noSuccessfulLogins')}
             </p>
           </div>
           <div>
@@ -49,9 +51,11 @@ const UserBuisnessData: FC<UserBuisnessDataProps> = ({ user, tag_value }) => {
               {t('lastFailedLogin')}
             </span>
             <p>
-              {new Date(user.lastFailedLogin).toLocaleString(
-                navigator.language || 'pl-PL'
-              )}
+              {user.lastFailedLogin != undefined
+                ? new Date(user.lastFailedLogin).toLocaleDateString(
+                    navigator.language || 'pl-PL'
+                  )
+                : t('noFailedLogins')}
             </p>
           </div>
           <div>
