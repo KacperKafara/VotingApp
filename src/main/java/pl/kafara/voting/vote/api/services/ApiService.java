@@ -100,15 +100,19 @@ public class ApiService {
             for (EnvoyAPI envoyAPI : envoys) {
                 Optional<ParliamentaryClub> parliamentaryClubOptional = parliamentaryClubRepository.findByTermAndShortName(term, envoyAPI.getClub());
                 if (parliamentaryClubOptional.isEmpty()) {
-                    ParliamentaryClubAPI parliamentaryClub = restClient.get()
-                            .uri(term + "/clubs/" + envoyAPI.getClub())
-                            .retrieve()
-                            .body(ParliamentaryClubAPI.class);
-
-                    if (parliamentaryClub == null)
+                    ResponseEntity<ParliamentaryClubAPI> parliamentaryClub;
+                    try {
+                        parliamentaryClub = restClient.get()
+                                .uri(term + "/clubs/" + envoyAPI.getClub())
+                                .retrieve()
+                                .toEntity(ParliamentaryClubAPI.class);
+                    } catch (Exception ignored) {
+                        continue;
+                    }
+                    if (parliamentaryClub.getBody() == null)
                         continue;
 
-                    savedClub = parliamentaryClubRepository.save(ParliamentaryClubMapper.mapToParliamentaryClub(parliamentaryClub, term));
+                    savedClub = parliamentaryClubRepository.save(ParliamentaryClubMapper.mapToParliamentaryClub(parliamentaryClub.getBody(), term));
                 } else {
                     savedClub = parliamentaryClubOptional.get();
                 }
