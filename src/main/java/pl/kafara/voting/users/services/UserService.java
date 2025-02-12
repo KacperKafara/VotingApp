@@ -24,6 +24,7 @@ import pl.kafara.voting.users.mapper.UserMapper;
 import pl.kafara.voting.users.repositories.GenderRepository;
 import pl.kafara.voting.users.repositories.RoleRepository;
 import pl.kafara.voting.users.repositories.UserRepository;
+import pl.kafara.voting.users.repositories.VoterRoleRequestRepository;
 import pl.kafara.voting.util.AESUtils;
 import pl.kafara.voting.util.filteringCriterias.FilteringCriteria;
 import pl.kafara.voting.util.JwsService;
@@ -47,6 +48,7 @@ public class UserService {
     private final AESUtils aesUtils;
     private final SecretGenerator secretGenerator;
     private final ParliamentaryClubRepository parliamentaryClubRepository;
+    private final VoterRoleRequestRepository voterRoleRequestRepository;
 
     @Value("${sejm.current-term}")
     private String currentTerm;
@@ -85,6 +87,14 @@ public class UserService {
         if (jwsService.verifySignature(tagValue, user.getId(), user.getVersion())) {
             throw new ApplicationOptimisticLockException(UserMessages.OPTIMISTIC_LOCK, UserExceptionCodes.USER_OPTIMISTIC_LOCK);
         }
+
+        Optional<VoterRoleRequest> voterRoleRequestOptional = voterRoleRequestRepository.getVoterRoleRequestByUser_Id(id);
+        if (voterRoleRequestOptional.isPresent() && !roles.contains(UserRoleEnum.USER)) {
+            VoterRoleRequest roleRequest = voterRoleRequestOptional.get();
+            roleRequest.setResolution(RoleRequestResolution.REJECTED);
+            voterRoleRequestRepository.save(roleRequest);
+        }
+
         Set<Role> rolesEntities = new HashSet<>();
 
         for (UserRoleEnum role : roles) {

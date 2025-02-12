@@ -52,7 +52,7 @@ services:
       SPRING_SQL_INIT_MODE: always
       SPRING_SQL_INIT_DATA_LOCATIONS: classpath:/db/data.sql
       FLYWAY_MIGRATE: false
-      SEJM_SYNC: true
+      SEJM_SYNC: false
       SEJM_TERM: 10
       APP_URL: http://localhost
     restart: no

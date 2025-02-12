@@ -18,6 +18,7 @@ import pl.kafara.voting.users.dto.UpdateUserDataRequest;
 import pl.kafara.voting.users.repositories.GenderRepository;
 import pl.kafara.voting.users.repositories.RoleRepository;
 import pl.kafara.voting.users.repositories.UserRepository;
+import pl.kafara.voting.users.repositories.VoterRoleRequestRepository;
 import pl.kafara.voting.users.services.TokenService;
 import pl.kafara.voting.users.services.UserService;
 import pl.kafara.voting.util.AESUtils;
@@ -50,6 +51,8 @@ public class UserServiceTest {
     private JwsService jwsService;
     @Mock
     private AESUtils aesUtils;
+    @Mock
+    private VoterRoleRequestRepository voterRoleRequestRepository;
     @Mock
     SecretGenerator secretGenerator;
     @InjectMocks
